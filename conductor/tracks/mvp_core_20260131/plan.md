@@ -14,7 +14,7 @@
     - [ ] Setup ESLint and Prettier.
     - [ ] Create initial failing test for homepage rendering.
     - [ ] Implement basic homepage to pass test.
-- [ ] **Task: Dockerization**
+- [x] **Task: Dockerization** 11b984d
     - [ ] Create multi-stage Dockerfiles for Backend and Frontend.
     - [ ] Configure `docker-compose.yml` to run both services.
 - [ ] **Task: Conductor - User Manual Verification 'Phase 1: Infrastructure & Scaffolding' (Protocol in workflow.md)**
