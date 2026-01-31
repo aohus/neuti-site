@@ -20,18 +20,18 @@
 ## Phase 2: Frontend UI & Form
 사용자가 의뢰를 접수할 수 있는 웹 페이지를 구현합니다.
 
-- [ ] **Task: Implement File Download Section**
-    - [ ] Create a UI section for downloading `수목진단의뢰.hwp`.
-    - [ ] Move the HWP file to `frontend/public/downloads/` (or serve via API).
-- [ ] **Task: Implement Online Diagnosis Form**
-    - [ ] Create `DiagnosisForm` component using React Hook Form.
-    - [ ] Implement input fields: Name, Contact, Email, Address, Symptom.
-    - [ ] Implement file upload input with preview if possible.
-    - [ ] Write unit tests for form validation logic.
-- [ ] **Task: Connect Form to API**
-    - [ ] Implement submission handler to send `FormData` to backend.
-    - [ ] Handle loading states and success/error responses.
-- [ ] **Task: Conductor - User Manual Verification 'Phase 2: Frontend UI & Form' (Protocol in workflow.md)**
+- [x] **Task: Implement File Download Section**
+    - [x] Create a UI section for downloading `수목진단의뢰.hwp`.
+    - [x] Move the HWP file to `frontend/public/downloads/` (or serve via API).
+- [x] **Task: Implement Online Diagnosis Form**
+    - [x] Create `DiagnosisForm` component using React Hook Form.
+    - [x] Implement input fields: Name, Contact, Email, Address, Symptom.
+    - [x] Implement file upload input with preview if possible.
+    - [x] Write unit tests for form validation logic.
+- [x] **Task: Connect Form to API**
+    - [x] Implement submission handler to send `FormData` to backend.
+    - [x] Handle loading states and success/error responses.
+- [x] **Task: Conductor - User Manual Verification 'Phase 2: Frontend UI & Form' (Protocol in workflow.md)**
 
 ## Phase 3: Integration & Finalization
 전체 기능을 통합하고 사용자 경험을 다듬습니다.
