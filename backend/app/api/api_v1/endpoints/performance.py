@@ -41,13 +41,18 @@ async def upload_image(
 async def read_performances(
     db: AsyncSession = Depends(get_db),
     skip: int = 0,
-    limit: int = 100
+    limit: int = 100,
+    category: str | None = None
 ) -> Any:
     """
-    시공 사례 목록 조회.
+    시공 사례 목록 조회. 카테고리별 필터링을 지원합니다.
     """
+    query = select(PerformanceModel)
+    if category:
+        query = query.filter(PerformanceModel.category == category)
+    
     result = await db.execute(
-        select(PerformanceModel).offset(skip).limit(limit).order_by(desc(PerformanceModel.created_at))
+        query.offset(skip).limit(limit).order_by(desc(PerformanceModel.created_at))
     )
     return result.scalars().all()
 

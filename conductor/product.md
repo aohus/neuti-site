@@ -53,9 +53,9 @@
 
 - **Content Source:** `./assets/content_text/공사실적.md`, 홍보브로슈어
 - **Display Style:**
-  - 홍보브로슈어에 나온 사업 분야 소개와 이미지가 잘 드러나도록 구성.
-  - 1개의 공사가 1개의 블로그 글이 되도록 구성.
-  - 리스트 페이지에는 사진+제목이 갤러리 형태로 노출 (사진은 없을 수도 있음).
+  - 브랜드 브로슈어 스타일의 스토리텔링형 레이아웃 (나무병원 사업, 조경식재 사업 섹션).
+  - 대형 이미지와 구조화된 타이포그래피를 활용한 시각적 전문성 강조.
+  - 백엔드 데이터베이스와 연동하여 카테고리별 관련 시공 사례(Performance) 자동 노출.
 - **References:**
   - https://m.blog.naver.com/PostView.naver?blogId=treestar132&logNo=224126163960&navType=by
   - https://m.blog.naver.com/PostView.naver?blogId=treestar132&logNo=223996189390&navType=by

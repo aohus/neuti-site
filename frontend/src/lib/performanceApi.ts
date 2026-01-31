@@ -10,9 +10,9 @@ const getAuthHeader = () => {
 
 export const performanceApi = {
   // 목록 조회
-  getPerformances: async (skip = 0, limit = 100): Promise<Performance[]> => {
+  getPerformances: async (skip = 0, limit = 100, category?: string): Promise<Performance[]> => {
     const response = await axios.get(`${API_URL}/api/v1/performance/`, {
-      params: { skip, limit }
+      params: { skip, limit, category }
     })
     return response.data.map((p: Performance) => ({
       ...p,
