@@ -38,7 +38,7 @@
     - [x] Verify all links (`/intro`, `/diagnosis`, `/notice`, etc.).
 - [x] **Task: Conductor - User Manual Verification 'Phase 3: Dynamic Data & Final CTA' (Protocol in workflow.md)**
 
-## Phase 4: Quality Check & Finalization
+## Phase 4: Quality Check & Finalization [checkpoint: b028c30]
 전체적인 완성도를 높이고 트랙을 마무리합니다.
 
 - [x] **Task: Final Polish & Responsive Check**
