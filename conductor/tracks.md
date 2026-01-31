@@ -18,5 +18,6 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: 주요 실적 페이지 콘텐츠 생성 및 게시글 볼 수 있도록 구현**
+- [x] **Track: 주요 실적 페이지 콘텐츠 생성 및 게시글 볼 수 있도록 구현**
 *Link: [./tracks/performance_records_20260131/](./tracks/performance_records_20260131/)*
+*Report: [./docs/performance_records_20260131/report.md](./docs/performance_records_20260131/report.md)*
