@@ -32,8 +32,8 @@ export default function AboutPage() {
           </div>
           <div className="mt-10 lg:mt-0 bg-green-50 rounded-3xl p-8 border border-green-100">
             <blockquote className="text-lg font-medium text-green-800 italic">
-              "나무는 우리 삶의 동반자입니다. 아끼고 보호해줘야 합니다. <br />
-              수목을 돌보는 마음으로 사람의 삶까지 돌보는 것이 우리의 소명입니다."
+              &quot;나무는 우리 삶의 동반자입니다. 아끼고 보호해줘야 합니다. <br />
+              수목을 돌보는 마음으로 사람의 삶까지 돌보는 것이 우리의 소명입니다.&quot;
             </blockquote>
             <div className="mt-6 flex items-center">
               <div className="ml-3">
