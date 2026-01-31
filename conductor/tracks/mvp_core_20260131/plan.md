@@ -34,7 +34,7 @@
 ## Phase 3: Essential Information Pages
 '회사소개' 및 '주요사업' 페이지의 내용을 구현합니다.
 
-- [ ] **Task: Develop 'About Us' Page**
+- [x] **Task: Develop 'About Us' Page** 08da1bf
     - [ ] Extract content from `회사소개.md` and `ceo_interview.md`.
     - [ ] Write tests for 'About Us' page content and visual elements.
     - [ ] Implement 'About Us' page with brand storytelling (Nature-friendly theme).
