@@ -9,7 +9,7 @@
     - [ ] Configure Ruff and Mypy for quality checks.
     - [ ] Create initial failing test for health check endpoint.
     - [ ] Implement health check endpoint to pass test.
-- [ ] **Task: Setup Frontend Infrastructure**
+- [x] **Task: Setup Frontend Infrastructure** a857f21
     - [ ] Initialize Next.js project with TypeScript and Tailwind CSS.
     - [ ] Setup ESLint and Prettier.
     - [ ] Create initial failing test for homepage rendering.
