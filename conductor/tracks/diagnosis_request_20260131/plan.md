@@ -1,6 +1,6 @@
 # Implementation Plan: 수목진단의뢰 페이지 구현
 
-## Phase 1: Backend API & Database
+## Phase 1: Backend API & Database [checkpoint: b105f09]
 의뢰 정보를 저장하고 처리할 백엔드 시스템을 구축합니다.
 
 - [x] **Task: Setup Backend Dependencies**
