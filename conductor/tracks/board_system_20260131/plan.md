@@ -3,22 +3,22 @@
 ## Phase 1: Backend - Authentication & Models
 게시판 데이터 구조와 관리자 인증 시스템을 구축합니다.
 
-- [ ] **Task: Setup Authentication System**
-    - [ ] Add `python-jose` and `passlib` for JWT and hashing.
-    - [ ] Create `Admin` user configuration (via env vars).
-    - [ ] Implement `POST /api/auth/login` endpoint returning access token.
-    - [ ] Write tests for login success/failure.
-- [ ] **Task: Define Database Models**
-    - [ ] Create `Notice` model (title, content, created_at, views).
-    - [ ] Create `Inquiry` model (title, content, author, password_hash, created_at, is_secret).
-    - [ ] Create `Answer` model (linked to Inquiry, content, created_at).
-    - [ ] Generate Alembic migrations.
-- [ ] **Task: Implement Board APIs**
-    - [ ] Create CRUD endpoints for `Notice` (protected by admin dependency).
-    - [ ] Create CRUD endpoints for `Inquiry` (create public, read/update/delete protected by password or admin).
-    - [ ] Create endpoint for `Answer` (admin only).
-    - [ ] Write tests for API permissions and logic.
-- [ ] **Task: Conductor - User Manual Verification 'Phase 1: Backend - Authentication & Models' (Protocol in workflow.md)**
+- [x] **Task: Setup Authentication System**
+    - [x] Add `python-jose` and `passlib` for JWT and hashing.
+    - [x] Create `Admin` user configuration (via env vars).
+    - [x] Implement `POST /api/auth/login` endpoint returning access token.
+    - [x] Write tests for login success/failure.
+- [x] **Task: Define Database Models**
+    - [x] Create `Notice` model (title, content, created_at, views).
+    - [x] Create `Inquiry` model (title, content, author, password_hash, created_at, is_secret).
+    - [x] Create `Answer` model (linked to Inquiry, content, created_at).
+    - [x] Generate Alembic migrations.
+- [x] **Task: Implement Board APIs**
+    - [x] Create CRUD endpoints for `Notice` (protected by admin dependency).
+    - [x] Create CRUD endpoints for `Inquiry` (create public, read/update/delete protected by password or admin).
+    - [x] Create endpoint for `Answer` (admin only).
+    - [x] Write tests for API permissions and logic.
+- [x] **Task: Conductor - User Manual Verification 'Phase 1: Backend - Authentication & Models' (Protocol in workflow.md)**
 
 ## Phase 2: Frontend - Components & Pages
 게시판 UI와 인증 관련 프론트엔드 기능을 구현합니다.

@@ -34,6 +34,15 @@ class Settings(BaseSettings):
     # Storage
     UPLOAD_DIR: Path = Path("uploads")
 
+    # Authentication
+    SECRET_KEY: str = "your-super-secret-key-for-development" # In production, use a strong key
+    ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8  # 8 days
+
+    # Admin Credentials
+    ADMIN_USERNAME: str = "admin"
+    ADMIN_PASSWORD: str = "admin1234" # Default password for development
+
     model_config = SettingsConfigDict(env_file=".env", case_sensitive=True, extra="ignore")
 
 settings = Settings()
