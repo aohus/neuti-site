@@ -105,7 +105,7 @@ export default function QnADetailPage() {
   if (!inquiry) return null
 
   return (
-    <div className="max-w-4xl mx-auto py-12 px-4">
+    <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
       <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-100 mb-12">
         <div className="border-b border-gray-100 pb-8 mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">{inquiry.title}</h1>

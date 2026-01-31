@@ -62,7 +62,7 @@ export default function NoticeEditPage() {
   if (isLoading) return <div className="py-24 text-center">로딩 중...</div>
 
   return (
-    <div className="max-w-4xl mx-auto py-12 px-4">
+    <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
       <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">공지사항 수정</h2>
       
       <form onSubmit={handleSubmit} className="space-y-8 bg-white p-8 rounded-3xl shadow-xl border border-gray-100">

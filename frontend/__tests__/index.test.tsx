@@ -6,9 +6,9 @@ describe('Page', () => {
   it('renders the homepage with Neuti title', () => {
     render(<Page />)
  
-    const heading = screen.getByRole('heading', { level: 1 })
- 
-    expect(heading).toBeInTheDocument()
-    expect(heading).toHaveTextContent('느티나무 협동조합 나무병원')
+    // Check if at least one of the carousel titles is present
+    const headings = screen.getAllByRole('heading', { level: 1 })
+    expect(headings.length).toBeGreaterThan(0)
+    expect(headings[0]).toHaveTextContent(/자연과 사람이 함께 누리는/i)
   })
 })

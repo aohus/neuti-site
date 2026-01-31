@@ -23,15 +23,15 @@ export default function BoardTable<T extends { id: number | string }>({
   isLoading = false
 }: BoardTableProps<T>) {
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full divide-y divide-gray-200">
+    <div className="overflow-hidden bg-white border border-gray-200 rounded-2xl shadow-sm">
+      <table className="w-full divide-y divide-gray-200 table-fixed">
         <thead className="bg-gray-50">
           <tr>
             {columns.map((column, idx) => (
               <th
                 key={idx}
                 scope="col"
-                className={`px-6 py-3 text-left text-xs font-bold text-gray-500 uppercase tracking-wider ${column.className || ''}`}
+                className={`px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider ${column.className || ''}`}
               >
                 {column.header}
               </th>
