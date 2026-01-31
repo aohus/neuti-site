@@ -1,6 +1,6 @@
 # Implementation Plan: Project MVP
 
-## Phase 1: Infrastructure & Scaffolding
+## Phase 1: Infrastructure & Scaffolding [checkpoint: 278a7ee]
 이 단계에서는 백엔드와 프론트엔드의 기본 구조를 잡고 Docker 환경을 구성합니다.
 
 - [x] **Task: Setup Backend Infrastructure** cd97101
