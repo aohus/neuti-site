@@ -38,7 +38,7 @@
     - [x] Implement password prompt modal for secret QnA posts.
 - [x] **Task: Conductor - User Manual Verification 'Phase 2: Frontend - Components & Pages' (Protocol in workflow.md)**
 
-## Phase 3: Integration & Finalization
+## Phase 3: Integration & Finalization [checkpoint: 3364763]
 기능을 통합하고 사용자 경험을 최적화합니다.
 
 - [x] **Task: Integrate API & Permissions**
