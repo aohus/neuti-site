@@ -1,9 +1,10 @@
 import { Project } from '@/types/project'
 import Image from 'next/image'
+import Link from 'next/link'
 
 export default function ProjectCard({ project }: { project: Project }) {
   return (
-    <div className="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
+    <Link href={`/performance/${project.id}`} className="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
       {/* Image Container */}
       <div className="relative aspect-[4/3] bg-gray-100 overflow-hidden">
         {project.image && (
@@ -38,6 +39,6 @@ export default function ProjectCard({ project }: { project: Project }) {
           ))}
         </div>
       </div>
-    </div>
+    </Link>
   )
 }
