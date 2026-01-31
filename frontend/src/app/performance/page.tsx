@@ -4,8 +4,8 @@ import { useMemo } from 'react'
 import useProjects from '@/hooks/useProjects'
 import ProjectGrid from '@/components/performance/ProjectGrid'
 import CategoryFilter from '@/components/performance/CategoryFilter'
-import SearchBar from '@/components/performance/SearchBar'
-import Pagination from '@/components/performance/Pagination'
+import SearchBar from '@/components/common/SearchBar'
+import Pagination from '@/components/common/Pagination'
 import { getProjectCategories } from '@/lib/projects'
 
 export default function PerformancePage() {

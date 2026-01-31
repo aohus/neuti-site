@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { useAuth } from '@/context/AuthContext'
 
 const links = [
   { name: '홈', href: '/' },
@@ -11,6 +12,8 @@ const links = [
 ]
 
 export default function Navbar() {
+  const { isAdmin, logout } = useAuth()
+
   return (
     <nav className="bg-white border-b border-green-100 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -20,7 +23,7 @@ export default function Navbar() {
               느티나무 나무병원
             </Link>
           </div>
-          <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+          <div className="hidden sm:ml-6 sm:flex sm:space-x-8 items-center">
             {links.map((link) => (
               <Link
                 key={link.href}
@@ -30,6 +33,22 @@ export default function Navbar() {
                 {link.name}
               </Link>
             ))}
+            
+            {isAdmin ? (
+              <button
+                onClick={logout}
+                className="ml-4 px-4 py-2 text-sm font-medium text-gray-500 hover:text-green-700 border border-gray-200 rounded-full hover:bg-gray-50"
+              >
+                로그아웃
+              </button>
+            ) : (
+              <Link
+                href="/login"
+                className="ml-4 px-4 py-2 text-sm font-medium text-gray-500 hover:text-green-700 border border-gray-200 rounded-full hover:bg-gray-50"
+              >
+                관리자
+              </Link>
+            )}
           </div>
           {/* Mobile menu button (Simplified for now) */}
           <div className="flex items-center sm:hidden">
