@@ -19,7 +19,7 @@
     - [ ] Configure `docker-compose.yml` to run both services.
 - [x] **Task: Conductor - User Manual Verification 'Phase 1: Infrastructure & Scaffolding' (Protocol in workflow.md)**
 
-## Phase 2: Layout & Navigation
+## Phase 2: Layout & Navigation [checkpoint: 8b1914b]
 상단 메뉴와 반응형 레이아웃을 구현합니다.
 
 - [x] **Task: Implement Global Navigation Bar** 45150d2
