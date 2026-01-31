@@ -1,6 +1,6 @@
 # Implementation Plan: 주요 실적 페이지 갤러리 구현
 
-## Phase 1: Data Structure & Management
+## Phase 1: Data Structure & Management [checkpoint: 0134e2b]
 실적 데이터를 코드와 분리하여 관리하기 위한 기반을 다집니다.
 
 - [x] **Task: Define Data Schema & File**
