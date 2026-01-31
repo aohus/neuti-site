@@ -1,6 +1,6 @@
 # Implementation Plan: 게시판 시스템 (공지사항 및 시공/견적문의) 구현
 
-## Phase 1: Backend - Authentication & Models
+## Phase 1: Backend - Authentication & Models [checkpoint: 2fd5928]
 게시판 데이터 구조와 관리자 인증 시스템을 구축합니다.
 
 - [x] **Task: Setup Authentication System**
