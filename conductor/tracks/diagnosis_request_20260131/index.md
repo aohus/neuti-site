@@ -1,4 +1,4 @@
-# Track mvp_core_20260131 Context
+# Track diagnosis_request_20260131 Context
 
 - [Specification](./spec.md)
 - [Implementation Plan](./plan.md)
