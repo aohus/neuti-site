@@ -41,11 +41,11 @@
 ## Phase 4: Integration & Finalization
 모든 요소를 통합하여 페이지를 완성합니다.
 
-- [ ] **Task: Assemble Performance Page**
-    - [ ] Integrate components and hooks into `app/performance/page.tsx`.
-    - [ ] Move images from `assets/` to `frontend/public/images/projects/` for access.
-    - [ ] Write integration tests for the full page workflow.
-- [ ] **Task: Documentation & Cleanup**
-    - [ ] Generate Implementation Report.
-    - [ ] Ensure all images are optimized and alt texts are correct.
-- [ ] **Task: Final Checkpoint and Track Finalization**
+- [x] **Task: Assemble Performance Page**
+    - [x] Integrate components and hooks into `app/performance/page.tsx`.
+    - [x] Move images from `assets/` to `frontend/public/images/projects/` for access.
+    - [x] Write integration tests for the full page workflow.
+- [x] **Task: Documentation & Cleanup**
+    - [x] Generate Implementation Report.
+    - [x] Ensure all images are optimized and alt texts are correct.
+- [~] **Task: Final Checkpoint and Track Finalization**
