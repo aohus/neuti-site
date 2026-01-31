@@ -1,10 +1,24 @@
 import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
 import Navbar from '@/components/Navbar'
+import { AuthProvider } from '@/context/AuthContext'
+
+// Mock useAuth
+jest.mock('@/context/AuthContext', () => ({
+  ...jest.requireActual('@/context/AuthContext'),
+  useAuth: () => ({
+    isAdmin: false,
+    logout: jest.fn()
+  })
+}))
 
 describe('Navbar', () => {
   it('renders all navigation links', () => {
-    render(<Navbar />)
+    render(
+      <AuthProvider>
+        <Navbar />
+      </AuthProvider>
+    )
  
     const links = [
       { name: '홈', href: '/' },

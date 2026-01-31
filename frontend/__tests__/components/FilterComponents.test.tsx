@@ -1,8 +1,8 @@
 import '@testing-library/jest-dom'
 import { render, screen, fireEvent } from '@testing-library/react'
 import CategoryFilter from '@/components/performance/CategoryFilter'
-import SearchBar from '@/components/performance/SearchBar'
-import Pagination from '@/components/performance/Pagination'
+import SearchBar from '@/components/common/SearchBar'
+import Pagination from '@/components/common/Pagination'
 
 describe('CategoryFilter', () => {
   it('renders categories and handles click', () => {

@@ -41,12 +41,12 @@
 ## Phase 3: Integration & Finalization
 기능을 통합하고 사용자 경험을 최적화합니다.
 
-- [ ] **Task: Integrate API & Permissions**
-    - [ ] Connect frontend components to backend APIs.
-    - [ ] Conditionally render 'Write/Edit/Delete' buttons based on admin status.
-    - [ ] Implement logic for QnA password verification flow.
-- [ ] **Task: UI Polish & Cleanup**
-    - [ ] Apply Tailwind styling to match the site theme.
-    - [ ] Check mobile responsiveness for tables.
-    - [ ] Generate Implementation Report.
-- [ ] **Task: Final Checkpoint and Track Finalization**
+- [x] **Task: Integrate API & Permissions**
+    - [x] Connect frontend components to backend APIs.
+    - [x] Conditionally render 'Write/Edit/Delete' buttons based on admin status.
+    - [x] Implement logic for QnA password verification flow.
+- [x] **Task: UI Polish & Cleanup**
+    - [x] Apply Tailwind styling to match the site theme.
+    - [x] Check mobile responsiveness for tables.
+    - [x] Generate Implementation Report.
+- [x] **Task: Final Checkpoint and Track Finalization**
