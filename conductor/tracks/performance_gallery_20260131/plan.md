@@ -12,7 +12,7 @@
     - [x] Write unit tests for data loading function.
 - [x] **Task: Conductor - User Manual Verification 'Phase 1: Data Structure & Management' (Protocol in workflow.md)**
 
-## Phase 2: UI Components (Card & Grid)
+## Phase 2: UI Components (Card & Grid) [checkpoint: 8740b71]
 시각적 요소를 담당하는 컴포넌트를 구현합니다.
 
 - [x] **Task: Implement ProjectCard Component**
