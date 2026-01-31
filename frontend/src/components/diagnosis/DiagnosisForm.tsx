@@ -45,12 +45,19 @@ export default function DiagnosisForm() {
       }
 
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-      await axios.post(`${apiUrl}/api/v1/diagnosis/`, formData)
+      await axios.post(`${apiUrl}/api/v1/diagnosis/`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
       setIsSuccess(true)
       reset()
-    } catch (error) {
+    } catch (error: any) {
       console.error('Submission failed', error)
-      alert('제출에 실패했습니다. 다시 시도해주세요.')
+      const errorMsg = error.response?.data?.detail 
+        ? (typeof error.response.data.detail === 'string' ? error.response.data.detail : JSON.stringify(error.response.data.detail))
+        : '제출에 실패했습니다. 백엔드 서버가 실행 중인지 확인해주세요.'
+      alert(`제출 실패: ${errorMsg}`)
     } finally {
       setIsSubmitting(false)
     }

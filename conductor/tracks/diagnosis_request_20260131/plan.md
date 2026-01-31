@@ -36,11 +36,11 @@
 ## Phase 3: Integration & Finalization
 전체 기능을 통합하고 사용자 경험을 다듬습니다.
 
-- [ ] **Task: UI Polish & Responsive Design**
-    - [ ] Style the form according to the Green/Brown theme.
-    - [ ] Ensure the layout is responsive on mobile devices.
-    - [ ] Add success confirmation message/modal after submission.
-- [ ] **Task: Documentation & Cleanup**
-    - [ ] Generate Implementation Report.
-    - [ ] Ensure temporary files are cleaned up.
-- [ ] **Task: Final Checkpoint and Track Finalization**
+- [x] **Task: UI Polish & Responsive Design**
+    - [x] Style the form according to the Green/Brown theme.
+    - [x] Ensure the layout is responsive on mobile devices.
+    - [x] Add success confirmation message/modal after submission.
+- [x] **Task: Documentation & Cleanup**
+    - [x] Generate Implementation Report.
+    - [x] Ensure temporary files are cleaned up.
+- [x] **Task: Final Checkpoint and Track Finalization**
