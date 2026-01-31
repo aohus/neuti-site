@@ -38,7 +38,7 @@
     - [ ] Extract content from `회사소개.md` and `ceo_interview.md`.
     - [ ] Write tests for 'About Us' page content and visual elements.
     - [ ] Implement 'About Us' page with brand storytelling (Nature-friendly theme).
-- [ ] **Task: Develop 'Business' Overview Page**
+- [x] **Task: Develop 'Business' Overview Page** 61135a4
     - [ ] Create the layout for business categories based on brochure content.
     - [ ] Write tests for category listing.
     - [ ] Implement the static structure for 'Business' pages.
