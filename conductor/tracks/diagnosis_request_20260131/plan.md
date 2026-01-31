@@ -17,7 +17,7 @@
     - [x] Write tests for the API endpoint (success and failure cases).
 - [x] **Task: Conductor - User Manual Verification 'Phase 1: Backend API & Database' (Protocol in workflow.md)**
 
-## Phase 2: Frontend UI & Form
+## Phase 2: Frontend UI & Form [checkpoint: 541d691]
 사용자가 의뢰를 접수할 수 있는 웹 페이지를 구현합니다.
 
 - [x] **Task: Implement File Download Section**
