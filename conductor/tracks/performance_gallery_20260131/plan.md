@@ -15,14 +15,14 @@
 ## Phase 2: UI Components (Card & Grid)
 시각적 요소를 담당하는 컴포넌트를 구현합니다.
 
-- [ ] **Task: Implement ProjectCard Component**
-    - [ ] Create `ProjectCard` component displaying image, title, summary, and tags.
-    - [ ] Write tests to verify content rendering in the card.
-    - [ ] Apply hover effects and Tailwind styling consistent with the design guide.
-- [ ] **Task: Implement ProjectGrid Component**
-    - [ ] Create `ProjectGrid` component for responsive layout (1col mobile, 2col tablet, 3-4col desktop).
-    - [ ] Write tests to check grid structure logic.
-- [ ] **Task: Conductor - User Manual Verification 'Phase 2: UI Components (Card & Grid)' (Protocol in workflow.md)**
+- [x] **Task: Implement ProjectCard Component**
+    - [x] Create `ProjectCard` component displaying image, title, summary, and tags.
+    - [x] Write tests to verify content rendering in the card.
+    - [x] Apply hover effects and Tailwind styling consistent with the design guide.
+- [x] **Task: Implement ProjectGrid Component**
+    - [x] Create `ProjectGrid` component for responsive layout (1col mobile, 2col tablet, 3-4col desktop).
+    - [x] Write tests to check grid structure logic.
+- [x] **Task: Conductor - User Manual Verification 'Phase 2: UI Components (Card & Grid)' (Protocol in workflow.md)**
 
 ## Phase 3: Logic & Interactivity
 사용자 상호작용(필터, 검색, 페이징)을 처리하는 로직을 구현합니다.
