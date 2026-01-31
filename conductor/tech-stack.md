@@ -9,6 +9,7 @@
 - **Dependency Management:** Poetry (with UV for fast installation)
 - **Standards:** Guard Clauses, Async-first, Repository Pattern with Unit of Work (UoW).
 - **Tools:** Ruff (Linter & Formatter), Mypy (Strict Type Checking).
+- **Authentication:** JWT (python-jose), Password Hashing (passlib with bcrypt==4.0.1).
 
 ## 2. Frontend Stack
 - **Language:** TypeScript
