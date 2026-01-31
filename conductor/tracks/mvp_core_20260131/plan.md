@@ -26,7 +26,7 @@
     - [ ] Define navigation links (Home, About, Business, Performance, Notice, Request, Q&A).
     - [ ] Write tests for navigation rendering and active states.
     - [ ] Implement Navbar component with Tailwind CSS (Responsive).
-- [ ] **Task: Common Layout Component**
+- [x] **Task: Common Layout Component** db8631c
     - [ ] Create a Layout component wrapping all pages with Navbar and Footer.
     - [ ] Write tests to ensure layout persistence across routes.
 - [ ] **Task: Conductor - User Manual Verification 'Phase 2: Layout & Navigation' (Protocol in workflow.md)**
