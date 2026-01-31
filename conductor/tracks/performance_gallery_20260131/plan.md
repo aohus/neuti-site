@@ -27,16 +27,16 @@
 ## Phase 3: Logic & Interactivity
 사용자 상호작용(필터, 검색, 페이징)을 처리하는 로직을 구현합니다.
 
-- [ ] **Task: Implement Filtering & Search Logic**
-    - [ ] Create `useProjects` hook to handle filtering by category and search query.
-    - [ ] Write unit tests for filtering and search logic (e.g., case-insensitive search).
-- [ ] **Task: Implement Pagination Logic**
-    - [ ] Add pagination support to `useProjects` hook.
-    - [ ] Write tests for page calculation and slicing.
-- [ ] **Task: Implement Filter & Search UI Components**
-    - [ ] Create `CategoryFilter`, `SearchBar`, and `Pagination` components.
-    - [ ] Write interaction tests (e.g., clicking a tab updates the state).
-- [ ] **Task: Conductor - User Manual Verification 'Phase 3: Logic & Interactivity' (Protocol in workflow.md)**
+- [x] **Task: Implement Filtering & Search Logic**
+    - [x] Create `useProjects` hook to handle filtering by category and search query.
+    - [x] Write unit tests for filtering and search logic (e.g., case-insensitive search).
+- [x] **Task: Implement Pagination Logic**
+    - [x] Add pagination support to `useProjects` hook.
+    - [x] Write tests for page calculation and slicing.
+- [x] **Task: Implement Filter & Search UI Components**
+    - [x] Create `CategoryFilter`, `SearchBar`, and `Pagination` components.
+    - [x] Write interaction tests (e.g., clicking a tab updates the state).
+- [x] **Task: Conductor - User Manual Verification 'Phase 3: Logic & Interactivity' (Protocol in workflow.md)**
 
 ## Phase 4: Integration & Finalization
 모든 요소를 통합하여 페이지를 완성합니다.
