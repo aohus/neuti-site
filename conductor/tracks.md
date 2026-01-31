@@ -8,5 +8,15 @@ This file tracks all major tracks for the project. Each track has its own detail
 ---
 
 - [x] **Track: 메인 페이지 구현**
-*Link: [./tracks/main_page_20260131/](./tracks/main_page_20260131/)*
+*Link: [./archive/main_page_20260131/](./tracks/main_page_20260131/)*
 *Report: [./docs/main_page_20260131/report.md](./docs/main_page_20260131/report.md)*
+
+---
+
+- [~] **Track: 회사소개 페이지 고도화**
+*Link: [./tracks/about_page_upgrade_20260131/](./tracks/about_page_upgrade_20260131/)*
+
+---
+
+- [ ] **Track: 주요 실적 페이지 콘텐츠 생성 및 게시글 볼 수 있도록 구현**
+*Link: [./tracks/performance_records_20260131/](./tracks/performance_records_20260131/)*
