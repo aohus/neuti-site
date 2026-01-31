@@ -3,19 +3,19 @@
 ## Phase 1: Backend API & Database
 의뢰 정보를 저장하고 처리할 백엔드 시스템을 구축합니다.
 
-- [ ] **Task: Setup Backend Dependencies**
-    - [ ] Add `fastapi-mail` (or similar) and `python-multipart` to backend dependencies.
-    - [ ] Configure environment variables for email service (SMTP) and file upload path.
-- [ ] **Task: Define Database Model & Schema**
-    - [ ] Create SQLAlchemy model `DiagnosisRequest` (name, contact, email, address, symptom, etc.).
-    - [ ] Create Pydantic schemas for request validation.
-    - [ ] Generate Alembic migration script.
-- [ ] **Task: Implement Request Submission API**
-    - [ ] Create API endpoint `POST /api/diagnosis` to handle form data and file uploads.
-    - [ ] Implement logic to save file to disk/storage and record info in DB.
-    - [ ] Implement email notification logic (mock or real SMTP).
-    - [ ] Write tests for the API endpoint (success and failure cases).
-- [ ] **Task: Conductor - User Manual Verification 'Phase 1: Backend API & Database' (Protocol in workflow.md)**
+- [x] **Task: Setup Backend Dependencies**
+    - [x] Add `fastapi-mail` (or similar) and `python-multipart` to backend dependencies.
+    - [x] Configure environment variables for email service (SMTP) and file upload path.
+- [x] **Task: Define Database Model & Schema**
+    - [x] Create SQLAlchemy model `DiagnosisRequest` (name, contact, email, address, symptom, etc.).
+    - [x] Create Pydantic schemas for request validation.
+    - [x] Generate Alembic migration script.
+- [x] **Task: Implement Request Submission API**
+    - [x] Create API endpoint `POST /api/diagnosis` to handle form data and file uploads.
+    - [x] Implement logic to save file to disk/storage and record info in DB.
+    - [x] Implement email notification logic (mock or real SMTP).
+    - [x] Write tests for the API endpoint (success and failure cases).
+- [x] **Task: Conductor - User Manual Verification 'Phase 1: Backend API & Database' (Protocol in workflow.md)**
 
 ## Phase 2: Frontend UI & Form
 사용자가 의뢰를 접수할 수 있는 웹 페이지를 구현합니다.
