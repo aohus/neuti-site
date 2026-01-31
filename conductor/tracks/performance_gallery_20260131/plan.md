@@ -24,7 +24,7 @@
     - [x] Write tests to check grid structure logic.
 - [x] **Task: Conductor - User Manual Verification 'Phase 2: UI Components (Card & Grid)' (Protocol in workflow.md)**
 
-## Phase 3: Logic & Interactivity
+## Phase 3: Logic & Interactivity [checkpoint: 25a103d]
 사용자 상호작용(필터, 검색, 페이징)을 처리하는 로직을 구현합니다.
 
 - [x] **Task: Implement Filtering & Search Logic**
