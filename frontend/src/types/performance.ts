@@ -7,6 +7,7 @@ export interface Performance {
   id: number
   title: string
   content: string // JSON stringified ContentBlock[]
+  category?: string
   thumbnail_url?: string
   client?: string
   construction_date?: string
@@ -16,6 +17,7 @@ export interface Performance {
 export interface PerformanceCreate {
   title: string
   content: string
+  category?: string
   thumbnail_url?: string
   client?: string
   construction_date?: string

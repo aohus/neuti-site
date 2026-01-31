@@ -4,6 +4,7 @@ from datetime import datetime
 class PerformanceBase(BaseModel):
     title: str
     content: str
+    category: str | None = None
     thumbnail_url: str | None = None
     client: str | None = None
     construction_date: datetime | None = None
@@ -14,6 +15,7 @@ class PerformanceCreate(PerformanceBase):
 class PerformanceUpdate(PerformanceBase):
     title: str | None = None
     content: str | None = None
+    category: str | None = None
     thumbnail_url: str | None = None
     client: str | None = None
     construction_date: datetime | None = None

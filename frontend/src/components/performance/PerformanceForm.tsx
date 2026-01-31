@@ -13,6 +13,7 @@ interface PerformanceFormProps {
 export default function PerformanceForm({ onClose, onSuccess }: PerformanceFormProps) {
   const [title, setTitle] = useState('')
   const [client, setClient] = useState('')
+  const [category, setCategory] = useState('나무병원')
   const [constructionDate, setConstructionDate] = useState(new Date().toISOString().split('T')[0])
   const [thumbnailUrl, setThumbnailUrl] = useState('')
   const [blocks, setBlocks] = useState<ContentBlock[]>([
@@ -97,6 +98,7 @@ export default function PerformanceForm({ onClose, onSuccess }: PerformanceFormP
       const data: PerformanceCreate = {
         title,
         client,
+        category,
         construction_date: constructionDate,
         thumbnail_url: thumbnailUrl,
         content: JSON.stringify(blocks)
@@ -157,6 +159,25 @@ export default function PerformanceForm({ onClose, onSuccess }: PerformanceFormP
                     value={constructionDate}
                     onChange={e => setConstructionDate(e.target.value)}
                   />
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-3">Category</label>
+                <div className="flex gap-4">
+                  {['나무병원', '조경식재'].map((cat) => (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => setCategory(cat)}
+                      className={`px-8 py-3 rounded-2xl font-black transition-all ${
+                        category === cat 
+                        ? 'bg-green-700 text-white shadow-lg shadow-green-200' 
+                        : 'bg-gray-100 text-gray-400 hover:bg-gray-200'
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  ))}
                 </div>
               </div>
             </div>
