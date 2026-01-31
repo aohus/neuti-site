@@ -31,7 +31,7 @@
     - [ ] Write tests to ensure layout persistence across routes.
 - [x] **Task: Conductor - User Manual Verification 'Phase 2: Layout & Navigation' (Protocol in workflow.md)**
 
-## Phase 3: Essential Information Pages
+## Phase 3: Essential Information Pages [checkpoint: 77fef02]
 '회사소개' 및 '주요사업' 페이지의 내용을 구현합니다.
 
 - [x] **Task: Develop 'About Us' Page** 08da1bf
