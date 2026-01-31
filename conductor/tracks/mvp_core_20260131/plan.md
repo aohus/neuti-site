@@ -29,7 +29,7 @@
 - [x] **Task: Common Layout Component** db8631c
     - [ ] Create a Layout component wrapping all pages with Navbar and Footer.
     - [ ] Write tests to ensure layout persistence across routes.
-- [ ] **Task: Conductor - User Manual Verification 'Phase 2: Layout & Navigation' (Protocol in workflow.md)**
+- [x] **Task: Conductor - User Manual Verification 'Phase 2: Layout & Navigation' (Protocol in workflow.md)**
 
 ## Phase 3: Essential Information Pages
 '회사소개' 및 '주요사업' 페이지의 내용을 구현합니다.
