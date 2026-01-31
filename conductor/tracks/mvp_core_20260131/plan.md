@@ -3,7 +3,7 @@
 ## Phase 1: Infrastructure & Scaffolding
 이 단계에서는 백엔드와 프론트엔드의 기본 구조를 잡고 Docker 환경을 구성합니다.
 
-- [ ] **Task: Setup Backend Infrastructure**
+- [x] **Task: Setup Backend Infrastructure** cd97101
     - [ ] Initialize Python environment using Poetry (Python 3.12).
     - [ ] Create basic FastAPI app structure.
     - [ ] Configure Ruff and Mypy for quality checks.
