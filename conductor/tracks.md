@@ -4,12 +4,6 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [x] **Track: 주요 실적 페이지 갤러리 구현**
-      _Link: [./tracks/performance_gallery_20260131/](./tracks/performance_gallery_20260131/)_
-      *Report: [./docs/performance_gallery_20260131/report.md](./docs/performance_gallery_20260131/report.md)*
-
----
-
 - [ ] **Track: 수목진단의뢰 페이지 구현**
       _Link: [./tracks/diagnosis_request_20260131/](./tracks/diagnosis_request_20260131/)_
 
