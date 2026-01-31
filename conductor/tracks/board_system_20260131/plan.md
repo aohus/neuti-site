@@ -20,7 +20,7 @@
     - [x] Write tests for API permissions and logic.
 - [x] **Task: Conductor - User Manual Verification 'Phase 1: Backend - Authentication & Models' (Protocol in workflow.md)**
 
-## Phase 2: Frontend - Components & Pages
+## Phase 2: Frontend - Components & Pages [checkpoint: 5ebd500]
 게시판 UI와 인증 관련 프론트엔드 기능을 구현합니다.
 
 - [~] **Task: Implement Auth Context & Login Page**
