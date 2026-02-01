@@ -10,6 +10,8 @@ import { useAuth } from '@/context/AuthContext'
 import axios from 'axios'
 import { Inquiry } from '@/types/board'
 
+import Container from '@/components/common/Container'
+
 export default function QnAListPage() {
   const [inquiries, setInquiries] = useState<Inquiry[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -55,23 +57,23 @@ export default function QnAListPage() {
               <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
             </svg>
           )}
-          <span className="font-bold text-gray-900">{item.title}</span>
+          <span className="font-black text-deep">{item.title}</span>
         </div>
       ),
-      className: 'font-bold text-gray-900' 
+      className: 'font-black text-deep' 
     },
-    { header: '작성자', key: 'author', className: 'w-32' },
+    { header: '작성자', key: 'author', className: 'w-32 font-bold text-gray-500' },
     { 
       header: '작성일', 
       key: 'created_at', 
       render: (item: Inquiry) => new Date(item.created_at).toLocaleDateString(),
-      className: 'w-32'
+      className: 'w-32 font-bold text-gray-400'
     },
     { 
       header: '상태', 
       key: 'status', 
       render: (item: Inquiry) => (
-        <span className={`px-3 py-1 rounded-full text-xs font-bold ${item.answer ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+        <span className={`px-3 py-1 rounded-full text-xs font-black ${item.answer ? 'bg-primary/10 text-primary' : 'bg-gray-100 text-gray-400'}`}>
           {item.answer ? '답변완료' : '접수완료'}
         </span>
       ),
@@ -80,34 +82,40 @@ export default function QnAListPage() {
   ]
 
   return (
-    <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-      <div className="flex justify-between items-end mb-12">
-        <div>
-          <h2 className="text-base font-semibold text-green-600 tracking-wide uppercase">Q&A</h2>
-          <p className="mt-2 text-3xl font-extrabold text-gray-900 sm:text-4xl">시공/견적문의</p>
+    <div className="pt-32 pb-20 md:pt-40 md:pb-32 bg-white">
+      <Container>
+        <div className="flex justify-between items-end mb-16">
+          <div>
+            <span className="text-label">Support</span>
+            <p className="mt-2 text-3xl font-black text-deep tracking-tight sm:text-4xl">시공/견적문의</p>
+          </div>
+          <Link
+            href="/qna/write"
+            className="bg-deep text-white px-8 py-3 rounded-2xl font-black hover:bg-black transition-all shadow-xl shadow-deep/10"
+          >
+            문의하기
+          </Link>
         </div>
-        <Link
-          href="/qna/write"
-          className="bg-green-700 text-white px-6 py-2 rounded-xl font-bold hover:bg-green-800 transition-all shadow-md"
-        >
-          문의하기
-        </Link>
-      </div>
 
-      <SearchBar value={searchQuery} onChange={setSearchQuery} />
+        <div className="mb-8">
+          <SearchBar value={searchQuery} onChange={setSearchQuery} />
+        </div>
 
-      <BoardTable
-        columns={columns}
-        data={inquiries}
-        isLoading={isLoading}
-        onRowClick={(item) => router.push(`/qna/${item.id}`)}
-      />
+        <BoardTable
+          columns={columns}
+          data={inquiries}
+          isLoading={isLoading}
+          onRowClick={(item) => router.push(`/qna/${item.id}`)}
+        />
 
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={setPage}
-      />
+        <div className="mt-12">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
+        </div>
+      </Container>
     </div>
   )
 }
