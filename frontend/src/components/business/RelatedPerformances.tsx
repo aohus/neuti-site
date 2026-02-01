@@ -21,7 +21,7 @@ export default function RelatedPerformances({ category, title, theme = 'light' }
     const fetchData = async () => {
       setIsLoading(true)
       try {
-        const data = await performanceApi.getPerformances(0, 4, category)
+        const data = await performanceApi.getPerformances(0, 4, { category })
         setPerformances(data)
       } catch (err) {
         console.error('Failed to fetch related performances', err)

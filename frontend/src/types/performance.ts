@@ -10,6 +10,11 @@ export interface Performance {
   category?: string
   thumbnail_url?: string
   client?: string
+  year?: number
+  job_main_category?: string
+  job_sub_category?: string
+  site_type?: string
+  site_location?: string
   construction_date?: string
   created_at: string
 }
@@ -20,6 +25,11 @@ export interface PerformanceCreate {
   category?: string
   thumbnail_url?: string
   client?: string
+  year?: number
+  job_main_category?: string
+  job_sub_category?: string
+  site_type?: string
+  site_location?: string
   construction_date?: string
 }
 
