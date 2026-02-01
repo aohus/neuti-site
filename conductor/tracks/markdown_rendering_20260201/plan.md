@@ -8,7 +8,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Typography & Base Layout' (Protocol in workflow.md)
 
 ## Phase 2: Technical Point Box (Callout) System
-- [ ] Task: Frontend - 기술 포인트 박스(Callout) 렌더링 로직 개발 및 유닛 테스트
+- [~] Task: Frontend - 기술 포인트 박스(Callout) 렌더링 로직 개발 및 유닛 테스트
 - [ ] Task: Frontend - Callout 박스 브랜드 디자인 적용 (Deep Green & Accent Green)
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Callout Component' (Protocol in workflow.md)
 

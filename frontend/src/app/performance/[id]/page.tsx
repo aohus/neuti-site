@@ -4,7 +4,18 @@ import { useParams, useRouter } from 'next/navigation'
 import { usePerformance } from '@/hooks/usePerformance'
 import { useAuth } from '@/context/AuthContext'
 import { performanceApi } from '@/lib/performanceApi'
-import { ChevronLeft, Calendar, User, Trash2, Edit, Info, Map, Tag } from 'lucide-react'
+import { 
+  ChevronLeft, 
+  Calendar, 
+  User, 
+  Trash2, 
+  Edit, 
+  Info, 
+  Map, 
+  Tag, 
+  AlertTriangle, 
+  CheckCircle2 
+} from 'lucide-react'
 import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -13,7 +24,7 @@ import remarkBreaks from 'remark-breaks'
 export default function PerformanceDetailPage() {
   const { id } = useParams()
   const router = useRouter()
-  const { isAdmin } = useAuth()
+  const {isAdmin} = useAuth()
   const { performance, isLoading, error } = usePerformance(Number(id))
 
   const handleDelete = async () => {
@@ -48,6 +59,7 @@ export default function PerformanceDetailPage() {
       return blocks.map((block: any, index: number) => {
         if (block.type === 'image') {
           try {
+            // 새 형식: JSON stringified {url, alt}
             const imgData = typeof block.value === 'string' && block.value.startsWith('{') 
               ? JSON.parse(block.value) 
               : { url: block.value, alt: '' };
@@ -57,7 +69,7 @@ export default function PerformanceDetailPage() {
               <div key={index} className="my-20 text-center">
                 <img 
                   src={url} 
-                  alt={imgData.alt || `Content ${index}`} 
+                  alt={imgData.alt || `Content ${index}`}
                   className="w-full rounded-[3rem] shadow-2xl border-8 border-white mb-6"
                 />
                 {imgData.alt && (
@@ -68,6 +80,7 @@ export default function PerformanceDetailPage() {
               </div>
             )
           } catch (err) {
+            // 파싱 실패 시 원본 그대로 출력 시도
             const url = getFullUrl(block.value)
             return (
               <div key={index} className="my-20">
@@ -83,13 +96,14 @@ export default function PerformanceDetailPage() {
               <div key={index} className="my-20">
                 <div className={`grid grid-cols-1 md:grid-cols-${Math.min(items.length, 3)} gap-8 mb-6`}>
                   {items.map((item: any, imgIdx: number) => {
+                    // item이 문자열일 수도 있고 객체일 수도 있음
                     const img = typeof item === 'string' ? { url: item, alt: '' } : item
                     const url = getFullUrl(img.url)
                     return (
                       <div key={imgIdx} className="text-center">
                         <img 
                           src={url} 
-                          alt={img.alt || `Content Row ${index}-${imgIdx}`} 
+                          alt={img.alt || `Content Row ${index}-${imgIdx}`}
                           className="w-full aspect-[4/3] object-cover rounded-[2.5rem] shadow-xl border-4 border-white mb-4"
                         />
                         {img.alt && (
@@ -104,9 +118,13 @@ export default function PerformanceDetailPage() {
               </div>
             )
           } catch (err) {
-            return null
+            return null // 파싱 오류 시 해당 블록 건너뜀
           }
         }
+        
+        // Final Markdown Text Rendering
+        const markdown = block.value.replace(/\\n/g, '\n');
+
         return (
           <div key={index} className="prose-magazine my-12">
             <ReactMarkdown 
@@ -116,14 +134,48 @@ export default function PerformanceDetailPage() {
                 h3: ({node, ...props}) => <h3 className="text-xl md:text-2xl font-black text-deep mt-16 mb-6 tracking-tight" {...props} />,
                 p: ({node, ...props}) => <p className="mb-8 whitespace-pre-wrap leading-relaxed text-gray-600" {...props} />,
                 strong: ({node, ...props}) => <strong className="font-black text-deep border-b-2 border-accent/40 px-0.5" {...props} />,
-                blockquote: ({node, children, ...props}) => (
-                  <blockquote className="my-16 py-10 px-12 bg-surface rounded-[3rem] border border-black/5 relative">
-                    <span className="absolute -top-6 left-10 text-7xl font-black text-accent/20">"</span>
-                    <div className="relative z-10 text-xl md:text-2xl font-black text-primary leading-snug italic keep-all">
-                      {children}
-                    </div>
-                  </blockquote>
-                ),
+                blockquote: ({node, children, ...props}) => {
+                  // children에서 [!TYPE] 텍스트를 제거하기 위해 재구성
+                  const firstChild = node?.children[0] as any;
+                  const firstText = firstChild?.children[0]?.value || '';
+                  const match = firstText.match(/^\[\!(INFO|TIP|WARNING|SUCCESS)\]\s*(.*)/i);
+                  
+                  if (match) {
+                    const type = match[1].toUpperCase();
+                    const title = match[2] || (type === 'SUCCESS' ? '시공 결과' : type);
+                    
+                    // 첫 번째 텍스트 노드에서 태그 부분만 제거
+                    if (firstChild?.children[0]) {
+                      firstChild.children[0].value = firstText.replace(/^\\[!.*?\\]\s*/, '');
+                    }
+
+                    return (
+                      <div className={`my-16 p-10 md:p-12 rounded-[2.5rem] border-2 callout-box callout-${type.toLowerCase()}`}>
+                        <div className="flex items-center gap-4 mb-6">
+                          <div className="w-10 h-10 rounded-full flex items-center justify-center callout-icon">
+                            {type === 'INFO' && <Info size={20} />}
+                            {type === 'TIP' && <Tag size={20} />}
+                            {type === 'WARNING' && <AlertTriangle size={20} />}
+                            {type === 'SUCCESS' && <CheckCircle2 size={20} />}
+                          </div>
+                          <span className="text-sm font-black uppercase tracking-widest callout-title">{title}</span>
+                        </div>
+                        <div className="text-lg md:text-xl font-bold leading-relaxed callout-content">
+                          {children}
+                        </div>
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <blockquote className="my-16 py-10 px-12 bg-surface rounded-[3rem] border border-black/5 relative">
+                      <span className="absolute -top-6 left-10 text-7xl font-black text-accent/20">"</span>
+                      <div className="relative z-10 text-xl md:text-2xl font-black text-primary leading-snug italic keep-all">
+                        {children}
+                      </div>
+                    </blockquote>
+                  );
+                },
                 ul: ({node, ...props}) => <ul className="my-10 space-y-4 list-none" {...props} />,
                 li: ({node, children, ...props}) => (
                   <li className="relative pl-8 text-lg font-bold text-gray-500">
@@ -133,7 +185,7 @@ export default function PerformanceDetailPage() {
                 )
               }}
             >
-              {block.value.replace(/\\n/g, '\n')}
+              {markdown}
             </ReactMarkdown>
           </div>
         )

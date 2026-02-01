@@ -192,8 +192,154 @@
 
 .prose-magazine ul li::before {
 
+
+
   content: '•';
+
+
 
   @apply absolute left-0 text-primary font-black;
 
+
+
 }
+
+
+
+
+
+
+
+/* Callout Box Styles */
+
+
+
+.callout-box {
+
+
+
+  @apply transition-all duration-500;
+
+
+
+}
+
+
+
+
+
+
+
+.callout-info {
+
+
+
+  @apply bg-blue-50 border-blue-100 text-blue-900;
+
+
+
+}
+
+
+
+.callout-info .callout-icon { @apply bg-blue-600 text-white shadow-lg shadow-blue-200; }
+
+
+
+.callout-info .callout-title { @apply text-blue-600; }
+
+
+
+
+
+
+
+.callout-tip {
+
+
+
+  @apply bg-green-50 border-green-100 text-green-900;
+
+
+
+}
+
+
+
+.callout-tip .callout-icon { @apply bg-primary text-white shadow-lg shadow-green-200; }
+
+
+
+.callout-tip .callout-title { @apply text-primary; }
+
+
+
+
+
+
+
+.callout-warning {
+
+
+
+  @apply bg-orange-50 border-orange-100 text-orange-900;
+
+
+
+}
+
+
+
+.callout-warning .callout-icon { @apply bg-orange-500 text-white shadow-lg shadow-orange-200; }
+
+
+
+.callout-warning .callout-title { @apply text-orange-600; }
+
+
+
+
+
+
+
+.callout-success {
+
+
+
+  @apply bg-accent/5 border-accent/20 text-deep;
+
+
+
+}
+
+
+
+.callout-success .callout-icon { @apply bg-accent text-white shadow-lg shadow-accent/20; }
+
+
+
+.callout-success .callout-title { @apply text-accent; }
+
+
+
+
+
+
+
+/* Remove the initial tag text from callout content if needed via CSS or logic */
+
+
+
+.callout-content p:first-child {
+
+
+
+  @apply mt-0;
+
+
+
+}
+
+
+
+
