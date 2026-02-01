@@ -2,10 +2,10 @@
 
 웹사이트 전반의 타이포그래피, 여백, 컬러 시스템을 정립하고 주요 페이지의 전문성을 시각적으로 강화합니다.
 
-## Phase 1: Global Design System & Foundation
-- [ ] Task: Frontend - Tailwind CSS 설정 업데이트 (폰트 위계 및 Spacing Scale 정의)
-- [ ] Task: Frontend - 공통 레이아웃 컴포넌트(`Container`, `Section`)의 여백 규칙 표준화 및 테스트 작성
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Design Foundation' (Protocol in workflow.md)
+## Phase 1: Global Design System & Foundation [checkpoint: fcf308f]
+- [x] Task: Frontend - Tailwind CSS 설정 업데이트 (폰트 위계 및 Spacing Scale 정의)
+- [x] Task: Frontend - 공통 레이아웃 컴포넌트(`Container`, `Section`)의 여백 규칙 표준화 및 테스트 작성
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Design Foundation' (Protocol in workflow.md)
 
 ## Phase 2: Navigation & Brand Identity
 - [ ] Task: Frontend - 상단 내비게이션(GNB) 폰트 스타일 및 로고 색상 통일 UI 테스트 작성
