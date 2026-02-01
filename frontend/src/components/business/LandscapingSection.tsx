@@ -41,19 +41,19 @@ export default function LandscapingSection() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <h3 className="text-xs font-black text-green-600 uppercase tracking-[0.3em] mb-6">Section 02</h3>
-              <h4 className="text-4xl md:text-6xl font-black tracking-tight leading-tight mb-8">
+              <span className="text-label-accent">Section 02</span>
+              <h4 className="text-3xl md:text-5xl font-black text-deep tracking-tight leading-tight mb-8">
                 조경식재 사업 <br />
-                <span className="text-green-600 text-2xl md:text-3xl">사람과 자연이 숨 쉬는 공간 창조</span>
+                <span className="text-primary text-xl md:text-2xl">사람과 자연이 숨 쉬는 공간 창조</span>
               </h4>
-              <p className="text-xl text-gray-500 font-medium leading-relaxed">
+              <p className="text-lg text-gray-500 font-bold leading-relaxed">
                 단순한 식재를 넘어, 공간의 가치를 높이는 조경 솔루션을 제공합니다. <br className="hidden md:block" />
                 지속 가능한 녹지 인프라 구축을 통해 <br className="hidden md:block" />
                 모두가 행복한 자연 친화적 환경을 만들어갑니다.
               </p>
             </motion.div>
 
-            <div className="grid sm:grid-cols-2 gap-8">
+            <div className="grid sm:grid-cols-2 gap-6">
               {features.map((feature, idx) => (
                 <motion.div
                   key={feature.title}
@@ -61,12 +61,12 @@ export default function LandscapingSection() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: idx * 0.1 }}
-                  className="bg-gray-50 border border-gray-100 p-8 rounded-[2rem] hover:bg-green-50 hover:border-green-100 transition-all group"
+                  className="bg-surface border border-black/5 p-8 rounded-[2.5rem] hover:shadow-xl hover:border-accent/20 transition-all group"
                 >
-                  <div className="w-12 h-12 rounded-xl bg-green-600 text-white flex items-center justify-center mb-6 shadow-lg shadow-green-100 group-hover:scale-110 transition-transform">
+                  <div className="w-12 h-12 rounded-2xl bg-deep group-hover:bg-accent text-white flex items-center justify-center mb-6 group-hover:scale-110 transition-all">
                     {feature.icon}
                   </div>
-                  <h5 className="text-lg font-black text-gray-900 mb-2">{feature.title}</h5>
+                  <h5 className="text-lg font-black text-deep mb-2">{feature.title}</h5>
                   <p className="text-sm text-gray-400 font-bold leading-relaxed">{feature.desc}</p>
                 </motion.div>
               ))}

@@ -22,28 +22,28 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   return (
-    <header className="sticky top-0 left-0 w-full z-[100] bg-white border-b border-gray-100 shadow-sm">
-      <Container className="flex justify-between items-center h-20">
+    <header className="fixed top-0 left-0 w-full z-[100] bg-white/70 backdrop-blur-xl border-b border-black/5 transition-all">
+      <Container className="flex justify-between items-center h-16 md:h-20">
         {/* Logo */}
-        <Link href="/" className="flex-shrink-0 flex items-center">
-          <span className="text-2xl font-black tracking-tighter text-green-800">
-            느티나무<span className="text-green-600">병원</span>
+        <Link href="/" className="flex-shrink-0 flex items-center group">
+          <span className="text-xl md:text-2xl font-black tracking-tighter text-deep group-hover:opacity-70 transition-opacity">
+            느티나무병원
           </span>
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden lg:flex items-center space-x-2">
-          <nav className="flex items-center space-x-1 mr-6">
+        <div className="hidden lg:flex items-center space-x-8">
+          <nav className="flex items-center space-x-1">
             {links.map((link) => {
               const isActive = pathname === link.href
               return (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`px-4 py-2 rounded-full text-sm font-bold transition-all ${
+                  className={`px-4 py-2 text-[14px] font-black transition-all ${
                     isActive 
-                      ? 'text-green-700 bg-green-50' 
-                      : 'text-gray-500 hover:text-green-700 hover:bg-gray-50'
+                      ? 'text-primary' 
+                      : 'text-gray-400 hover:text-deep'
                   }`}
                 >
                   {link.name}
@@ -52,13 +52,12 @@ export default function Navbar() {
             })}
           </nav>
           
-          <div className="flex items-center space-x-3 border-l border-gray-100 pl-6">
+          <div className="flex items-center space-x-4">
             <Link
               href="/request"
-              className="flex items-center bg-green-600 text-white px-6 py-2.5 rounded-full text-sm font-bold hover:bg-green-700 transition-all shadow-md shadow-green-600/10 active:scale-95"
+              className="flex items-center bg-deep text-white px-6 py-2.5 rounded-full text-sm font-black hover:bg-black transition-all shadow-xl shadow-deep/10 active:scale-95"
             >
               수목진단의뢰
-              <ArrowRight className="ml-2 w-4 h-4" />
             </Link>
 
             {isAdmin && (

@@ -77,10 +77,10 @@ export default function RelatedPerformances({ category, title, theme = 'light' }
                   <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors" />
                 </div>
                 <div>
-                  <p className={`text-xs font-black uppercase tracking-widest mb-1 ${theme === 'dark' ? 'text-green-500/60' : 'text-green-600/60'}`}>
+                  <p className={`text-[11px] font-black uppercase tracking-widest mb-1 ${theme === 'dark' ? 'text-white/60' : 'text-primary'}`}>
                     {perf.client || '느티나무협동조합'}
                   </p>
-                  <h6 className={`font-black line-clamp-1 leading-tight ${theme === 'dark' ? 'text-white group-hover:text-green-400' : 'text-gray-900 group-hover:text-green-700'} transition-colors`}>
+                  <h6 className={`font-black line-clamp-1 leading-tight ${theme === 'dark' ? 'text-white group-hover:text-accent' : 'text-deep group-hover:text-primary'} transition-colors`}>
                     {perf.title}
                   </h6>
                 </div>

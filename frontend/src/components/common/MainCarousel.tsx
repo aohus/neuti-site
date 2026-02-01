@@ -34,12 +34,12 @@ export default function MainCarousel() {
   }, [])
 
   useEffect(() => {
-    const timer = setInterval(nextSlide, 7000)
+    const timer = setInterval(nextSlide, 5000)
     return () => clearInterval(timer)
   }, [nextSlide])
 
   return (
-    <section className="relative h-[650px] md:h-[750px] w-full overflow-hidden bg-gray-100">
+    <section className="relative h-[500px] md:h-[600px] w-full overflow-hidden bg-gray-100">
       <AnimatePresence mode="wait">
         <motion.div
           key={currentIndex}
@@ -70,23 +70,23 @@ export default function MainCarousel() {
               className="max-w-3xl"
             >
               <h1 
-                className="text-white text-5xl md:text-7xl font-black mb-8 leading-[1.1] tracking-tighter"
+                className="text-white text-4xl md:text-6xl font-black mb-8 leading-[1.1] tracking-tighter"
                 style={{ textShadow: '0 2px 10px rgba(0,0,0,0.2)' }}
               >
                 {carouselItems[currentIndex].title}
               </h1>
               <p 
-                className="text-white text-xl md:text-2xl mb-12 opacity-95 leading-relaxed font-medium"
+                className="text-white text-lg md:text-xl mb-12 opacity-95 leading-relaxed font-bold"
               >
                 {carouselItems[currentIndex].description}
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link
                   href={carouselItems[currentIndex].btnLink}
-                  className="group inline-flex items-center bg-white text-green-800 px-10 py-4 font-black rounded-full hover:bg-green-700 hover:text-white transition-all shadow-2xl active:scale-95"
+                  className="group inline-flex items-center bg-white text-green-800 px-8 py-4 font-black rounded-full hover:bg-green-700 hover:text-white transition-all shadow-2xl active:scale-95"
                 >
                   {carouselItems[currentIndex].btnText}
-                  <ArrowRight className="ml-3 w-6 h-6 group-hover:translate-x-2 transition-transform" />
+                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-2 transition-transform" />
                 </Link>
               </div>
             </motion.div>

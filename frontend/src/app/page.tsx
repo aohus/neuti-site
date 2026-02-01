@@ -14,7 +14,6 @@ export default function Home() {
       <LandscapingSection />
       <TreeHospitalSection />
       <LatestUpdates />
-      <FinalCTA />
     </div>
   )
 }

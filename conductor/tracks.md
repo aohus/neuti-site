@@ -32,3 +32,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: 마크다운 기반 시공 사례 등록 및 고도화된 검색 시스템**
 *Link: [./archive/markdown_performances_20260131/](./archive/markdown_performances_20260131/)*
+
+---
+
+- [~] **Track: UI/UX 통일감 및 전문성 제고**
+*Link: [./tracks/ui_ux_refinement_20260201/](./tracks/ui_ux_refinement_20260201/)*
