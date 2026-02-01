@@ -4,7 +4,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { usePerformance } from '@/hooks/usePerformance'
 import { useAuth } from '@/context/AuthContext'
 import { performanceApi } from '@/lib/performanceApi'
-import { ChevronLeft, Calendar, User, Trash2, Edit } from 'lucide-react'
+import { ChevronLeft, Calendar, User, Trash2, Edit, Info, Map, Tag } from 'lucide-react'
 import Link from 'next/link'
 
 export default function PerformanceDetailPage() {
@@ -136,23 +136,76 @@ export default function PerformanceDetailPage() {
 
       {/* Main Content Area */}
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 pt-20">
-        {isAdmin && (
-          <div className="flex justify-end gap-3 mb-12">
-            <button className="flex items-center gap-2 px-5 py-2.5 rounded-2xl border border-gray-200 text-gray-600 font-bold hover:bg-gray-50 transition-all hover:shadow-md">
-              <Edit size={18} /> 수정하기
-            </button>
-            <button 
-              onClick={handleDelete}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-red-50 text-red-600 font-bold hover:bg-red-100 transition-all hover:shadow-md"
-            >
-              <Trash2 size={18} /> 삭제하기
-            </button>
-          </div>
-        )}
+        <div className="grid lg:grid-cols-4 gap-12 mb-16">
+          <div className="lg:col-span-3">
+            {isAdmin && (
+              <div className="flex justify-end gap-3 mb-8">
+                <button className="flex items-center gap-2 px-5 py-2.5 rounded-2xl border border-gray-200 text-gray-600 font-bold hover:bg-gray-50 transition-all hover:shadow-md">
+                  <Edit size={18} /> 수정하기
+                </button>
+                <button 
+                  onClick={handleDelete}
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-red-50 text-red-600 font-bold hover:bg-red-100 transition-all hover:shadow-md"
+                >
+                  <Trash2 size={18} /> 삭제하기
+                </button>
+              </div>
+            )}
 
-        {/* Dynamic Content Rendering */}
-        <div className="performance-content">
-          {renderContent(performance.content)}
+            {/* Dynamic Content Rendering */}
+            <div className="performance-content">
+              {renderContent(performance.content)}
+            </div>
+          </div>
+
+          {/* Sidebar Metadata Info */}
+          <div className="lg:col-span-1">
+            <div className="bg-gray-50 rounded-[2.5rem] p-8 sticky top-24 border border-gray-100 shadow-sm">
+              <h3 className="text-xs font-black text-green-600 uppercase tracking-widest mb-8 flex items-center gap-2">
+                <Info size={14} /> Project Info
+              </h3>
+              
+              <div className="space-y-8">
+                <div>
+                  <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">발주처</p>
+                  <p className="text-gray-900 font-black">{performance.client || '-'}</p>
+                </div>
+                
+                {performance.year && (
+                  <div>
+                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">연도</p>
+                    <p className="text-gray-900 font-black">{performance.year}년</p>
+                  </div>
+                )}
+
+                {(performance.job_main_category || performance.job_sub_category) && (
+                  <div>
+                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
+                      <Tag size={10} /> 작업분류
+                    </p>
+                    <p className="text-gray-900 font-black">{performance.job_main_category || '-'}</p>
+                    {performance.job_sub_category && (
+                      <p className="text-sm text-gray-500 font-bold mt-1">{performance.job_sub_category}</p>
+                    )}
+                  </div>
+                )}
+
+                {(performance.site_type || performance.site_location) && (
+                  <div>
+                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-1">
+                      <Map size={10} /> 대상지
+                    </p>
+                    <p className="text-gray-900 font-black">{performance.site_location || '-'}</p>
+                    {performance.site_type && (
+                      <span className="inline-block mt-2 px-3 py-1 bg-green-100 text-green-700 text-[10px] font-black rounded-lg">
+                        {performance.site_type}
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="mt-24 pt-16 border-t border-gray-100 flex flex-col items-center">

@@ -11,8 +11,56 @@ from app.models.performance import Performance as PerformanceModel
 from app.schemas.performance import Performance, PerformanceCreate, PerformanceUpdate
 from app.api import deps
 from app.core.config import settings
+from app.utils.markdown import parse_markdown_performance
 
 router = APIRouter()
+
+@router.post("/upload-md", response_model=Performance)
+async def upload_markdown(
+    *,
+    db: AsyncSession = Depends(get_db),
+    file: UploadFile = File(...),
+    current_admin: str = Depends(deps.get_current_admin)
+) -> Any:
+    """
+    마크다운 파일을 업로드하여 시공 사례를 자동으로 등록합니다.
+    """
+    if not file.filename.endswith('.md'):
+        raise HTTPException(status_code=400, detail="Only .md files are allowed")
+    
+    content = await file.read()
+    try:
+        parsed = parse_markdown_performance(content.decode('utf-8'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to parse markdown: {str(e)}")
+    
+    metadata = parsed["metadata"]
+    
+    # 필수 필드 확인
+    title = metadata.get("title")
+    if not title:
+        raise HTTPException(status_code=400, detail="Title is required in frontmatter")
+    
+    # 데이터 매핑
+    perf_in = PerformanceCreate(
+        title=title,
+        content=parsed["content_json"],
+        category=metadata.get("category"),
+        year=int(metadata.get("year")) if metadata.get("year") else None,
+        job_main_category=metadata.get("job_main_category"),
+        job_sub_category=metadata.get("job_sub_category"),
+        site_type=metadata.get("site_type"),
+        site_location=metadata.get("site_location"),
+        client=metadata.get("client"),
+        thumbnail_url=metadata.get("thumbnail_url"),
+        construction_date=metadata.get("construction_date")
+    )
+    
+    db_obj = PerformanceModel(**perf_in.model_dump())
+    db.add(db_obj)
+    await db.commit()
+    await db.refresh(db_obj)
+    return db_obj
 
 @router.post("/upload-image", response_model=str)
 async def upload_image(
@@ -42,14 +90,31 @@ async def read_performances(
     db: AsyncSession = Depends(get_db),
     skip: int = 0,
     limit: int = 100,
-    category: str | None = None
+    category: str | None = None,
+    year: int | None = None,
+    job_main: str | None = None,
+    site_type: str | None = None,
+    q: str | None = None
 ) -> Any:
     """
-    시공 사례 목록 조회. 카테고리별 필터링을 지원합니다.
+    시공 사례 목록 조회. 다중 필터링 및 키워드 검색을 지원합니다.
     """
     query = select(PerformanceModel)
+    
     if category:
         query = query.filter(PerformanceModel.category == category)
+    if year:
+        query = query.filter(PerformanceModel.year == year)
+    if job_main:
+        query = query.filter(PerformanceModel.job_main_category == job_main)
+    if site_type:
+        query = query.filter(PerformanceModel.site_type == site_type)
+    if q:
+        query = query.filter(
+            (PerformanceModel.title.ilike(f"%{q}%")) |
+            (PerformanceModel.client.ilike(f"%{q}%")) |
+            (PerformanceModel.site_location.ilike(f"%{q}%"))
+        )
     
     result = await db.execute(
         query.offset(skip).limit(limit).order_by(desc(PerformanceModel.created_at))

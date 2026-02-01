@@ -5,6 +5,11 @@ class PerformanceBase(BaseModel):
     title: str
     content: str
     category: str | None = None
+    year: int | None = None
+    job_main_category: str | None = None
+    job_sub_category: str | None = None
+    site_type: str | None = None
+    site_location: str | None = None
     thumbnail_url: str | None = None
     client: str | None = None
     construction_date: datetime | None = None
@@ -16,6 +21,11 @@ class PerformanceUpdate(PerformanceBase):
     title: str | None = None
     content: str | None = None
     category: str | None = None
+    year: int | None = None
+    job_main_category: str | None = None
+    job_sub_category: str | None = None
+    site_type: str | None = None
+    site_location: str | None = None
     thumbnail_url: str | None = None
     client: str | None = None
     construction_date: datetime | None = None

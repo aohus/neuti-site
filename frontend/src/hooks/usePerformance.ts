@@ -2,7 +2,13 @@ import { useState, useEffect, useCallback } from 'react'
 import { Performance } from '@/types/performance'
 import { performanceApi } from '@/lib/performanceApi'
 
-export function usePerformances() {
+export function usePerformances(filters?: {
+  category?: string,
+  year?: number,
+  job_main?: string,
+  site_type?: string,
+  q?: string
+}) {
   const [performances, setPerformances] = useState<Performance[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -10,7 +16,7 @@ export function usePerformances() {
   const fetchPerformances = useCallback(async () => {
     setIsLoading(true)
     try {
-      const data = await performanceApi.getPerformances()
+      const data = await performanceApi.getPerformances(0, 100, filters)
       setPerformances(data)
       setError(null)
     } catch (err: any) {
@@ -19,7 +25,7 @@ export function usePerformances() {
     } finally {
       setIsLoading(false)
     }
-  }, [])
+  }, [filters?.category, filters?.year, filters?.job_main, filters?.site_type, filters?.q])
 
   useEffect(() => {
     fetchPerformances()

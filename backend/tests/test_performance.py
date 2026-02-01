@@ -3,6 +3,7 @@ from httpx import AsyncClient, ASGITransport
 from app.main import app
 from app.core.config import settings
 import io
+import json
 
 @pytest.mark.asyncio
 async def test_performance_flow():
@@ -24,17 +25,27 @@ async def test_performance_flow():
         image_url = upload_res.json()
         assert image_url.startswith("/uploads/")
 
-        # 3. Create performance record
+        # 3. Create performance record with metadata
         perf_data = {
             "title": "Test Performance",
             "content": "<p>Test Content</p>",
             "thumbnail_url": image_url,
             "client": "Test Client",
+            "category": "나무병원",
+            "year": 2024,
+            "job_main_category": "고사목제거",
+            "job_sub_category": "고사목",
+            "site_type": "공공기관",
+            "site_location": "성남시청",
             "construction_date": "2026-01-31T00:00:00"
         }
         create_res = await ac.post("/api/v1/performance/", json=perf_data, headers=headers)
         assert create_res.status_code == 200
-        perf_id = create_res.json()["id"]
+        data = create_res.json()
+        assert data["title"] == "Test Performance"
+        assert data["year"] == 2024
+        assert data["job_main_category"] == "고사목제거"
+        perf_id = data["id"]
 
         # 4. List performance records
         list_res = await ac.get("/api/v1/performance/")
@@ -45,12 +56,14 @@ async def test_performance_flow():
         detail_res = await ac.get(f"/api/v1/performance/{perf_id}")
         assert detail_res.status_code == 200
         assert detail_res.json()["title"] == "Test Performance"
+        assert detail_res.json()["site_location"] == "성남시청"
 
-        # 6. Update
-        update_data = {"title": "Updated Title"}
+        # 6. Update metadata
+        update_data = {"year": 2025, "site_location": "수정구청"}
         update_res = await ac.patch(f"/api/v1/performance/{perf_id}", json=update_data, headers=headers)
         assert update_res.status_code == 200
-        assert update_res.json()["title"] == "Updated Title"
+        assert update_res.json()["year"] == 2025
+        assert update_res.json()["site_location"] == "수정구청"
 
         # 7. Delete
         delete_res = await ac.delete(f"/api/v1/performance/{perf_id}", headers=headers)
@@ -59,3 +72,44 @@ async def test_performance_flow():
         # 8. Verify deletion
         verify_res = await ac.get(f"/api/v1/performance/{perf_id}")
         assert verify_res.status_code == 404
+
+@pytest.mark.asyncio
+async def test_markdown_upload_flow():
+    # 1. Login as admin
+    login_data = {
+        "username": settings.ADMIN_USERNAME,
+        "password": settings.ADMIN_PASSWORD,
+    }
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
+        login_res = await ac.post("/api/v1/login/access-token", data=login_data)
+        token = login_res.json()["access_token"]
+        headers = {"Authorization": f"Bearer {token}"}
+
+        # 2. Upload MD file
+        md_content = """---
+title: MD Upload Test
+year: 2026
+job_main_category: 진단
+site_type: 공원
+client: Green Park
+---
+This is a test content.
+![img](/uploads/test.jpg)
+"""
+        files = {"file": ("test.md", io.BytesIO(md_content.encode('utf-8')), "text/markdown")}
+        upload_res = await ac.post("/api/v1/performance/upload-md", files=files, headers=headers)
+        assert upload_res.status_code == 200
+        data = upload_res.json()
+        assert data["title"] == "MD Upload Test"
+        assert data["year"] == 2026
+        assert data["job_main_category"] == "진단"
+        assert data["site_type"] == "공원"
+        
+        # Verify content conversion
+        content_json = data["content"]
+        blocks = json.loads(content_json)
+        assert any(b["type"] == "text" and "This is a test content." in b["value"] for b in blocks)
+        assert any(b["type"] == "image" and "/uploads/test.jpg" in b["value"] for b in blocks)
+
+        # Cleanup
+        await ac.delete(f"/api/v1/performance/{data['id']}", headers=headers)

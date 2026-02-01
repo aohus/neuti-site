@@ -10,9 +10,27 @@ const getAuthHeader = () => {
 
 export const performanceApi = {
   // 목록 조회
-  getPerformances: async (skip = 0, limit = 100, category?: string): Promise<Performance[]> => {
+  getPerformances: async (
+    skip = 0, 
+    limit = 100, 
+    filters?: {
+      category?: string,
+      year?: number,
+      job_main?: string,
+      site_type?: string,
+      q?: string
+    }
+  ): Promise<Performance[]> => {
     const response = await axios.get(`${API_URL}/api/v1/performance/`, {
-      params: { skip, limit, category }
+      params: { 
+        skip, 
+        limit, 
+        category: filters?.category,
+        year: filters?.year,
+        job_main: filters?.job_main,
+        site_type: filters?.site_type,
+        q: filters?.q
+      }
     })
     return response.data.map((p: Performance) => ({
       ...p,
@@ -28,6 +46,19 @@ export const performanceApi = {
       ...p,
       thumbnail_url: p.thumbnail_url ? (p.thumbnail_url.startsWith('http') ? p.thumbnail_url : `${API_URL}${p.thumbnail_url}`) : p.thumbnail_url
     }
+  },
+
+  // 마크다운 파일 업로드
+  uploadMarkdown: async (file: File): Promise<Performance> => {
+    const formData = new FormData()
+    formData.append('file', file)
+    const response = await axios.post(`${API_URL}/api/v1/performance/upload-md`, formData, {
+      headers: {
+        ...getAuthHeader(),
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    return response.data
   },
 
   // 이미지 업로드
