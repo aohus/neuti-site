@@ -27,6 +27,13 @@ def parse_markdown_performance(content: str) -> Dict[str, Any]:
                 blocks.append({"type": "text", "value": text_value})
             current_text.clear()
 
+    def normalize_img_url(url: str) -> str:
+        # 상대 경로(../../uploads/...)를 절대 경로(/uploads/...)로 변환
+        if 'uploads/' in url:
+            parts = url.split('uploads/')
+            return '/uploads/' + parts[-1]
+        return url
+
     i = 0
     while i < len(lines):
         line_raw = lines[i]
@@ -42,7 +49,7 @@ def parse_markdown_performance(content: str) -> Dict[str, Any]:
         if img_match:
             flush_text()
             
-            row_images = [img_match.group(1)]
+            row_images = [normalize_img_url(img_match.group(1))]
             j = i + 1
             while j < len(lines):
                 next_line = lines[j].strip()
@@ -52,7 +59,7 @@ def parse_markdown_performance(content: str) -> Dict[str, Any]:
                 
                 next_img_match = img_pattern.match(next_line)
                 if next_img_match:
-                    row_images.append(next_img_match.group(1))
+                    row_images.append(normalize_img_url(next_img_match.group(1)))
                     j += 1
                 else:
                     break

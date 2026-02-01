@@ -27,6 +27,12 @@ async def sync_performances():
             metadata = parsed["metadata"]
             content_json = parsed["content_json"]
             
+            def normalize_url(url: str | None) -> str | None:
+                if not url: return url
+                if 'uploads/' in url:
+                    return '/uploads/' + url.split('uploads/')[-1]
+                return url
+
             title = metadata.get("title")
             if not title:
                 print(f"Skip {md_file.name}: No title found in frontmatter.")
@@ -47,7 +53,7 @@ async def sync_performances():
                 "site_type": metadata.get("site_type"),
                 "site_location": metadata.get("site_location"),
                 "client": metadata.get("client"),
-                "thumbnail_url": metadata.get("thumbnail_url"),
+                "thumbnail_url": normalize_url(metadata.get("thumbnail_url")),
             }
             
             if db_obj:
