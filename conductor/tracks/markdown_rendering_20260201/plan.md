@@ -13,7 +13,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Callout Component' (Protocol in workflow.md)
 
 ## Phase 3: Advanced Image Grid & Flow Logic
-- [ ] Task: Frontend - 이미지 그리드 로직 고도화 (최대 3장 병렬 배치) 및 테스트 작성
+- [~] Task: Frontend - 이미지 그리드 로직 고도화 (최대 3장 병렬 배치) 및 테스트 작성
 - [ ] Task: Frontend - 가변 이미지 레이아웃(1~3열) 및 Before/After 미세 라벨 디자인 적용
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Advanced Image Grid' (Protocol in workflow.md)
 

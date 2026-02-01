@@ -66,9 +66,10 @@ def parse_markdown_performance(content: str) -> Dict[str, Any]:
         if img_match:
             flush_text()
             
+            # 단일 이미지 정보를 {url, alt} 객체로 관리하며, 최대 3장까지 그룹화
             row_images = [{"url": normalize_img_url(img_match.group(2)), "alt": img_match.group(1)}]
             j = i + 1
-            while j < len(lines):
+            while j < len(lines) and len(row_images) < 3:
                 next_line = lines[j].strip()
                 if not next_line:
                     j += 1

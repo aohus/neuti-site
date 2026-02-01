@@ -92,22 +92,34 @@ export default function PerformanceDetailPage() {
         if (block.type === 'image_row') {
           try {
             const items = JSON.parse(block.value)
+            const isBeforeAfter = items.length === 2;
+
             return (
               <div key={index} className="my-20">
-                <div className={`grid grid-cols-1 md:grid-cols-${Math.min(items.length, 3)} gap-8 mb-6`}>
+                <div className={`grid grid-cols-1 md:grid-cols-${items.length} gap-6 md:gap-8 mb-6`}>
                   {items.map((item: any, imgIdx: number) => {
-                    // item이 문자열일 수도 있고 객체일 수도 있음
                     const img = typeof item === 'string' ? { url: item, alt: '' } : item
                     const url = getFullUrl(img.url)
                     return (
-                      <div key={imgIdx} className="text-center">
-                        <img 
-                          src={url} 
-                          alt={img.alt || `Content Row ${index}-${imgIdx}`}
-                          className="w-full aspect-[4/3] object-cover rounded-[2.5rem] shadow-xl border-4 border-white mb-4"
-                        />
+                      <div key={imgIdx} className="text-center group/img relative">
+                        <div className="relative aspect-[4/3] rounded-[2.5rem] overflow-hidden shadow-xl border-4 border-white mb-4 group-hover/img:shadow-2xl transition-all duration-500">
+                          <img 
+                            src={url} 
+                            alt={img.alt || `Content Row ${index}-${imgIdx}`} 
+                            className="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-1000"
+                          />
+                          {isBeforeAfter && (
+                            <div className="absolute top-6 left-6">
+                              <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg ${
+                                imgIdx === 0 ? 'bg-white text-deep' : 'bg-accent text-white'
+                              }`}>
+                                {imgIdx === 0 ? 'Before' : 'After'}
+                              </span>
+                            </div>
+                          )}
+                        </div>
                         {img.alt && (
-                          <p className="text-xs md:text-sm text-gray-400 font-bold tracking-tight">
+                          <p className="text-xs md:text-sm text-gray-400 font-bold tracking-tight opacity-80 group-hover/img:opacity-100 transition-opacity">
                             {img.alt}
                           </p>
                         )}
@@ -118,7 +130,7 @@ export default function PerformanceDetailPage() {
               </div>
             )
           } catch (err) {
-            return null // 파싱 오류 시 해당 블록 건너뜀
+            return null
           }
         }
         
