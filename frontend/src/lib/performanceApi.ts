@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { Performance, PerformanceCreate, PerformanceUpdate } from '@/types/performance'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+// API_URL을 빈 문자열로 설정하여 상대 경로를 사용하게 함
+const API_URL = ''
 
 const getAuthHeader = () => {
   const token = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : null
@@ -11,8 +12,8 @@ const getAuthHeader = () => {
 const getFullUrl = (url: string | null | undefined) => {
   if (!url) return url
   if (url.startsWith('http')) return url
-  const path = url.startsWith('/') ? url : `/${url}`
-  return `${API_URL}${path}`
+  // 도메인 없이 상대 경로(/uploads/...)만 반환
+  return url.startsWith('/') ? url : `/${url}`
 }
 
 export const performanceApi = {

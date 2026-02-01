@@ -24,7 +24,7 @@ import remarkBreaks from 'remark-breaks'
 export default function PerformanceDetailPage() {
   const { id } = useParams()
   const router = useRouter()
-  const {isAdmin} = useAuth()
+  const { isAdmin } = useAuth()
   const { performance, isLoading, error } = usePerformance(Number(id))
 
   const handleDelete = async () => {
@@ -42,14 +42,11 @@ export default function PerformanceDetailPage() {
 
   // Content Rendering helper
   const renderContent = (contentStr: string) => {
-    // NEXT_PUBLIC_API_URL이 정의되지 않은 경우 브라우저에서는 localhost:8000을 사용하도록 강제
-    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-    
     const getFullUrl = (url: string) => {
       if (!url) return ''
       if (url.startsWith('http')) return url
-      const path = url.startsWith('/') ? url : `/${url}`
-      return `${API_URL}${path}`
+      // 도메인 없이 상대 경로(/uploads/...)만 반환하여 Proxy 이용
+      return url.startsWith('/') ? url : `/${url}`
     }
 
     try {
@@ -66,14 +63,14 @@ export default function PerformanceDetailPage() {
             
             const url = getFullUrl(imgData.url)
             return (
-              <div key={index} className="my-20 text-center">
+              <div key={index} className="my-16 md:my-24 text-center px-2 md:px-0">
                 <img 
                   src={url} 
                   alt={imgData.alt || `Content ${index}`}
-                  className="w-full rounded-[3rem] shadow-2xl border-8 border-white mb-6"
+                  className="w-full rounded-[2rem] md:rounded-[3rem] shadow-2xl border-4 md:border-8 border-white mb-6"
                 />
                 {imgData.alt && (
-                  <p className="text-sm md:text-base text-gray-400 font-bold tracking-tight">
+                  <p className="text-sm md:text-base text-gray-400 font-bold tracking-tight px-4">
                     {imgData.alt}
                   </p>
                 )}
@@ -83,8 +80,8 @@ export default function PerformanceDetailPage() {
             // 파싱 실패 시 원본 그대로 출력 시도
             const url = getFullUrl(block.value)
             return (
-              <div key={index} className="my-20">
-                <img src={url} alt="" className="w-full rounded-[3rem] shadow-2xl border-8 border-white" />
+              <div key={index} className="my-16 md:my-24 px-2 md:px-0">
+                <img src={url} alt="" className="w-full rounded-[2rem] md:rounded-[3rem] shadow-2xl border-4 md:border-8 border-white" />
               </div>
             )
           }
@@ -95,31 +92,29 @@ export default function PerformanceDetailPage() {
             const isBeforeAfter = items.length === 2;
 
             return (
-              <div key={index} className="my-20">
-                <div className={`grid grid-cols-1 md:grid-cols-${items.length} gap-6 md:gap-8 mb-6`}>
+              <div key={index} className="my-16 md:my-24 px-2 md:px-0">
+                <div className={`grid grid-cols-1 ${items.length === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-6 md:gap-8 mb-6`}>
                   {items.map((item: any, imgIdx: number) => {
                     const img = typeof item === 'string' ? { url: item, alt: '' } : item
                     const url = getFullUrl(img.url)
                     return (
                       <div key={imgIdx} className="text-center group/img relative">
-                        <div className="relative aspect-[4/3] rounded-[2.5rem] overflow-hidden shadow-xl border-4 border-white mb-4 group-hover/img:shadow-2xl transition-all duration-500">
+                        <div className="relative aspect-[4/3] rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden shadow-xl border-2 md:border-4 border-white mb-4 group-hover/img:shadow-2xl transition-all duration-500">
                           <img 
                             src={url} 
                             alt={img.alt || `Content Row ${index}-${imgIdx}`} 
                             className="w-full h-full object-cover group-hover/img:scale-110 transition-transform duration-1000"
                           />
                           {isBeforeAfter && (
-                            <div className="absolute top-6 left-6">
-                              <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-lg ${
-                                imgIdx === 0 ? 'bg-white text-deep' : 'bg-accent text-white'
-                              }`}>
+                            <div className="absolute top-4 left-4 md:top-6 md:left-6">
+                              <span className={`px-3 py-1 md:px-4 md:py-1.5 rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-widest shadow-lg ${imgIdx === 0 ? 'bg-white text-deep' : 'bg-accent text-white'}`}>
                                 {imgIdx === 0 ? 'Before' : 'After'}
                               </span>
                             </div>
                           )}
                         </div>
                         {img.alt && (
-                          <p className="text-xs md:text-sm text-gray-400 font-bold tracking-tight opacity-80 group-hover/img:opacity-100 transition-opacity">
+                          <p className="text-xs md:text-sm text-gray-400 font-bold tracking-tight opacity-80 group-hover/img:opacity-100 transition-opacity px-2">
                             {img.alt}
                           </p>
                         )}
@@ -135,44 +130,42 @@ export default function PerformanceDetailPage() {
         }
         
         // Final Markdown Text Rendering
-        const markdown = block.value.replace(/\\n/g, '\n');
+        const markdown = block.value.replace(/\n/g, '\n');
 
         return (
-          <div key={index} className="prose-magazine my-12">
+          <div key={index} className="prose-magazine my-10 md:my-16 px-4 md:px-0">
             <ReactMarkdown 
               remarkPlugins={[remarkGfm, remarkBreaks]}
               components={{
-                h2: ({node, ...props}) => <h2 className="text-2xl md:text-3xl font-black text-deep mt-20 mb-10 tracking-tight border-l-8 border-primary pl-6 leading-tight" {...props} />,
-                h3: ({node, ...props}) => <h3 className="text-xl md:text-2xl font-black text-deep mt-16 mb-6 tracking-tight" {...props} />,
-                p: ({node, ...props}) => <p className="mb-8 whitespace-pre-wrap leading-relaxed text-gray-600" {...props} />,
+                h2: ({node, ...props}) => <h2 className="text-xl md:text-3xl font-black text-deep mt-16 md:mt-24 mb-8 md:mb-12 tracking-tight border-l-4 md:border-l-8 border-primary pl-4 md:pl-6 leading-tight" {...props} />,
+                h3: ({node, ...props}) => <h3 className="text-lg md:text-2xl font-black text-deep mt-12 md:mt-16 mb-6 tracking-tight" {...props} />,
+                p: ({node, ...props}) => <p className="mb-6 md:mb-8 whitespace-pre-wrap leading-relaxed text-gray-600" {...props} />,
                 strong: ({node, ...props}) => <strong className="font-black text-deep border-b-2 border-accent/40 px-0.5" {...props} />,
                 blockquote: ({node, children, ...props}) => {
-                  // children에서 [!TYPE] 텍스트를 제거하기 위해 재구성
                   const firstChild = node?.children[0] as any;
                   const firstText = firstChild?.children[0]?.value || '';
-                  const match = firstText.match(/^\[\!(INFO|TIP|WARNING|SUCCESS)\]\s*(.*)/i);
+                  const match = firstText.match(/^\!\!(INFO|TIP|WARNING|SUCCESS)\]\s*(.*)/i);
                   
                   if (match) {
                     const type = match[1].toUpperCase();
                     const title = match[2] || (type === 'SUCCESS' ? '시공 결과' : type);
                     
-                    // 첫 번째 텍스트 노드에서 태그 부분만 제거
                     if (firstChild?.children[0]) {
-                      firstChild.children[0].value = firstText.replace(/^\\[!.*?\\]\s*/, '');
+                      firstChild.children[0].value = firstText.replace(/^\!.*?\\\]\s*/, '');
                     }
 
                     return (
-                      <div className={`my-16 p-10 md:p-12 rounded-[2.5rem] border-2 callout-box callout-${type.toLowerCase()}`}>
+                      <div className={`my-12 md:my-20 p-8 md:p-12 rounded-[2rem] md:rounded-[2.5rem] border-2 callout-box callout-${type.toLowerCase()}`}>
                         <div className="flex items-center gap-4 mb-6">
-                          <div className="w-10 h-10 rounded-full flex items-center justify-center callout-icon">
-                            {type === 'INFO' && <Info size={20} />}
-                            {type === 'TIP' && <Tag size={20} />}
-                            {type === 'WARNING' && <AlertTriangle size={20} />}
-                            {type === 'SUCCESS' && <CheckCircle2 size={20} />}
+                          <div className="w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center callout-icon">
+                            {type === 'INFO' && <Info size={18} />}
+                            {type === 'TIP' && <Tag size={18} />}
+                            {type === 'WARNING' && <AlertTriangle size={18} />}
+                            {type === 'SUCCESS' && <CheckCircle2 size={18} />}
                           </div>
-                          <span className="text-sm font-black uppercase tracking-widest callout-title">{title}</span>
+                          <span className="text-[12px] md:text-sm font-black uppercase tracking-widest callout-title">{title}</span>
                         </div>
-                        <div className="text-lg md:text-xl font-bold leading-relaxed callout-content">
+                        <div className="text-base md:text-xl font-bold leading-relaxed callout-content">
                           {children}
                         </div>
                       </div>
@@ -180,17 +173,17 @@ export default function PerformanceDetailPage() {
                   }
 
                   return (
-                    <blockquote className="my-16 py-10 px-12 bg-surface rounded-[3rem] border border-black/5 relative">
-                      <span className="absolute -top-6 left-10 text-7xl font-black text-accent/20">"</span>
-                      <div className="relative z-10 text-xl md:text-2xl font-black text-primary leading-snug italic keep-all">
+                    <blockquote className="my-12 md:my-20 py-8 md:py-12 px-10 md:px-16 bg-surface rounded-[2rem] md:rounded-[3.5rem] border border-black/5 relative">
+                      <span className="absolute -top-4 left-8 md:-top-8 md:left-12 text-6xl md:text-8xl font-black text-accent/20">"</span>
+                      <div className="relative z-10 text-lg md:text-2xl font-black text-primary leading-snug italic keep-all">
                         {children}
                       </div>
                     </blockquote>
                   );
                 },
-                ul: ({node, ...props}) => <ul className="my-10 space-y-4 list-none" {...props} />,
+                ul: ({node, ...props}) => <ul className="my-8 md:my-12 space-y-3 md:space-y-4 list-none" {...props} />,
                 li: ({node, children, ...props}) => (
-                  <li className="relative pl-8 text-lg font-bold text-gray-500">
+                  <li className="relative pl-6 md:pl-8 text-base md:text-lg font-bold text-gray-500">
                     <span className="absolute left-0 text-accent font-black top-1">●</span>
                     <div>{children}</div>
                   </li>
@@ -204,9 +197,9 @@ export default function PerformanceDetailPage() {
       })
     } catch (e) {
       return (
-        <div className="prose-magazine my-12">
+        <div className="prose-magazine my-12 px-4 md:px-0">
           <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>
-            {contentStr.replace(/\\n/g, '\n')}
+            {contentStr.replace(/\n/g, '\n')}
           </ReactMarkdown>
         </div>
       )
@@ -248,7 +241,7 @@ export default function PerformanceDetailPage() {
               <ChevronLeft size={24} className="group-hover:-translate-x-1 transition-transform" /> 
               <span className="text-base font-bold tracking-tight">시공 사례 목록으로</span>
             </Link>
-            <h1 className="text-5xl md:text-7xl font-black text-white mb-10 leading-tight tracking-tighter drop-shadow-2xl">
+            <h1 className="text-4xl md:text-7xl font-black text-white mb-10 leading-tight tracking-tighter drop-shadow-2xl">
               {performance.title}
             </h1>
             <div className="flex flex-wrap items-center gap-10 text-white/90">
