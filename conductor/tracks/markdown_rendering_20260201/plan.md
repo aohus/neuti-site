@@ -2,10 +2,10 @@
 
 마크다운 본문을 매거진 스타일로 전환하고, 기술 포인트 박스 및 지능형 이미지 그리드 시스템을 구축합니다.
 
-## Phase 1: Typography & Magazine Style Base
-- [~] Task: Frontend - 마크다운 타이포그래피 스타일 가이드 정의 및 테스트 (Magazine style)
-- [ ] Task: Frontend - 본문 렌더링 컴포넌트(`renderContent`) 고도화: 텍스트 및 인용구 스타일 적용
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Typography & Base Layout' (Protocol in workflow.md)
+## Phase 1: Typography & Magazine Style Base [checkpoint: c13cb96]
+- [x] Task: Frontend - 마크다운 타이포그래피 스타일 가이드 정의 및 테스트 (Magazine style)
+- [x] Task: Frontend - 본문 렌더링 컴포넌트(`renderContent`) 고도화: 텍스트 및 인용구 스타일 적용
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Typography & Base Layout' (Protocol in workflow.md)
 
 ## Phase 2: Technical Point Box (Callout) System
 - [ ] Task: Frontend - 기술 포인트 박스(Callout) 렌더링 로직 개발 및 유닛 테스트
