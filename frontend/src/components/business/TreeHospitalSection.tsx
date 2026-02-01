@@ -4,6 +4,7 @@ import React from 'react'
 import Container from '@/components/common/Container'
 import { motion } from 'framer-motion'
 import { ShieldCheck, Search, Activity, AlertTriangle } from 'lucide-react'
+import RelatedPerformances from './RelatedPerformances'
 
 const features = [
   {
