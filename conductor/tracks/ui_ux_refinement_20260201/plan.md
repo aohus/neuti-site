@@ -17,7 +17,7 @@
 - [x] Task: Frontend - 메인 페이지 전문성 강화를 위한 그리드 및 컴포넌트 재구성
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Main Page Revamp' (Protocol in workflow.md)
 
-## Phase 4: About & Business Page Refinement
-- [ ] Task: Frontend - 회사소개 페이지 컬러 톤 정리(남색 제거) 및 여백 최적화 테스트 작성
-- [ ] Task: Frontend - 주요사업 및 주요실적 페이지 상단 타이틀 크기 조정 및 통일감 적용
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Page Refinement' (Protocol in workflow.md)
+## Phase 4: About & Business Page Refinement [checkpoint: 0e8b26b]
+- [x] Task: Frontend - 회사소개 페이지 컬러 톤 정리(남색 제거) 및 여백 최적화 테스트 작성
+- [x] Task: Frontend - 주요사업 및 주요실적 페이지 상단 타이틀 크기 조정 및 통일감 적용
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Page Refinement' (Protocol in workflow.md)
