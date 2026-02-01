@@ -2,7 +2,7 @@ import asyncio
 import os
 from pathlib import Path
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, delete
 
 from app.db.session import async_session
 from app.models.performance import Performance
@@ -17,6 +17,9 @@ async def sync_performances():
         return
 
     async with async_session() as session:
+        # 1. 현재 폴더에 존재하는 마크다운 파일들의 제목(Title) 목록 수집
+        existing_titles = []
+        
         for md_file in DATA_DIR.glob("*.md"):
             print(f"Processing {md_file.name}...")
             
@@ -27,21 +30,23 @@ async def sync_performances():
             metadata = parsed["metadata"]
             content_json = parsed["content_json"]
             
+            title = metadata.get("title")
+            if not title:
+                print(f"Skip {md_file.name}: No title found in frontmatter.")
+                continue
+            
+            existing_titles.append(title)
+            
+            # DB에서 기존 항목 검색
+            result = await session.execute(select(Performance).filter(Performance.title == title))
+            db_obj = result.scalar_one_or_none()
+            
             def normalize_url(url: str | None) -> str | None:
                 if not url: return url
                 if 'uploads/' in url:
                     return '/uploads/' + url.split('uploads/')[-1]
                 return url
 
-            title = metadata.get("title")
-            if not title:
-                print(f"Skip {md_file.name}: No title found in frontmatter.")
-                continue
-            
-            # DB에서 기존 항목 검색
-            result = await session.execute(select(Performance).filter(Performance.title == title))
-            db_obj = result.scalar_one_or_none()
-            
             # 메타데이터 매핑
             performance_data = {
                 "title": title,
@@ -54,16 +59,24 @@ async def sync_performances():
                 "site_location": metadata.get("site_location"),
                 "client": metadata.get("client"),
                 "thumbnail_url": normalize_url(metadata.get("thumbnail_url")),
+                "construction_date": metadata.get("construction_date")
             }
             
             if db_obj:
-                print(f"Updating existing performance: {title}")
+                print(f"Updating: {title}")
                 for key, value in performance_data.items():
                     setattr(db_obj, key, value)
             else:
-                print(f"Creating new performance: {title}")
+                print(f"Creating: {title}")
                 new_performance = Performance(**performance_data)
                 session.add(new_performance)
+        
+        # 2. 삭제 로직: 폴더에 없는 제목을 가진 DB 데이터를 모두 삭제
+        # (주의: 마크다운으로 관리되는 데이터만 삭제되도록 설계되었습니다.)
+        if existing_titles:
+            delete_query = delete(Performance).where(Performance.title.not_in(existing_titles))
+            result = await session.execute(delete_query)
+            print(f"Deleted {result.rowcount} removed performances from DB.")
         
         await session.commit()
         print("Sync completed successfully.")
