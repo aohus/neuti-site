@@ -6,6 +6,9 @@ import { useAuth } from '@/context/AuthContext'
 import { performanceApi } from '@/lib/performanceApi'
 import { ChevronLeft, Calendar, User, Trash2, Edit, Info, Map, Tag } from 'lucide-react'
 import Link from 'next/link'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import remarkBreaks from 'remark-breaks'
 
 export default function PerformanceDetailPage() {
   const { id } = useParams()
@@ -34,39 +37,88 @@ export default function PerformanceDetailPage() {
       
       return blocks.map((block: any, index: number) => {
         if (block.type === 'image') {
+          const imgData = JSON.parse(block.value)
+          const url = imgData.url.startsWith('http') ? imgData.url : `http://localhost:8000${imgData.url}`
           return (
-            <div key={index} className="my-12">
+            <div key={index} className="my-20 text-center">
               <img 
-                src={block.value.startsWith('http') ? block.value : `http://localhost:8000${block.value}`} 
-                alt={`Content ${index}`} 
-                className="w-full rounded-[2.5rem] shadow-2xl"
+                src={url} 
+                alt={imgData.alt || `Content ${index}`} 
+                className="w-full rounded-[3rem] shadow-2xl border-8 border-white mb-6"
               />
+              {imgData.alt && (
+                <p className="text-sm md:text-base text-gray-400 font-bold tracking-tight">
+                  {imgData.alt}
+                </p>
+              )}
             </div>
           )
         }
         if (block.type === 'image_row') {
           const images = JSON.parse(block.value)
           return (
-            <div key={index} className={`grid grid-cols-1 md:grid-cols-${Math.min(images.length, 3)} gap-6 my-12`}>
-              {images.map((imgUrl: string, imgIdx: number) => (
-                <img 
-                  key={imgIdx}
-                  src={imgUrl.startsWith('http') ? imgUrl : `http://localhost:8000${imgUrl}`} 
-                  alt={`Content Row ${index}-${imgIdx}`} 
-                  className="w-full aspect-video object-cover rounded-[2rem] shadow-xl"
-                />
-              ))}
+            <div key={index} className="my-20">
+              <div className={`grid grid-cols-1 md:grid-cols-${Math.min(images.length, 3)} gap-8 mb-6`}>
+                {images.map((img: any, imgIdx: number) => {
+                  const url = img.url.startsWith('http') ? img.url : `http://localhost:8000${img.url}`
+                  return (
+                    <div key={imgIdx} className="text-center">
+                      <img 
+                        src={url} 
+                        alt={img.alt || `Content Row ${index}-${imgIdx}`} 
+                        className="w-full aspect-[4/3] object-cover rounded-[2.5rem] shadow-xl border-4 border-white mb-4"
+                      />
+                      {img.alt && (
+                        <p className="text-xs md:text-sm text-gray-400 font-bold tracking-tight">
+                          {img.alt}
+                        </p>
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
             </div>
           )
         }
         return (
-          <p key={index} className="my-10 text-xl text-gray-700 leading-relaxed whitespace-pre-wrap font-medium">
-            {block.value}
-          </p>
+          <div key={index} className="prose-magazine my-12">
+            <ReactMarkdown 
+              remarkPlugins={[remarkGfm, remarkBreaks]}
+              components={{
+                h2: ({node, ...props}) => <h2 className="text-2xl md:text-3xl font-black text-deep mt-20 mb-10 tracking-tight border-l-8 border-primary pl-6 leading-tight" {...props} />,
+                h3: ({node, ...props}) => <h3 className="text-xl md:text-2xl font-black text-deep mt-16 mb-6 tracking-tight" {...props} />,
+                p: ({node, ...props}) => <p className="mb-8 whitespace-pre-wrap leading-relaxed text-gray-600" {...props} />,
+                strong: ({node, ...props}) => <strong className="font-black text-deep border-b-2 border-accent/40 px-0.5" {...props} />,
+                blockquote: ({node, children, ...props}) => (
+                  <blockquote className="my-16 py-10 px-12 bg-surface rounded-[3rem] border border-black/5 relative">
+                    <span className="absolute -top-6 left-10 text-7xl font-black text-accent/20">"</span>
+                    <div className="relative z-10 text-xl md:text-2xl font-black text-primary leading-snug italic keep-all">
+                      {children}
+                    </div>
+                  </blockquote>
+                ),
+                ul: ({node, ...props}) => <ul className="my-10 space-y-4 list-none" {...props} />,
+                li: ({node, children, ...props}) => (
+                  <li className="relative pl-8 text-lg font-bold text-gray-500">
+                    <span className="absolute left-0 text-accent font-black top-1">●</span>
+                    <div>{children}</div>
+                  </li>
+                )
+              }}
+            >
+              {block.value.replace(/\\n/g, '\n')}
+            </ReactMarkdown>
+          </div>
         )
       })
     } catch (e) {
-      return <p className="whitespace-pre-wrap text-xl text-gray-700 leading-relaxed font-medium">{contentStr}</p>
+      return (
+        <div className="prose-magazine my-12">
+          <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>
+            {contentStr.replace(/\\n/g, '\n')}
+          </ReactMarkdown>
+        </div>
+      )
     }
   }
 

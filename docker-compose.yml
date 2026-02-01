@@ -3,7 +3,6 @@ services:
     build:
       context: ./backend
       target: runtime
-    # Overwrite command for development to enable hot-reload if needed, but let's stick to Dockerfile CMD for now or override for dev
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     ports:
       - "8000:8000"
@@ -15,6 +14,24 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=app
+      - PYTHONPATH=/app
+    depends_on:
+      - db
+
+  sync-watcher:
+    build:
+      context: ./backend
+      target: runtime
+    command: python app/sync_md.py --watch
+    volumes:
+      - ./backend:/app
+      - /app/.venv
+    environment:
+      - POSTGRES_SERVER=db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=app
+      - PYTHONPATH=/app
     depends_on:
       - db
 
@@ -22,11 +39,6 @@ services:
     build:
       context: ./frontend
       target: runner
-    # In dev, we usually want to run `npm run dev` instead of the production build
-    # But for a strict docker-compose up that mirrors prod, we use the build.
-    # However, for a dev environment, it's better to mount volume and run dev.
-    # Let's configure it for production-like run as per task 'Dockerization' usually implies building the images.
-    # BUT, to be useful for dev, I'll stick to the production build for verification.
     ports:
       - "3000:3000"
     environment:

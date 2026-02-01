@@ -14,8 +14,7 @@ def parse_markdown_performance(content: str) -> Dict[str, Any]:
     blocks = []
     
     # 이미지 정규식: ![alt](url)
-    # 줄의 시작과 끝이 이미지 형식을 갖추고 있는지 확인
-    img_pattern = re.compile(r'^!\[.*?\]\((.*?)\)\s*$')
+    img_pattern = re.compile(r'^!\[(.*?)\]\((.*?)\)\s*$')
     
     lines = body.splitlines()
     current_text = []
@@ -49,7 +48,8 @@ def parse_markdown_performance(content: str) -> Dict[str, Any]:
         if img_match:
             flush_text()
             
-            row_images = [normalize_img_url(img_match.group(1))]
+            # 단일 이미지 정보를 {url, alt} 객체로 관리
+            row_images = [{"url": normalize_img_url(img_match.group(2)), "alt": img_match.group(1)}]
             j = i + 1
             while j < len(lines):
                 next_line = lines[j].strip()
@@ -59,7 +59,7 @@ def parse_markdown_performance(content: str) -> Dict[str, Any]:
                 
                 next_img_match = img_pattern.match(next_line)
                 if next_img_match:
-                    row_images.append(normalize_img_url(next_img_match.group(1)))
+                    row_images.append({"url": normalize_img_url(next_img_match.group(2)), "alt": next_img_match.group(1)})
                     j += 1
                 else:
                     break
@@ -68,7 +68,7 @@ def parse_markdown_performance(content: str) -> Dict[str, Any]:
                 blocks.append({"type": "image_row", "value": json.dumps(row_images, ensure_ascii=False)})
                 i = j
             else:
-                blocks.append({"type": "image", "value": row_images[0]})
+                blocks.append({"type": "image", "value": json.dumps(row_images[0], ensure_ascii=False)})
                 i += 1
         else:
             current_text.append(line_raw)

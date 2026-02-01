@@ -38,3 +38,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 - [x] **Track: UI/UX 통일감 및 전문성 제고**
 *Link: [./archive/ui_ux_refinement_20260201/](./archive/ui_ux_refinement_20260201/)*
 *Report: [./docs/ui_ux_refinement_20260201/report.md](./docs/ui_ux_refinement_20260201/report.md)*
+
+---
+
+- [~] **Track: 시공사례 마크다운 렌더링 고도화**
+*Link: [./tracks/markdown_rendering_20260201/](./tracks/markdown_rendering_20260201/)*

@@ -75,6 +75,125 @@
 }
 
 .text-accent-highlight::after {
+
   content: '';
+
   @apply absolute bottom-1 left-0 w-full h-2 bg-accent/20 -z-10;
+
+}
+
+
+
+/* Magazine Style Typography for Markdown Content */
+
+.prose-magazine {
+
+  @apply text-gray-600 leading-[1.8] text-lg md:text-xl font-medium;
+
+  word-break: keep-all;
+
+}
+
+
+
+.prose-magazine h2 {
+
+  @apply text-2xl md:text-3xl font-black text-deep mt-16 mb-8 tracking-tight border-l-4 border-primary pl-6;
+
+}
+
+
+
+.prose-magazine h3 {
+
+
+
+  @apply text-xl md:text-2xl font-black text-deep mt-12 mb-6 tracking-tight;
+
+
+
+}
+
+
+
+
+
+
+
+.prose-magazine p {
+
+
+
+  @apply mb-8 whitespace-pre-wrap;
+
+
+
+}
+
+
+
+
+
+
+
+.prose-magazine strong {
+
+
+
+
+
+  @apply font-black text-deep border-b-2 border-accent/30 px-0.5;
+
+}
+
+
+
+.prose-magazine blockquote {
+
+  @apply my-16 py-8 px-10 bg-surface rounded-[2.5rem] border border-black/5 relative;
+
+}
+
+
+
+.prose-magazine blockquote p {
+
+  @apply text-xl md:text-2xl font-black text-primary leading-snug mb-0 italic;
+
+}
+
+
+
+.prose-magazine blockquote::before {
+
+  content: '"';
+
+  @apply absolute -top-4 left-8 text-6xl font-black text-accent/20;
+
+}
+
+
+
+.prose-magazine ul, .prose-magazine ol {
+
+  @apply my-8 space-y-3;
+
+}
+
+
+
+.prose-magazine li {
+
+  @apply relative pl-6;
+
+}
+
+
+
+.prose-magazine ul li::before {
+
+  content: '•';
+
+  @apply absolute left-0 text-primary font-black;
+
 }
