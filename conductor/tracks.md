@@ -41,5 +41,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: 시공사례 마크다운 렌더링 고도화**
-*Link: [./tracks/markdown_rendering_20260201/](./tracks/markdown_rendering_20260201/)*
+- [x] **Track: 시공사례 마크다운 렌더링 고도화**
+*Link: [./archive/markdown_rendering_20260201/](./archive/markdown_rendering_20260201/)*
