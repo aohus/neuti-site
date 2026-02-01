@@ -7,10 +7,10 @@
 - [x] Task: Frontend - 공통 레이아웃 컴포넌트(`Container`, `Section`)의 여백 규칙 표준화 및 테스트 작성
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Design Foundation' (Protocol in workflow.md)
 
-## Phase 2: Navigation & Brand Identity
-- [ ] Task: Frontend - 상단 내비게이션(GNB) 폰트 스타일 및 로고 색상 통일 UI 테스트 작성
-- [ ] Task: Frontend - GNB 및 푸터 디자인 고도화 (글자 크기 축소 및 위계 조정)
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Navigation & Identity' (Protocol in workflow.md)
+## Phase 2: Navigation & Brand Identity [checkpoint: 41857b8]
+- [x] Task: Frontend - 상단 내비게이션(GNB) 폰트 스타일 및 로고 색상 통일 UI 테스트 작성
+- [x] Task: Frontend - GNB 및 푸터 디자인 고도화 (글자 크기 축소 및 위계 조정)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Navigation & Identity' (Protocol in workflow.md)
 
 ## Phase 3: Main Page Revamp
 - [ ] Task: Frontend - 메인 페이지 히어로 섹션 및 레이아웃 구조 개선 테스트 작성
