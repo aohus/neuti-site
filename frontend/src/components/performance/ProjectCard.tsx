@@ -4,39 +4,40 @@ import Link from 'next/link'
 
 export default function ProjectCard({ project }: { project: Project }) {
   return (
-    <Link href={`/performance/${project.id}`} className="group bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
+    <Link href={`/performance/${project.id}`} className="group bg-white rounded-[2rem] shadow-sm border border-black/5 overflow-hidden hover:shadow-2xl transition-all duration-500">
       {/* Image Container */}
-      <div className="relative aspect-[4/3] bg-gray-100 overflow-hidden">
+      <div className="relative aspect-[4/3] bg-surface overflow-hidden">
         {project.image && (
-          <Image
+          <img
             src={project.image}
             alt={project.title}
-            fill
-            className="object-cover group-hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
           />
         )}
-        <div className="absolute top-4 left-4">
-          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-green-600 text-white shadow-sm">
+        <div className="absolute top-5 left-5">
+          <span className="inline-flex items-center px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest bg-deep text-white shadow-lg shadow-deep/20">
             {project.category}
           </span>
         </div>
       </div>
 
       {/* Content */}
-      <div className="p-6">
-        <p className="text-xs text-green-700 font-bold mb-2 uppercase tracking-wider">{project.client}</p>
-        <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-green-700 transition-colors">
+      <div className="p-8">
+        <p className="text-[11px] font-black text-primary mb-3 uppercase tracking-[0.2em]">{project.client}</p>
+        <h3 className="text-xl font-black text-deep mb-4 line-clamp-2 group-hover:text-primary transition-colors leading-snug">
           {project.title}
         </h3>
-        {project.year && (
-          <p className="text-sm text-gray-400 mb-4">{project.year}년 시공</p>
-        )}
-        <div className="flex flex-wrap gap-2">
-          {project.tags.map((tag) => (
-            <span key={tag} className="text-[10px] bg-gray-50 text-gray-500 px-2 py-1 rounded border border-gray-100">
-              #{tag}
-            </span>
-          ))}
+        <div className="flex items-center justify-between mt-auto">
+          {project.year && (
+            <p className="text-[12px] font-bold text-gray-300 uppercase tracking-tighter">{project.year} YEAR</p>
+          )}
+          <div className="flex flex-wrap gap-2">
+            {project.tags.slice(0, 2).map((tag) => (
+              <span key={tag} className="text-[10px] font-bold text-gray-400">
+                #{tag}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </Link>

@@ -31,54 +31,81 @@ export default function PerformanceDetailPage() {
 
   // Content Rendering helper
   const renderContent = (contentStr: string) => {
+    // NEXT_PUBLIC_API_URL이 정의되지 않은 경우 브라우저에서는 localhost:8000을 사용하도록 강제
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+    
+    const getFullUrl = (url: string) => {
+      if (!url) return ''
+      if (url.startsWith('http')) return url
+      const path = url.startsWith('/') ? url : `/${url}`
+      return `${API_URL}${path}`
+    }
+
     try {
       const blocks = JSON.parse(contentStr)
       if (!Array.isArray(blocks)) throw new Error()
       
       return blocks.map((block: any, index: number) => {
         if (block.type === 'image') {
-          const imgData = JSON.parse(block.value)
-          const url = imgData.url.startsWith('http') ? imgData.url : `http://localhost:8000${imgData.url}`
-          return (
-            <div key={index} className="my-20 text-center">
-              <img 
-                src={url} 
-                alt={imgData.alt || `Content ${index}`} 
-                className="w-full rounded-[3rem] shadow-2xl border-8 border-white mb-6"
-              />
-              {imgData.alt && (
-                <p className="text-sm md:text-base text-gray-400 font-bold tracking-tight">
-                  {imgData.alt}
-                </p>
-              )}
-            </div>
-          )
+          try {
+            const imgData = typeof block.value === 'string' && block.value.startsWith('{') 
+              ? JSON.parse(block.value) 
+              : { url: block.value, alt: '' };
+            
+            const url = getFullUrl(imgData.url)
+            return (
+              <div key={index} className="my-20 text-center">
+                <img 
+                  src={url} 
+                  alt={imgData.alt || `Content ${index}`} 
+                  className="w-full rounded-[3rem] shadow-2xl border-8 border-white mb-6"
+                />
+                {imgData.alt && (
+                  <p className="text-sm md:text-base text-gray-400 font-bold tracking-tight">
+                    {imgData.alt}
+                  </p>
+                )}
+              </div>
+            )
+          } catch (err) {
+            const url = getFullUrl(block.value)
+            return (
+              <div key={index} className="my-20">
+                <img src={url} alt="" className="w-full rounded-[3rem] shadow-2xl border-8 border-white" />
+              </div>
+            )
+          }
         }
         if (block.type === 'image_row') {
-          const images = JSON.parse(block.value)
-          return (
-            <div key={index} className="my-20">
-              <div className={`grid grid-cols-1 md:grid-cols-${Math.min(images.length, 3)} gap-8 mb-6`}>
-                {images.map((img: any, imgIdx: number) => {
-                  const url = img.url.startsWith('http') ? img.url : `http://localhost:8000${img.url}`
-                  return (
-                    <div key={imgIdx} className="text-center">
-                      <img 
-                        src={url} 
-                        alt={img.alt || `Content Row ${index}-${imgIdx}`} 
-                        className="w-full aspect-[4/3] object-cover rounded-[2.5rem] shadow-xl border-4 border-white mb-4"
-                      />
-                      {img.alt && (
-                        <p className="text-xs md:text-sm text-gray-400 font-bold tracking-tight">
-                          {img.alt}
-                        </p>
-                      )}
-                    </div>
-                  )
-                })}
+          try {
+            const items = JSON.parse(block.value)
+            return (
+              <div key={index} className="my-20">
+                <div className={`grid grid-cols-1 md:grid-cols-${Math.min(items.length, 3)} gap-8 mb-6`}>
+                  {items.map((item: any, imgIdx: number) => {
+                    const img = typeof item === 'string' ? { url: item, alt: '' } : item
+                    const url = getFullUrl(img.url)
+                    return (
+                      <div key={imgIdx} className="text-center">
+                        <img 
+                          src={url} 
+                          alt={img.alt || `Content Row ${index}-${imgIdx}`} 
+                          className="w-full aspect-[4/3] object-cover rounded-[2.5rem] shadow-xl border-4 border-white mb-4"
+                        />
+                        {img.alt && (
+                          <p className="text-xs md:text-sm text-gray-400 font-bold tracking-tight">
+                            {img.alt}
+                          </p>
+                        )}
+                      </div>
+                    )
+                  })}
+                </div>
               </div>
-            </div>
-          )
+            )
+          } catch (err) {
+            return null
+          }
         }
         return (
           <div key={index} className="prose-magazine my-12">

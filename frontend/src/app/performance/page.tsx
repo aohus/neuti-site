@@ -7,7 +7,6 @@ import PerformanceForm from '@/components/performance/PerformanceForm'
 import ProjectGrid from '@/components/performance/ProjectGrid'
 import SearchBar from '@/components/common/SearchBar'
 import Pagination from '@/components/common/Pagination'
-import { getProjectCategories } from '@/lib/projects'
 import { Plus, Calendar, MapPin, Wrench, Search, Filter } from 'lucide-react'
 
 export default function PerformancePage() {
@@ -33,17 +32,22 @@ export default function PerformancePage() {
 
   // Combine back-end data
   const allCombinedItems = useMemo(() => {
-    return performances.map(p => ({
-      id: p.id,
-      title: p.title,
-      client: p.client || '느티나무협동조합',
-      category: p.category || '시공사례',
-      image: p.thumbnail_url || '/images/hero-bg.jpg',
-      year: p.year?.toString() || (p.construction_date ? new Date(p.construction_date).getFullYear().toString() : ''),
-      tags: [p.job_main_category, p.site_type].filter(Boolean) as string[],
-      content: p.content,
-      isBackend: true
-    }))
+    console.log('Performances from API:', performances);
+    return performances.map(p => {
+      const item = {
+        id: p.id,
+        title: p.title,
+        client: p.client || '느티나무협동조합',
+        category: p.category || '시공사례',
+        image: p.thumbnail_url || '/images/hero-bg.jpg',
+        year: p.year?.toString() || (p.construction_date ? new Date(p.construction_date).getFullYear().toString() : ''),
+        tags: [p.job_main_category, p.site_type].filter(Boolean) as string[],
+        content: p.content,
+        isBackend: true
+      };
+      console.log('Mapped item:', item.title, 'Image:', item.image);
+      return item;
+    });
   }, [performances])
 
   // Pagination

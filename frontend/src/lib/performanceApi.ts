@@ -8,6 +8,13 @@ const getAuthHeader = () => {
   return token ? { Authorization: `Bearer ${token}` } : {}
 }
 
+const getFullUrl = (url: string | null | undefined) => {
+  if (!url) return url
+  if (url.startsWith('http')) return url
+  const path = url.startsWith('/') ? url : `/${url}`
+  return `${API_URL}${path}`
+}
+
 export const performanceApi = {
   // 목록 조회
   getPerformances: async (
@@ -34,7 +41,7 @@ export const performanceApi = {
     })
     return response.data.map((p: Performance) => ({
       ...p,
-      thumbnail_url: p.thumbnail_url ? (p.thumbnail_url.startsWith('http') ? p.thumbnail_url : `${API_URL}${p.thumbnail_url}`) : p.thumbnail_url
+      thumbnail_url: getFullUrl(p.thumbnail_url)
     }))
   },
 
@@ -44,7 +51,7 @@ export const performanceApi = {
     const p = response.data
     return {
       ...p,
-      thumbnail_url: p.thumbnail_url ? (p.thumbnail_url.startsWith('http') ? p.thumbnail_url : `${API_URL}${p.thumbnail_url}`) : p.thumbnail_url
+      thumbnail_url: getFullUrl(p.thumbnail_url)
     }
   },
 

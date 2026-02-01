@@ -10,7 +10,7 @@ from watchdog.events import FileSystemEventHandler
 
 from app.db.session import async_session
 from app.models.performance import Performance
-from app.utils.markdown import parse_markdown_performance
+from app.utils.markdown import parse_markdown_performance, normalize_img_url
 
 # 마크다운 파일 경로 설정
 DATA_DIR = Path("data/performances")
@@ -46,12 +46,6 @@ async def sync_performances():
                 result = await session.execute(select(Performance).filter(Performance.title == title))
                 db_obj = result.scalar_one_or_none()
                 
-                def normalize_url(url: str | None) -> str | None:
-                    if not url: return url
-                    if 'uploads/' in url:
-                        return '/uploads/' + url.split('uploads/')[-1]
-                    return url
-
                 # 메타데이터 매핑
                 performance_data = {
                     "title": title,
@@ -63,12 +57,12 @@ async def sync_performances():
                     "site_type": metadata.get("site_type"),
                     "site_location": metadata.get("site_location"),
                     "client": metadata.get("client"),
-                    "thumbnail_url": normalize_url(metadata.get("thumbnail_url")),
+                    "thumbnail_url": normalize_img_url(metadata.get("thumbnail_url")),
                     "construction_date": metadata.get("construction_date")
                 }
                 
                 if db_obj:
-                    # 변경 사항이 있을 때만 업데이트 (간단하게 모든 필드 셋)
+                    # 변경 사항이 있을 때만 업데이트
                     for key, value in performance_data.items():
                         setattr(db_obj, key, value)
                 else:
@@ -76,7 +70,9 @@ async def sync_performances():
                     new_performance = Performance(**performance_data)
                     session.add(new_performance)
             except Exception as e:
+                import traceback
                 print(f"Error processing {md_file.name}: {str(e)}")
+                traceback.print_exc()
         
         # 2. 삭제 로직
         if existing_titles:
