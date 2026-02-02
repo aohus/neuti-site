@@ -163,3 +163,24 @@ async def test_update_performance_unauthorized():
         # Update attempt without token
         update_res = await ac.put("/api/v1/performance/1", json={"title": "Hack"})
         assert update_res.status_code == 401
+
+@pytest.mark.asyncio
+async def test_general_upload_image():
+    # 1. Login as admin
+    login_data = {
+        "username": settings.ADMIN_USERNAME,
+        "password": settings.ADMIN_PASSWORD,
+    }
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
+        login_res = await ac.post("/api/v1/login/access-token", data=login_data)
+        token = login_res.json()["access_token"]
+        headers = {"Authorization": f"Bearer {token}"}
+
+        # 2. Upload image to general endpoint
+        file_content = b"fake image content"
+        files = {"image": ("test.jpg", io.BytesIO(file_content), "image/jpeg")}
+        # This path /api/v1/upload/image is mentioned in the plan
+        upload_res = await ac.post("/api/v1/upload/image", files=files, headers=headers)
+        assert upload_res.status_code == 200
+        image_url = upload_res.json()
+        assert image_url.startswith("/uploads/")

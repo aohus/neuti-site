@@ -11,9 +11,9 @@
     - [x] `backend/app/api/api_v1/endpoints/performances.py` (또는 유사 경로)에 PUT 엔드포인트 구현.
     - [x] Pydantic Schema (`PerformanceUpdate`)가 모든 필드(썸네일, 본문 등)를 허용하는지 재확인.
     - [x] 테스트 통과 및 리팩토링.
-- [ ] Task: 이미지 업로드 API 구현 (Editor Support)
-    - [ ] 에디터 내 이미지 업로드를 위한 `POST /api/v1/upload/image` 엔드포인트 구현 (또는 기존 업로드 API 활용).
-    - [ ] 업로드된 이미지가 `uploads/` 디렉토리에 저장되고 접근 가능한 URL을 반환하는지 테스트.
+- [x] Task: 이미지 업로드 API 구현 (Editor Support)
+    - [x] 에디터 내 이미지 업로드를 위한 `POST /api/v1/upload/image` 엔드포인트 구현 (또는 기존 업로드 API 활용).
+    - [x] 업로드된 이미지가 `uploads/` 디렉토리에 저장되고 접근 가능한 URL을 반환하는지 테스트.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md)
 
 ## Phase 2: 프론트엔드 에디터 도입 및 UI 구현 (Frontend)
