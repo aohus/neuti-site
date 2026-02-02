@@ -85,7 +85,8 @@ async def upload_image(
     # URL로 반환하기 위해 /uploads/파일명 형식을 사용합니다.
     return f"/uploads/{file_name}"
 
-@router.get("/", response_model=List[Performance])
+@router.get("", response_model=List[Performance])
+@router.get("/", response_model=List[Performance], include_in_schema=False)
 async def read_performances(
     db: AsyncSession = Depends(get_db),
     skip: int = 0,
@@ -121,7 +122,8 @@ async def read_performances(
     )
     return result.scalars().all()
 
-@router.post("/", response_model=Performance)
+@router.post("", response_model=Performance)
+@router.post("/", response_model=Performance, include_in_schema=False)
 async def create_performance(
     *,
     db: AsyncSession = Depends(get_db),
@@ -152,6 +154,7 @@ async def read_performance(
         raise HTTPException(status_code=404, detail="Performance record not found")
     return performance
 
+@router.put("/{id}", response_model=Performance)
 @router.patch("/{id}", response_model=Performance)
 async def update_performance(
     *,

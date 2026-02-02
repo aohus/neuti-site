@@ -113,3 +113,53 @@ This is a test content.
 
         # Cleanup
         await ac.delete(f"/api/v1/performance/{data['id']}", headers=headers)
+
+@pytest.mark.asyncio
+async def test_update_performance_put():
+    # 1. Login as admin
+    login_data = {
+        "username": settings.ADMIN_USERNAME,
+        "password": settings.ADMIN_PASSWORD,
+    }
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
+        login_res = await ac.post("/api/v1/login/access-token", data=login_data)
+        token = login_res.json()["access_token"]
+        headers = {"Authorization": f"Bearer {token}"}
+
+        # 2. Create initial performance
+        perf_data = {
+            "title": "Initial Title",
+            "content": "Initial Content",
+            "category": "조경식재"
+        }
+        create_res = await ac.post("/api/v1/performance/", json=perf_data, headers=headers)
+        perf_id = create_res.json()["id"]
+
+        # 3. Update using PUT
+        update_data = {
+            "title": "Updated Title",
+            "content": "Updated Content",
+            "category": "수목치료",
+            "year": 2026,
+            "client": "New Client"
+        }
+        update_res = await ac.put(f"/api/v1/performance/{perf_id}", json=update_data, headers=headers)
+        
+        # Currently, PUT is not implemented, so this should fail (e.g., 405 Method Not Allowed)
+        assert update_res.status_code == 200
+        data = update_res.json()
+        assert data["title"] == "Updated Title"
+        assert data["content"] == "Updated Content"
+        assert data["category"] == "수목치료"
+        assert data["year"] == 2026
+        assert data["client"] == "New Client"
+
+        # Cleanup
+        await ac.delete(f"/api/v1/performance/{perf_id}", headers=headers)
+
+@pytest.mark.asyncio
+async def test_update_performance_unauthorized():
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
+        # Update attempt without token
+        update_res = await ac.put("/api/v1/performance/1", json={"title": "Hack"})
+        assert update_res.status_code == 401

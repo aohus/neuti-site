@@ -6,11 +6,11 @@
 - [x] Task: `sync_md.py` 동기화 로직 수정 (DB 삭제 방지)
     - [x] `backend/app/sync_md.py`에서 기존 DB 레코드 삭제 로직(delete_query) 제거 또는 조건부 실행으로 변경.
     - [x] DB에 존재하면 건너뛰고, 없으면 추가하는 'Seed' 방식으로 로직 안정화.
-- [ ] Task: 성능(Performance) 업데이트 API 구현 (TDD)
-    - [ ] `backend/tests/test_performance.py`에 `update_performance` 관련 실패하는 테스트 케이스 추가 (수정 권한, 데이터 검증).
-    - [ ] `backend/app/api/api_v1/endpoints/performances.py` (또는 유사 경로)에 PUT 엔드포인트 구현.
-    - [ ] Pydantic Schema (`PerformanceUpdate`)가 모든 필드(썸네일, 본문 등)를 허용하는지 재확인.
-    - [ ] 테스트 통과 및 리팩토링.
+- [x] Task: 성능(Performance) 업데이트 API 구현 (TDD)
+    - [x] `backend/tests/test_performance.py`에 `update_performance` 관련 실패하는 테스트 케이스 추가 (수정 권한, 데이터 검증).
+    - [x] `backend/app/api/api_v1/endpoints/performances.py` (또는 유사 경로)에 PUT 엔드포인트 구현.
+    - [x] Pydantic Schema (`PerformanceUpdate`)가 모든 필드(썸네일, 본문 등)를 허용하는지 재확인.
+    - [x] 테스트 통과 및 리팩토링.
 - [ ] Task: 이미지 업로드 API 구현 (Editor Support)
     - [ ] 에디터 내 이미지 업로드를 위한 `POST /api/v1/upload/image` 엔드포인트 구현 (또는 기존 업로드 API 활용).
     - [ ] 업로드된 이미지가 `uploads/` 디렉토리에 저장되고 접근 가능한 URL을 반환하는지 테스트.
