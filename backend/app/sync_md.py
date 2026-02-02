@@ -4,9 +4,7 @@ import sys
 import time
 from pathlib import Path
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, delete
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
+from sqlalchemy import select
 
 from app.db.session import async_session
 from app.models.performance import Performance
@@ -21,17 +19,18 @@ async def sync_performances():
         return
 
     async with async_session() as session:
-        # 1. 현재 폴더에 존재하는 마크다운 파일들의 제목(Title) 목록 수집
-        existing_titles = []
-        
         for md_file in DATA_DIR.glob("*.md"):
             print(f"Processing {md_file.name}...")
+            
+            # 마크다운 파일의 이름을 이미지 하위 폴더명으로 간주 (힌트 반영)
+            post_dir_name = md_file.stem
             
             with open(md_file, "r", encoding="utf-8") as f:
                 content = f.read()
             
             try:
-                parsed = parse_markdown_performance(content)
+                # 텍스트 내 이미지 보정을 위해 post_dir_name 전달
+                parsed = parse_markdown_performance(content, post_dir_name)
                 metadata = parsed["metadata"]
                 content_json = parsed["content_json"]
                 
@@ -40,13 +39,18 @@ async def sync_performances():
                     print(f"Skip {md_file.name}: No title found in frontmatter.")
                     continue
                 
-                existing_titles.append(title)
-                
                 # DB에서 기존 항목 검색
                 result = await session.execute(select(Performance).filter(Performance.title == title))
                 db_obj = result.scalar_one_or_none()
                 
-                # 메타데이터 매핑
+                if db_obj:
+                    print(f"Skip {title}: Already exists in DB. Web edits take priority.")
+                    continue
+
+                # 썸네일 URL도 post_dir_name을 사용하여 보정
+                thumbnail_raw = metadata.get("thumbnail_url")
+                thumbnail_url = normalize_img_url(thumbnail_raw, post_dir_name)
+
                 performance_data = {
                     "title": title,
                     "content": content_json,
@@ -57,29 +61,17 @@ async def sync_performances():
                     "site_type": metadata.get("site_type"),
                     "site_location": metadata.get("site_location"),
                     "client": metadata.get("client"),
-                    "thumbnail_url": normalize_img_url(metadata.get("thumbnail_url")),
+                    "thumbnail_url": thumbnail_url,
                     "construction_date": metadata.get("construction_date")
                 }
                 
-                if db_obj:
-                    # 변경 사항이 있을 때만 업데이트
-                    for key, value in performance_data.items():
-                        setattr(db_obj, key, value)
-                else:
-                    print(f"Creating: {title}")
-                    new_performance = Performance(**performance_data)
-                    session.add(new_performance)
+                print(f"Creating: {title}")
+                new_performance = Performance(**performance_data)
+                session.add(new_performance)
             except Exception as e:
                 import traceback
                 print(f"Error processing {md_file.name}: {str(e)}")
                 traceback.print_exc()
-        
-        # 2. 삭제 로직
-        if existing_titles:
-            delete_query = delete(Performance).where(Performance.title.not_in(existing_titles))
-            result = await session.execute(delete_query)
-            if result.rowcount > 0:
-                print(f"Deleted {result.rowcount} removed performances from DB.")
         
         await session.commit()
         print("Sync completed.")
@@ -93,7 +85,6 @@ class MarkdownHandler(FileSystemEventHandler):
         if event.is_directory or not event.src_path.endswith('.md'):
             return
         
-        # 짧은 시간 내의 중복 이벤트 방지 (Debounce)
         current_time = time.time()
         if current_time - self.last_run < 1:
             return
@@ -104,7 +95,7 @@ class MarkdownHandler(FileSystemEventHandler):
 
 async def watch_mode():
     print(f"Starting watch mode on {DATA_DIR}...")
-    await sync_performances() # 시작 시 최초 1회 실행
+    await sync_performances()
     
     loop = asyncio.get_running_loop()
     event_handler = MarkdownHandler(loop)
