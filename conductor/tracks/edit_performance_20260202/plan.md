@@ -19,18 +19,18 @@
 ## Phase 2: 프론트엔드 에디터 도입 및 UI 구현 (Frontend)
 이 단계에서는 Tiptap 에디터를 도입하고 수정 페이지 UI를 구축합니다.
 
-- [ ] Task: Tiptap 에디터 컴포넌트 개발
-    - [ ] 필요한 패키지 설치 (`@tiptap/react`, `@tiptap/starter-kit`, `@tiptap/extension-image` 등).
-    - [ ] `frontend/src/components/Editor/TiptapEditor.tsx` (가칭) 컴포넌트 생성.
-    - [ ] 드래그 앤 드롭 이미지 기능 활성화 및 이미지 업로드 핸들러(Hook) 연동.
-- [ ] Task: 시공사례 수정 페이지 구현
-    - [ ] `frontend/src/app/performance/[id]/edit/page.tsx` 생성.
-    - [ ] 기존 데이터(초기값)를 불러와 폼(React Hook Form 추천)과 에디터에 바인딩하는 로직 구현.
-    - [ ] 제목, 카테고리, 날짜 등 메타데이터 입력 UI 구성 (Tailwind CSS 적용).
-- [ ] Task: 수정 기능 통합 및 테스트
-    - [ ] '저장' 버튼 클릭 시 백엔드 API로 데이터 전송 (Payload 구성 확인).
-    - [ ] 성공 시 상세 페이지로 리다이렉트 및 토스트 메시지 출력.
-    - [ ] Jest를 이용한 에디터 렌더링 및 폼 제출 기본 동작 테스트.
+- [x] Task: Tiptap 에디터 컴포넌트 개발
+    - [x] 필요한 패키지 설치 (`@tiptap/react`, `@tiptap/starter-kit`, `@tiptap/extension-image` 등).
+    - [x] `frontend/src/components/Editor/TiptapEditor.tsx` (가칭) 컴포넌트 생성.
+    - [x] 드래그 앤 드롭 이미지 기능 활성화 및 이미지 업로드 핸들러(Hook) 연동.
+- [x] Task: 시공사례 수정 페이지 구현
+    - [x] `frontend/src/app/performance/[id]/edit/page.tsx` 생성.
+    - [x] 기존 데이터(초기값)를 불러와 폼(React Hook Form 추천)과 에디터에 바인딩하는 로직 구현.
+    - [x] 제목, 카테고리, 날짜 등 메타데이터 입력 UI 구성 (Tailwind CSS 적용).
+- [x] Task: 수정 기능 통합 및 테스트
+    - [x] '저장' 버튼 클릭 시 백엔드 API로 데이터 전송 (Payload 구성 확인).
+    - [x] 성공 시 상세 페이지로 리다이렉트 및 토스트 메시지 출력.
+    - [x] Jest를 이용한 에디터 렌더링 및 폼 제출 기본 동작 테스트.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md)
 
 ## Phase 3: 최종 점검 및 안정화 (Stabilization)
