@@ -14,7 +14,7 @@
 - [x] Task: 이미지 업로드 API 구현 (Editor Support)
     - [x] 에디터 내 이미지 업로드를 위한 `POST /api/v1/upload/image` 엔드포인트 구현 (또는 기존 업로드 API 활용).
     - [x] 업로드된 이미지가 `uploads/` 디렉토리에 저장되고 접근 가능한 URL을 반환하는지 테스트.
-- [ ] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md)
 
 ## Phase 2: 프론트엔드 에디터 도입 및 UI 구현 (Frontend)
 이 단계에서는 Tiptap 에디터를 도입하고 수정 페이지 UI를 구축합니다.

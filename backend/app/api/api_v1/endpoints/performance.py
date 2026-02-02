@@ -16,6 +16,53 @@ from app.utils.markdown import parse_markdown_performance
 router = APIRouter()
 utils_router = APIRouter()
 
+@router.post("/upload-md", response_model=Performance)
+async def upload_markdown(
+    *,
+    db: AsyncSession = Depends(get_db),
+    file: UploadFile = File(...),
+    current_admin: str = Depends(deps.get_current_admin)
+) -> Any:
+    """
+    마크다운 파일을 업로드하여 시공 사례를 자동으로 등록합니다.
+    """
+    if not file.filename.endswith('.md'):
+        raise HTTPException(status_code=400, detail="Only .md files are allowed")
+    
+    content = await file.read()
+    try:
+        parsed = parse_markdown_performance(content.decode('utf-8'))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Failed to parse markdown: {str(e)}")
+    
+    metadata = parsed["metadata"]
+    
+    # 필수 필드 확인
+    title = metadata.get("title")
+    if not title:
+        raise HTTPException(status_code=400, detail="Title is required in frontmatter")
+    
+    # 데이터 매핑
+    perf_in = PerformanceCreate(
+        title=title,
+        content=parsed["content_json"],
+        category=metadata.get("category"),
+        year=int(metadata.get("year")) if metadata.get("year") else None,
+        job_main_category=metadata.get("job_main_category"),
+        job_sub_category=metadata.get("job_sub_category"),
+        site_type=metadata.get("site_type"),
+        site_location=metadata.get("site_location"),
+        client=metadata.get("client"),
+        thumbnail_url=metadata.get("thumbnail_url"),
+        construction_date=metadata.get("construction_date")
+    )
+    
+    db_obj = PerformanceModel(**perf_in.model_dump())
+    db.add(db_obj)
+    await db.commit()
+    await db.refresh(db_obj)
+    return db_obj
+
 @utils_router.post("/image", response_model=str)
 @router.post("/upload-image", response_model=str)
 async def upload_image(
