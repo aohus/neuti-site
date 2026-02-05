@@ -8,11 +8,11 @@ fi
 domains=(xn--o39am4cy8gnsc00kvxe.com xn--o39am4cy8gnsc00kvxe.net)
 rsa_key_size=4096
 data_path="./certbot"
-email="info@neuti.co.kr" # 수정 필요 시 업데이트
+email="info@neuti.co.kr"
 staging=0 # 실제 발급 시 0으로 설정
 
-if [ -d "$data_path" ]; then
-  read -p "Existing data found for $domains. Continue and replace existing certificate? (y/N) " decision
+if [ -d "$data_path/conf/live/${domains[0]}" ]; then
+  read -p "Existing data found for ${domains[0]}. Continue and replace existing certificate? (y/N) " decision
   if [ "$decision" != "Y" ] && [ "$decision" != "y" ]; then
     exit
   fi
@@ -27,14 +27,14 @@ if [ ! -e "$data_path/conf/options-ssl-nginx.conf" ] || [ ! -e "$data_path/conf/
   echo
 fi
 
-echo "### Creating dummy certificate for $domains ..."
-path="/etc/letsencrypt/live/$domains"
-mkdir -p "$data_path/conf/live/$domains"
+echo "### Creating dummy certificate for ${domains[0]} ..."
+path="/etc/letsencrypt/live/${domains[0]}"
+mkdir -p "$data_path/conf/live/${domains[0]}"
 sudo docker compose -f docker-compose.prod.yml run --rm --entrypoint \
-  openssl req -x509 -nodes -newkey rsa:1024 -days 1 \
+  "openssl req -x509 -nodes -newkey rsa:1024 -days 1 \
     -keyout '$path/privkey.pem' \
     -out '$path/fullchain.pem' \
-    -subj '/CN=localhost' certbot
+    -subj '/CN=localhost'" certbot
 echo
 
 
@@ -42,11 +42,11 @@ echo "### Starting nginx ..."
 sudo docker compose -f docker-compose.prod.yml up --force-recreate -d nginx
 echo
 
-echo "### Deleting dummy certificate for $domains ..."
+echo "### Deleting dummy certificate for ${domains[0]} ..."
 sudo docker compose -f docker-compose.prod.yml run --rm --entrypoint \
-  rm -rf /etc/letsencrypt/live/$domains && \
-  rm -rf /etc/letsencrypt/archive/$domains && \
-  rm -rf /etc/letsencrypt/renewal/$domains.conf certbot
+  "rm -rf /etc/letsencrypt/live/${domains[0]} && \
+  rm -rf /etc/letsencrypt/archive/${domains[0]} && \
+  rm -rf /etc/letsencrypt/renewal/${domains[0]}.conf" certbot
 echo
 
 
@@ -67,13 +67,13 @@ esac
 if [ $staging != "0" ]; then staging_arg="--staging"; fi
 
 sudo docker compose -f docker-compose.prod.yml run --rm --entrypoint \
-  certbot certonly --webroot -w /var/www/certbot \
+  "certbot certonly --webroot -w /var/www/certbot \
     $staging_arg \
     $email_arg \
     $domain_args \
     --rsa-key-size $rsa_key_size \
     --agree-tos \
-    --force-renewal certbot
+    --force-renewal" certbot
 echo
 
 echo "### Reloading nginx ..."
