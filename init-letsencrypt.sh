@@ -11,8 +11,11 @@ data_path="./certbot"
 email="info@neuti.co.kr"
 staging=0 # 실제 발급 시 0으로 설정
 
-if [ -d "$data_path/conf/live/${domains[0]}" ]; then
-  read -p "Existing data found for ${domains[0]}. Continue and replace existing certificate? (y/N) " decision
+# 첫 번째 도메인을 기준으로 경로 설정
+main_domain="${domains[0]}"
+
+if [ -d "$data_path/conf/live/$main_domain" ]; then
+  read -p "Existing data found for $main_domain. Continue and replace existing certificate? (y/N) " decision
   if [ "$decision" != "Y" ] && [ "$decision" != "y" ]; then
     exit
   fi
@@ -27,26 +30,23 @@ if [ ! -e "$data_path/conf/options-ssl-nginx.conf" ] || [ ! -e "$data_path/conf/
   echo
 fi
 
-echo "### Creating dummy certificate for ${domains[0]} ..."
-path="/etc/letsencrypt/live/${domains[0]}"
-mkdir -p "$data_path/conf/live/${domains[0]}"
+echo "### Creating dummy certificate for $main_domain ..."
+path="/etc/letsencrypt/live/$main_domain"
+mkdir -p "$data_path/conf/live/$main_domain"
 sudo docker compose -f docker-compose.prod.yml run --rm --entrypoint \
-  "openssl req -x509 -nodes -newkey rsa:1024 -days 1 \
-    -keyout '$path/privkey.pem' \
+  "openssl req -x509 -nodes -newkey rsa:1024 -days 1\    -keyout '$path/privkey.pem' \
     -out '$path/fullchain.pem' \
     -subj '/CN=localhost'" certbot
 echo
 
-
 echo "### Starting nginx ..."
+# Nginx가 더미 인증서를 물고 실행됩니다.
 sudo docker compose -f docker-compose.prod.yml up --force-recreate -d nginx
 echo
 
-echo "### Deleting dummy certificate for ${domains[0]} ..."
+echo "### Deleting dummy certificate for $main_domain ..."
 sudo docker compose -f docker-compose.prod.yml run --rm --entrypoint \
-  "rm -rf /etc/letsencrypt/live/${domains[0]} && \
-  rm -rf /etc/letsencrypt/archive/${domains[0]} && \
-  rm -rf /etc/letsencrypt/renewal/${domains[0]}.conf" certbot
+  "rm -rf /etc/letsencrypt/live/$main_domain && \  rm -rf /etc/letsencrypt/archive/$main_domain && \  rm -rf /etc/letsencrypt/renewal/$main_domain.conf" certbot
 echo
 
 
@@ -59,21 +59,16 @@ done
 
 # Select appropriate email arg
 case "$email" in
-  "" ) email_arg="--register-unsafely-without-email" ;;
-  * ) email_arg="--email $email" ;;
+  "" ) email_arg="--register-unsafely-without-email" ;; 
+  * ) email_arg="--email $email" ;; 
 esac
 
 # Enable staging mode if needed
 if [ $staging != "0" ]; then staging_arg="--staging"; fi
 
+# 실제 인증서 발급 요청
 sudo docker compose -f docker-compose.prod.yml run --rm --entrypoint \
-  "certbot certonly --webroot -w /var/www/certbot \
-    $staging_arg \
-    $email_arg \
-    $domain_args \
-    --rsa-key-size $rsa_key_size \
-    --agree-tos \
-    --force-renewal" certbot
+  "certbot certonly --webroot -w /var/www/certbot \    $staging_arg \    $email_arg \    $domain_args \    --rsa-key-size $rsa_key_size \    --agree-tos \    --force-renewal" certbot
 echo
 
 echo "### Reloading nginx ..."
