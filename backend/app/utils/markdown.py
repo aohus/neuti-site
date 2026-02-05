@@ -36,8 +36,9 @@ def parse_markdown_performance(content: str, post_dir: str = "") -> dict[str, An
     body = post.content.strip()
 
     blocks = []
-    # 정규표현식 수정: 캡처 그룹 (1) alt text, (2) url
-    img_pattern = re.compile(r"^![\s\S]*?\]\([\s\S]*?\)\s*$")
+    # 정규표현식 수정: 명시적인 캡처 그룹 정의 (1) alt text, (2) url
+    # ![alt](url) 형식을 정확히 매칭합니다.
+    img_pattern = re.compile(r"^!\[(.*?)](.*?)\)\\s*$")
 
     lines = body.splitlines()
     current_text = []
@@ -61,7 +62,7 @@ def parse_markdown_performance(content: str, post_dir: str = "") -> dict[str, An
             continue
 
         img_match = img_pattern.match(line)
-        if img_match:
+        if img_match and len(img_match.groups()) >= 2:
             flush_text()
 
             row_images = [
@@ -78,7 +79,7 @@ def parse_markdown_performance(content: str, post_dir: str = "") -> dict[str, An
                     continue
 
                 next_img_match = img_pattern.match(next_line)
-                if next_img_match:
+                if next_img_match and len(next_img_match.groups()) >= 2:
                     row_images.append(
                         {
                             "url": normalize_img_url(

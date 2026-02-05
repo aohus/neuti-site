@@ -6,6 +6,7 @@ import ClientBanner from '@/components/common/ClientBanner'
 import StatisticsDashboard from '@/components/home/StatisticsDashboard'
 import TargetCTA from '@/components/home/TargetCTA'
 import ProcessFlow from '@/components/home/ProcessFlow'
+import ImpactGallery from '@/components/home/ImpactGallery'
 import { MissionSection } from '@/components/common/HomeSections'
 import LatestUpdates from '@/components/common/LatestUpdates'
 
@@ -24,11 +25,14 @@ export default function Home() {
       
       {/* 4. Professionalism - Scientific Process */}
       <ProcessFlow />
+
+      {/* 5. Evidence - Impact Gallery (B&A) */}
+      <ImpactGallery />
       
-      {/* 5. Brand Identity - Mission & Philosophy */}
+      {/* 6. Brand Identity - Mission & Philosophy */}
       <MissionSection />
       
-      {/* 6. Current Evidence - Latest Performance & Posts */}
+      {/* 7. Current Evidence - Latest Performance & Posts */}
       <LatestUpdates />
     </div>
   )

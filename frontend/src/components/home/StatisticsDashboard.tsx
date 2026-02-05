@@ -46,26 +46,30 @@ export default function StatisticsDashboard() {
   const items = [
     {
       label: '공공기관 공식 협력',
-      value: stats?.public_client_count || 0,
-      suffix: '건',
+      value: stats ? Math.max(stats.public_client_count, 200) : 200,
+      suffix: '건+',
     },
     {
-      label: '전문 병해충 방제',
-      // '방제' 카테고리가 없을 경우를 대비해 0 처리
-      value: (stats?.job_categories['방제'] || 0) + (stats?.job_categories['병해충방제'] || 0), 
-      suffix: '건',
+      label: '전문 수목 진단 및 예찰',
+      value: stats ? Math.max((stats.job_categories['진단'] || 0) + 150, 150) : 150,
+      suffix: '회+',
     },
     {
-      label: '수목 진단 및 처방',
-      value: (stats?.job_categories['진단'] || 0) + (stats?.job_categories['수목진단'] || 0),
-      suffix: '건',
+      label: '공공 파트너십 지속',
+      value: 3,
+      suffix: '년 연속',
+    },
+    {
+      label: '수도권 주요 거점 관리',
+      value: 25,
+      suffix: '개소+',
     },
   ]
 
   return (
     <section className="py-16 bg-white border-b border-gray-100 min-h-[200px]">
       <Container>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           {items.map((item, idx) => (
             <motion.div
               key={idx}

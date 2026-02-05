@@ -39,7 +39,7 @@ export default function MainCarousel() {
   }, [nextSlide])
 
   return (
-    <section className="relative h-[85vh] min-h-[700px] w-full overflow-hidden bg-black">
+    <section className="relative h-[70vh] min-h-[600px] w-full overflow-hidden bg-black">
       <AnimatePresence mode="wait">
         <motion.div
           key={currentIndex}
