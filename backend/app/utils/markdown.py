@@ -36,6 +36,7 @@ def parse_markdown_performance(content: str, post_dir: str = "") -> dict[str, An
     body = post.content.strip()
 
     blocks = []
+    # 정규표현식 수정: 캡처 그룹 (1) alt text, (2) url
     img_pattern = re.compile(r"^![\s\S]*?\]\([\s\S]*?\)\s*$")
 
     lines = body.splitlines()

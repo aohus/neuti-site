@@ -12,18 +12,10 @@ const clients = [
 ]
 
 export default function ClientBanner() {
-  // 무한 롤링을 위해 리스트 복제
-  const doubleClients = [...clients, ...clients]
-
   return (
-    <div className="w-full bg-white border-b border-gray-100 py-10 overflow-hidden relative">
-      <div className="mb-6 text-center">
-        <p className="text-gray-400 text-sm font-black tracking-widest uppercase">
-          With Our Clients
-        </p>
-      </div>
-      
-      <div className="flex w-full overflow-hidden">
+    <section className="py-12 bg-white overflow-hidden border-b border-gray-50">
+      <div className="relative">
+        {/* Rolling Banner */}
         <div 
           className="flex whitespace-nowrap animate-marquee"
           style={{ 

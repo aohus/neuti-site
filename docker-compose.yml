@@ -5,7 +5,7 @@ services:
       target: runtime
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     ports:
-      - "8000:8000"
+      - "8001:8000"
     volumes:
       - ./backend:/app
       - /app/.venv
@@ -40,7 +40,7 @@ services:
       context: ./frontend
       target: runner
     ports:
-      - "3000:3000"
+      - "3001:3000"
     environment:
       - NEXT_PUBLIC_API_URL=/backend-api
       - BACKEND_INTERNAL_URL=http://backend:8000
@@ -56,7 +56,7 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=app
     ports:
-      - "5432:5432"
+      - "5431:5432"
 
 volumes:
   postgres_data:

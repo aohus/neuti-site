@@ -45,19 +45,20 @@ export default function StatisticsDashboard() {
 
   const items = [
     {
-      label: '누적 시공 완료',
-      value: stats?.total_count || 0,
-      suffix: '+',
+      label: '공공기관 공식 협력',
+      value: stats?.public_client_count || 0,
+      suffix: '건',
     },
     {
-      label: '관리 수목 (주)',
-      value: 50000 + (stats?.total_count || 0) * 10, 
-      suffix: '+',
+      label: '전문 병해충 방제',
+      // '방제' 카테고리가 없을 경우를 대비해 0 처리
+      value: (stats?.job_categories['방제'] || 0) + (stats?.job_categories['병해충방제'] || 0), 
+      suffix: '건',
     },
     {
-      label: '나무의사 직접 진단',
-      value: 100,
-      suffix: '%',
+      label: '수목 진단 및 처방',
+      value: (stats?.job_categories['진단'] || 0) + (stats?.job_categories['수목진단'] || 0),
+      suffix: '건',
     },
   ]
 

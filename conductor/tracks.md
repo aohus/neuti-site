@@ -60,3 +60,13 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [ ] **Track: 공지사항 게시판 구현**
 *Link: [./tracks/notice_board_20260203/](./tracks/notice_board_20260203/)*
+
+---
+
+
+
+- [x] **Track: 메인 페이지 UI 개선(홍보전략 관점)**
+
+*Link: [./tracks/main_page_improvement_20260205/](./tracks/main_page_improvement_20260205/)*
+
+*Report: [./docs/main_page_improvement_20260205/report.md](./docs/main_api_improvement_20260205/report.md)*

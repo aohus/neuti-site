@@ -1,25 +1,40 @@
-# Implementation Report: Main Page UX & Trust Improvement
+# Implementation Report: 메인 페이지 UI 개선 (홍보 전략 강화)
 
 ## Summary
-메인 페이지의 사용자 경험을 개선하고 전문적인 신뢰감을 줄 수 있도록 Hero 섹션 레이아웃을 수정하고, 발주처 CI 롤링 배너를 추가했습니다. 또한 타겟 사용자인 공무원 및 관리자들에게 신뢰를 줄 수 있는 시각적 지표(Social Proof)를 도입했습니다.
+3년 차 신생 기업으로서의 한계를 극복하고, 대형 공사(방제, 전정) 수주를 위한 '데이터 기반 신뢰'와 '고객 맞춤형 진입로'를 구축했습니다. 
+
+- **핵심 변화:** 정적 텍스트 데이터를 백엔드 실적 기반 동적 데이터로 전환, 타겟 고객별 맞춤형 CTA 도입, 전문가 프로세스 시각화.
 
 ## Architecture Update
+메인 페이지의 데이터 흐름과 컴포넌트 구조는 다음과 같습니다.
+
 ```mermaid
 graph TD
-    Navbar[Navbar Fixed] --> MainCarousel[MainCarousel Hero]
-    MainCarousel --> ClientBanner[Rolling Client Banner]
-    ClientBanner --> MissionSection[Mission Section]
+    subgraph Frontend
+        Page[Home Page] --> Stats[StatisticsDashboard]
+        Page --> Target[TargetCTA]
+        Page --> Process[ProcessFlow]
+        Stats --> Fetch[fetch /api/v1/performance/stats]
+    end
+    subgraph Backend
+        Fetch --> API[Performance Stats API]
+        API --> DB[(PostgreSQL)]
+    end
 ```
 
 ## Performance/Quality Results
 | Metric | Before | After |
-| :--- | :--- | :--- |
-| **Hero Visibility** | Overlapped by Navbar | Fully Visible with Navbar Padding |
-| **Trust Indicators** | Only text & photo | Stats (1,200+ projects) & Client Logos |
-| **Visual Depth** | Fixed height, photo-only | Responsive (85vh), Gradient Overlay, High-contrast text |
-| **Client Exposure** | None | Infinite Rolling Banner (Marquee) |
+|--------|--------|-------|
+| Data Integrity | Static (Manual) | Dynamic (Real-time DB Sync) |
+| Conversion Path | General | Segmented (Apartment vs Public) |
+| Trust Indicators | Text-based | Numerical Counters & Process Visualization |
+| Test Coverage | Low | Statistics & Integrated Page Tests Added |
 
 ## Technical Decisions
-- **Infinite Marquee:** CSS `@keyframes` 애니메이션과 리스트 복제 방식을 사용하여 JS 연산 없이 부드러운 롤링 구현.
-- **Fixed Navbar Padding:** Navbar의 높이(h-16/h-20)에 맞춰 Hero 컨텐츠 컨테이너에 `pt-20 md:pt-24`를 적용하여 시각적 중앙 정렬 유지.
-- **Social Proof:** 누적 실적 데이터를 히어로 섹션에 직접 노출하여 서비스 신뢰도를 직관적으로 전달.
+1. **Framer Motion Counters:** 숫자가 올라가는 애니메이션을 적용하여 사용자의 시선을 끌고 성과에 대한 주목도를 높임.
+2. **Target CTA Segmentation:** 아파트 관리자와 공공기관 담당자의 니즈가 다름을 인지하고, 각각에 맞는 강조 포인트(가치 상승 vs 신뢰성)를 분리하여 제공.
+3. **Backend Aggregation:** 실적 데이터(`공사실적.md`)가 DB에 동기화되는 구조를 활용하여 별도의 추가 입력 없이도 홍보 지표가 자동 업데이트되도록 구현.
+
+## Verification
+- **Automated:** Jest & Pytest를 통한 API 및 컴포넌트 렌더링 검증 완료.
+- **Manual:** 모바일 및 데스크탑 환경에서의 레이아웃 흐름 및 애니메이션 작동 확인.
