@@ -62,7 +62,7 @@ export default function MainCarousel() {
             <div className="absolute inset-0 bg-black/30 z-10" />
           </div>
 
-          <Container className="relative h-full z-20 flex flex-col justify-center text-left">
+          <Container className="relative h-full z-20 flex flex-col justify-center text-left pt-16 md:pt-20">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}

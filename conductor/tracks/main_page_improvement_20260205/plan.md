@@ -8,9 +8,9 @@
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Preparation & Analysis' (Protocol in workflow.md)
 
 ## Phase 2: Hero Section Layout Fix (TDD)
-- [ ] Task: Write tests to verify Hero section positioning and container spacing.
-- [ ] Task: Implement CSS/Layout fixes to prevent GNB overlap and center the Hero content properly.
-- [ ] Task: Verify fix across different screen sizes (Responsive check).
+- [x] Task: Write tests to verify Hero section positioning and container spacing.
+- [x] Task: Implement CSS/Layout fixes to prevent GNB overlap and center the Hero content properly.
+- [x] Task: Verify fix across different screen sizes (Responsive check).
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Hero Section Layout Fix' (Protocol in workflow.md)
 
 ## Phase 3: Client CI Rolling Banner Implementation (TDD)
