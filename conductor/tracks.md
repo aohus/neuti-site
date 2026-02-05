@@ -60,3 +60,9 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [ ] **Track: 공지사항 게시판 구현**
 *Link: [./tracks/notice_board_20260203/](./tracks/notice_board_20260203/)*
+
+---
+
+- [x] **Track: 홈서버 배포**
+*Link: [./tracks/home_server_deploy_20260205/](./tracks/home_server_deploy_20260205/)*
+*Report: [./docs/home_server_deploy_20260205/report.md](./docs/home_server_deploy_20260205/report.md)*
