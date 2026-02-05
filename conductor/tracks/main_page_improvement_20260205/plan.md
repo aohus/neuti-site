@@ -2,7 +2,7 @@
 
 메인 페이지의 Hero 섹션 레이아웃 문제를 해결하고, 발주처 CI 롤링 배너를 추가하여 시각적 완성도와 신뢰도를 높입니다.
 
-## Phase 1: Preparation & Analysis
+## Phase 1: Preparation & Analysis [checkpoint: 55d02d7]
 - [x] Task: Analyze current Hero section component and CSS. Identify the cause of the overlap with the GNB.
 - [x] Task: Verify the contents of `./assets/발주처CI/` and prepare public assets for the frontend.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Preparation & Analysis' (Protocol in workflow.md)
