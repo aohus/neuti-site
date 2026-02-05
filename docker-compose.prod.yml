@@ -1,75 +1,57 @@
 services:
-  nginx:
-    image: nginx:stable-alpine
-    container_name: neuti-nginx
-    ports:
-      - "8080:80"
-      - "8443:443"
-    volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
-    restart: always
-    depends_on:
-      - frontend
-      - backend
-
-  certbot:
-    image: certbot/certbot
-    container_name: neuti-certbot
-    volumes:
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12d & wait $${!}; done'"
-    restart: always
-
-  backend:
+  neuti-backend:
     build:
       context: ./backend
       target: runtime
+    container_name: neuti-backend
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000
     expose:
       - "8000"
     environment:
-      - POSTGRES_SERVER=db
+      - POSTGRES_SERVER=neuti-db
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
       - PYTHONPATH=/app
     restart: always
-    depends_on:
-      - db
+    networks:
+      - neuti-internal
+      - existing-s2r-network
 
-  sync-watcher:
+  neuti-sync-watcher:
     build:
       context: ./backend
       target: runtime
+    container_name: neuti-sync-watcher
     command: python app/sync_md.py --watch
     environment:
-      - POSTGRES_SERVER=db
+      - POSTGRES_SERVER=neuti-db
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
       - PYTHONPATH=/app
     restart: always
-    depends_on:
-      - db
+    networks:
+      - neuti-internal
 
-  frontend:
+  neuti-frontend:
     build:
       context: ./frontend
       target: runner
+    container_name: neuti-frontend
     expose:
       - "3000"
     environment:
       - NEXT_PUBLIC_API_URL=/backend-api
-      - BACKEND_INTERNAL_URL=http://backend:8000
+      - BACKEND_INTERNAL_URL=http://neuti-backend:8000
     restart: always
-    depends_on:
-      - backend
+    networks:
+      - neuti-internal
+      - existing-s2r-network
 
-  db:
+  neuti-db:
     image: postgres:15-alpine
+    container_name: neuti-db
     volumes:
       - postgres_data_prod:/var/lib/postgresql/data
     environment:
@@ -77,6 +59,15 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
     restart: always
+    networks:
+      - neuti-internal
+
+networks:
+  neuti-internal:
+    driver: bridge
+  existing-s2r-network:
+    external: true
+    name: app-network # 기존 서비스의 docker-compose에 정의된 네트워크 이름
 
 volumes:
   postgres_data_prod:
