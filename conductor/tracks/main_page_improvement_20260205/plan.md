@@ -7,7 +7,7 @@
 - [x] Task: Verify the contents of `./assets/발주처CI/` and prepare public assets for the frontend.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Preparation & Analysis' (Protocol in workflow.md)
 
-## Phase 2: Hero Section Layout Fix (TDD)
+## Phase 2: Hero Section Layout Fix (TDD) [checkpoint: 94da661]
 - [x] Task: Write tests to verify Hero section positioning and container spacing.
 - [x] Task: Implement CSS/Layout fixes to prevent GNB overlap and center the Hero content properly.
 - [x] Task: Verify fix across different screen sizes (Responsive check).
