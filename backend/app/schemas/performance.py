@@ -1,5 +1,7 @@
-from pydantic import BaseModel, ConfigDict
 from datetime import datetime
+
+from pydantic import BaseModel, ConfigDict
+
 
 class PerformanceBase(BaseModel):
     title: str
@@ -35,3 +37,10 @@ class Performance(PerformanceBase):
     created_at: datetime
     
     model_config = ConfigDict(from_attributes=True)
+
+class PerformanceStats(BaseModel):
+    total_count: int
+    public_client_count: int
+    categories: dict[str, int]
+    job_categories: dict[str, int]
+    years: dict[str, int]

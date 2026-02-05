@@ -109,7 +109,12 @@ This is a test content.
         content_json = data["content"]
         blocks = json.loads(content_json)
         assert any(b["type"] == "text" and "This is a test content." in b["value"] for b in blocks)
-        assert any(b["type"] == "image" and "/uploads/test.jpg" in b["value"] for b in blocks)
+        
+        # image value is now a JSON string containing url and alt
+        image_blocks = [b for b in blocks if b["type"] == "image"]
+        assert len(image_blocks) > 0
+        image_data = json.loads(image_blocks[0]["value"])
+        assert image_data["url"] == "/uploads/test.jpg"
 
         # Cleanup
         await ac.delete(f"/api/v1/performance/{data['id']}", headers=headers)
@@ -184,3 +189,16 @@ async def test_general_upload_image():
         assert upload_res.status_code == 200
         image_url = upload_res.json()
         assert image_url.startswith("/uploads/")
+
+@pytest.mark.asyncio
+async def test_get_performance_stats():
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
+        res = await ac.get("/api/v1/performance/stats")
+        assert res.status_code == 200
+        data = res.json()
+        assert "total_count" in data
+        assert "public_client_count" in data
+        assert "categories" in data
+        assert isinstance(data["total_count"], int)
+        assert isinstance(data["public_client_count"], int)
+        assert isinstance(data["categories"], dict)

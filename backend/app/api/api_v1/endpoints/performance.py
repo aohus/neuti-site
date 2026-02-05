@@ -1,47 +1,100 @@
-from typing import Any, List
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, desc
-import aiofiles
 import os
+from typing import Any
 from uuid import uuid4
 
-from app.db.session import get_db
-from app.models.performance import Performance as PerformanceModel
-from app.schemas.performance import Performance, PerformanceCreate, PerformanceUpdate
+import aiofiles
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from sqlalchemy import desc, select
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.api import deps
 from app.core.config import settings
+from app.db.session import get_db
+from app.models.performance import Performance as PerformanceModel
+from app.schemas.performance import (
+    Performance,
+    PerformanceCreate,
+    PerformanceStats,
+    PerformanceUpdate,
+)
 from app.utils.markdown import parse_markdown_performance
 
 router = APIRouter()
 utils_router = APIRouter()
+
+
+@router.get("/stats", response_model=PerformanceStats)
+async def get_performance_stats(
+    db: AsyncSession = Depends(get_db),
+) -> Any:
+    """
+    시공 사례 통계 정보를 반환합니다.
+    """
+    # 전체 개수
+    total_result = await db.execute(select(PerformanceModel))
+    all_performances = total_result.scalars().all()
+
+    total_count = len(all_performances)
+
+    # 공공기관 계약 수 (site_type이 '공공기관' 또는 '공원' 또는 '학교' 인 경우)
+    public_types = ["공공기관", "공원", "학교"]
+    public_client_count = sum(
+        1 for p in all_performances if p.site_type in public_types
+    )
+
+    # 카테고리별 집계
+    categories: dict[str, int] = {}
+    job_categories: dict[str, int] = {}
+    years: dict[str, int] = {}
+
+    for p in all_performances:
+        if p.category:
+            categories[p.category] = categories.get(p.category, 0) + 1
+        if p.job_main_category:
+            job_categories[p.job_main_category] = (
+                job_categories.get(p.job_main_category, 0) + 1
+            )
+        if p.year:
+            yr_str = str(p.year)
+            years[yr_str] = years.get(yr_str, 0) + 1
+
+    return {
+        "total_count": total_count,
+        "public_client_count": public_client_count,
+        "categories": categories,
+        "job_categories": job_categories,
+        "years": years,
+    }
+
 
 @router.post("/upload-md", response_model=Performance)
 async def upload_markdown(
     *,
     db: AsyncSession = Depends(get_db),
     file: UploadFile = File(...),
-    current_admin: str = Depends(deps.get_current_admin)
+    current_admin: str = Depends(deps.get_current_admin),
 ) -> Any:
     """
     마크다운 파일을 업로드하여 시공 사례를 자동으로 등록합니다.
     """
-    if not file.filename.endswith('.md'):
+    if not file.filename.endswith(".md"):
         raise HTTPException(status_code=400, detail="Only .md files are allowed")
-    
+
     content = await file.read()
     try:
-        parsed = parse_markdown_performance(content.decode('utf-8'))
+        parsed = parse_markdown_performance(content.decode("utf-8"))
     except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Failed to parse markdown: {str(e)}")
-    
+        raise HTTPException(
+            status_code=400, detail=f"Failed to parse markdown: {str(e)}"
+        ) from e
+
     metadata = parsed["metadata"]
-    
+
     # 필수 필드 확인
     title = metadata.get("title")
     if not title:
         raise HTTPException(status_code=400, detail="Title is required in frontmatter")
-    
+
     # 데이터 매핑
     perf_in = PerformanceCreate(
         title=title,
@@ -54,41 +107,43 @@ async def upload_markdown(
         site_location=metadata.get("site_location"),
         client=metadata.get("client"),
         thumbnail_url=metadata.get("thumbnail_url"),
-        construction_date=metadata.get("construction_date")
+        construction_date=metadata.get("construction_date"),
     )
-    
+
     db_obj = PerformanceModel(**perf_in.model_dump())
     db.add(db_obj)
     await db.commit()
     await db.refresh(db_obj)
     return db_obj
 
+
 @utils_router.post("/image", response_model=str)
 @router.post("/upload-image", response_model=str)
 async def upload_image(
     *,
     image: UploadFile = File(...),
-    current_admin: str = Depends(deps.get_current_admin)
+    current_admin: str = Depends(deps.get_current_admin),
 ) -> Any:
     """
     이미지 업로드 API. 업로드된 이미지의 URL(경로)을 반환합니다.
     """
     if not os.path.exists(settings.UPLOAD_DIR):
         os.makedirs(settings.UPLOAD_DIR)
-    
+
     file_ext = os.path.splitext(image.filename)[1]
     file_name = f"{uuid4()}{file_ext}"
     image_path = settings.UPLOAD_DIR / file_name
-    
-    async with aiofiles.open(image_path, mode='wb') as f:
+
+    async with aiofiles.open(image_path, mode="wb") as f:
         content = await image.read()
         await f.write(content)
-    
+
     # URL로 반환하기 위해 /uploads/파일명 형식을 사용합니다.
     return f"/uploads/{file_name}"
 
-@router.get("", response_model=List[Performance])
-@router.get("/", response_model=List[Performance], include_in_schema=False)
+
+@router.get("", response_model=list[Performance])
+@router.get("/", response_model=list[Performance], include_in_schema=False)
 async def read_performances(
     db: AsyncSession = Depends(get_db),
     skip: int = 0,
@@ -97,13 +152,13 @@ async def read_performances(
     year: int | None = None,
     job_main: str | None = None,
     site_type: str | None = None,
-    q: str | None = None
+    q: str | None = None,
 ) -> Any:
     """
     시공 사례 목록 조회. 다중 필터링 및 키워드 검색을 지원합니다.
     """
     query = select(PerformanceModel)
-    
+
     if category:
         query = query.filter(PerformanceModel.category == category)
     if year:
@@ -114,15 +169,16 @@ async def read_performances(
         query = query.filter(PerformanceModel.site_type == site_type)
     if q:
         query = query.filter(
-            (PerformanceModel.title.ilike(f"%{q}%")) |
-            (PerformanceModel.client.ilike(f"%{q}%")) |
-            (PerformanceModel.site_location.ilike(f"%{q}%"))
+            (PerformanceModel.title.ilike(f"%{q}%"))
+            | (PerformanceModel.client.ilike(f"%{q}%"))
+            | (PerformanceModel.site_location.ilike(f"%{q}%"))
         )
-    
+
     result = await db.execute(
         query.offset(skip).limit(limit).order_by(desc(PerformanceModel.created_at))
     )
     return result.scalars().all()
+
 
 @router.post("", response_model=Performance)
 @router.post("/", response_model=Performance, include_in_schema=False)
@@ -130,7 +186,7 @@ async def create_performance(
     *,
     db: AsyncSession = Depends(get_db),
     performance_in: PerformanceCreate,
-    current_admin: str = Depends(deps.get_current_admin)
+    current_admin: str = Depends(deps.get_current_admin),
 ) -> Any:
     """
     시공 사례 등록 (관리자 전용).
@@ -141,20 +197,22 @@ async def create_performance(
     await db.refresh(db_obj)
     return db_obj
 
+
 @router.get("/{id}", response_model=Performance)
 async def read_performance(
-    *,
-    db: AsyncSession = Depends(get_db),
-    id: int
+    *, db: AsyncSession = Depends(get_db), id: int
 ) -> Any:
     """
     시공 사례 상세 조회.
     """
-    result = await db.execute(select(PerformanceModel).filter(PerformanceModel.id == id))
+    result = await db.execute(
+        select(PerformanceModel).filter(PerformanceModel.id == id)
+    )
     performance = result.scalar_one_or_none()
     if not performance:
         raise HTTPException(status_code=404, detail="Performance record not found")
     return performance
+
 
 @router.put("/{id}", response_model=Performance)
 @router.patch("/{id}", response_model=Performance)
@@ -163,40 +221,45 @@ async def update_performance(
     db: AsyncSession = Depends(get_db),
     id: int,
     performance_in: PerformanceUpdate,
-    current_admin: str = Depends(deps.get_current_admin)
+    current_admin: str = Depends(deps.get_current_admin),
 ) -> Any:
     """
     시공 사례 수정 (관리자 전용).
     """
-    result = await db.execute(select(PerformanceModel).filter(PerformanceModel.id == id))
+    result = await db.execute(
+        select(PerformanceModel).filter(PerformanceModel.id == id)
+    )
     db_obj = result.scalar_one_or_none()
     if not db_obj:
         raise HTTPException(status_code=404, detail="Performance record not found")
-    
+
     update_data = performance_in.model_dump(exclude_unset=True)
     for field in update_data:
         setattr(db_obj, field, update_data[field])
-    
+
     db.add(db_obj)
     await db.commit()
     await db.refresh(db_obj)
     return db_obj
+
 
 @router.delete("/{id}", response_model=Performance)
 async def delete_performance(
     *,
     db: AsyncSession = Depends(get_db),
     id: int,
-    current_admin: str = Depends(deps.get_current_admin)
+    current_admin: str = Depends(deps.get_current_admin),
 ) -> Any:
     """
     시공 사례 삭제 (관리자 전용).
     """
-    result = await db.execute(select(PerformanceModel).filter(PerformanceModel.id == id))
+    result = await db.execute(
+        select(PerformanceModel).filter(PerformanceModel.id == id)
+    )
     db_obj = result.scalar_one_or_none()
     if not db_obj:
         raise HTTPException(status_code=404, detail="Performance record not found")
-    
+
     await db.delete(db_obj)
     await db.commit()
     return db_obj
