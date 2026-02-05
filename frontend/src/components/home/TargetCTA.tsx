@@ -34,12 +34,12 @@ const targets = [
 
 export default function TargetCTA() {
   return (
-    <section className="py-24 bg-gray-50">
+    <section className="py-24 bg-green-50/50">
       <Container>
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-sm font-bold text-green-600 tracking-widest uppercase mb-4">Targeted Solutions</h2>
           <p className="text-4xl md:text-5xl font-black text-gray-900 leading-tight">
-            맞춤형 관리로<br/>나무와 사람을 잇습니다
+            귀하의 공간에 딱 맞는<br/>정밀 솔루션을 제안합니다
           </p>
         </div>
 
