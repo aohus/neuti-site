@@ -14,13 +14,19 @@
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Hero Section Layout Fix' (Protocol in workflow.md)
 
 ## Phase 3: Client CI Rolling Banner Implementation (TDD)
-- [ ] Task: Write tests for the Rolling Banner component (rendering items, animation structure).
-- [ ] Task: Implement `ClientBanner` component with infinite scrolling CSS animation.
-- [ ] Task: Integrate `ClientBanner` into the Main Page, positioned below the Hero section.
-- [ ] Task: Apply responsive styling for the banner (logo sizes, speed).
+- [x] Task: Write tests for the Rolling Banner component (rendering items, animation structure).
+- [x] Task: Implement `ClientBanner` component with infinite scrolling CSS animation.
+- [x] Task: Integrate `ClientBanner` into the Main Page, positioned below the Hero section.
+- [x] Task: Apply responsive styling for the banner (logo sizes, speed).
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Client CI Rolling Banner' (Protocol in workflow.md)
 
-## Phase 4: Final Review & Refinement
-- [ ] Task: Final visual check against the reference image (Wishket style).
-- [ ] Task: Run full test suite and linting.
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Final Review & Refinement' (Protocol in workflow.md)
+## Phase 4: Refinement based on Feedback
+- [x] Task: Adjust MainCarousel height to occupy most of the viewport (trustworthy look).
+- [x] Task: Replace MainCarousel background photo with a simple, solid/gradient design.
+- [x] Task: Fix ClientBanner overlap issue (increase spacing or fix animation).
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Refinement' (Protocol in workflow.md)
+
+## Phase 5: Advanced Refinement (Reliability & Quality)
+- [x] Task: Fix Rolling Banner overlap definitively (use min-width and margin).
+- [x] Task: Upgrade Hero Section with "Social Proof" metrics (completed projects count, etc.) and high-quality background overlay to convey trust.
+- [ ] Task: Conductor - User Manual Verification 'Phase 5: Advanced Refinement' (Protocol in workflow.md)

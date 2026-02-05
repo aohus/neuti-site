@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, CheckCircle2 } from 'lucide-react'
 import Container from './Container'
 
 const carouselItems = [
@@ -26,6 +26,12 @@ const carouselItems = [
   }
 ]
 
+const stats = [
+  { value: '1,200+', label: '누적 시공 완료' },
+  { value: '50,000+', label: '관리 수목 (주)' },
+  { value: '100%', label: '나무의사 직접 진단' },
+]
+
 export default function MainCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0)
 
@@ -34,12 +40,12 @@ export default function MainCarousel() {
   }, [])
 
   useEffect(() => {
-    const timer = setInterval(nextSlide, 5000)
+    const timer = setInterval(nextSlide, 6000)
     return () => clearInterval(timer)
   }, [nextSlide])
 
   return (
-    <section className="relative h-[500px] md:h-[600px] w-full overflow-hidden bg-gray-100">
+    <section className="relative h-[85vh] min-h-[700px] w-full overflow-hidden bg-black">
       <AnimatePresence mode="wait">
         <motion.div
           key={currentIndex}
@@ -49,66 +55,84 @@ export default function MainCarousel() {
           transition={{ duration: 1 }}
           className="absolute inset-0"
         >
-          {/* Full Width Background Image */}
+          {/* Background Image */}
           <div className="absolute inset-0 w-full h-full">
             <Image
               src={carouselItems[currentIndex].image}
               alt="Hero Image"
               fill
-              className="object-cover"
+              className="object-cover opacity-80"
               priority
             />
-            {/* Soft dark overlay for text readability */}
-            <div className="absolute inset-0 bg-black/30 z-10" />
+            {/* Premium Dark Overlay for Trust & Readability */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/50 to-transparent z-10" />
           </div>
 
-          <Container className="relative h-full z-20 flex flex-col justify-center text-left pt-16 md:pt-20">
+          <Container className="relative h-full z-20 flex flex-col justify-center text-left pt-20 md:pt-24">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="max-w-3xl"
+              className="max-w-4xl"
             >
+              <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full mb-8 border border-white/10">
+                <CheckCircle2 className="text-green-400 w-4 h-4" />
+                <span className="text-green-50 text-sm font-bold tracking-wide">신뢰받는 1종 나무병원</span>
+              </div>
+              
               <h1 
-                className="text-white text-4xl md:text-6xl font-black mb-8 leading-[1.1] tracking-tighter"
-                style={{ textShadow: '0 2px 10px rgba(0,0,0,0.2)' }}
+                className="text-white text-5xl md:text-7xl font-black mb-8 leading-[1.1] tracking-tighter"
               >
                 {carouselItems[currentIndex].title}
               </h1>
               <p 
-                className="text-white text-lg md:text-xl mb-12 opacity-95 leading-relaxed font-bold"
+                className="text-gray-200 text-lg md:text-2xl mb-12 opacity-90 leading-relaxed font-medium max-w-2xl"
               >
                 {carouselItems[currentIndex].description}
               </p>
-              <div className="flex flex-wrap gap-4">
+              
+              <div className="flex flex-wrap gap-4 mb-16">
                 <Link
                   href={carouselItems[currentIndex].btnLink}
-                  className="group inline-flex items-center bg-white text-green-800 px-8 py-4 font-black rounded-full hover:bg-green-700 hover:text-white transition-all shadow-2xl active:scale-95"
+                  className="group inline-flex items-center bg-green-600 text-white px-10 py-5 font-black rounded-full hover:bg-green-700 transition-all shadow-2xl active:scale-95 text-lg"
                 >
                   {carouselItems[currentIndex].btnText}
-                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-2 transition-transform" />
+                  <ArrowRight className="ml-2 w-6 h-6 group-hover:translate-x-2 transition-transform" />
                 </Link>
+                <Link
+                  href="/performance"
+                  className="group inline-flex items-center bg-white/10 backdrop-blur-sm text-white px-10 py-5 font-black rounded-full hover:bg-white/20 transition-all border border-white/20 text-lg"
+                >
+                  시공사례 보기
+                </Link>
+              </div>
+
+              {/* Social Proof / Stats Section */}
+              <div className="grid grid-cols-3 gap-8 border-t border-white/10 pt-8 max-w-2xl">
+                {stats.map((stat, idx) => (
+                  <div key={idx}>
+                    <p className="text-3xl md:text-4xl font-black text-white mb-1">{stat.value}</p>
+                    <p className="text-sm md:text-base text-gray-400 font-bold">{stat.label}</p>
+                  </div>
+                ))}
               </div>
             </motion.div>
           </Container>
         </motion.div>
       </AnimatePresence>
 
-      {/* Modern Pagination Controls */}
+      {/* Pagination Controls */}
       <div className="absolute bottom-12 right-12 md:right-24 z-30 flex items-center space-x-8">
-        <div className="flex space-x-2">
+        <div className="flex space-x-3">
           {carouselItems.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}
-              className={`h-1 rounded-full transition-all duration-500 ${
-                index === currentIndex ? 'bg-white w-12' : 'bg-white/30 w-6'
+              className={`h-1.5 rounded-full transition-all duration-500 ${
+                index === currentIndex ? 'bg-green-500 w-16' : 'bg-white/20 w-8 hover:bg-white/40'
               }`}
             />
           ))}
-        </div>
-        <div className="text-white font-black text-xl tracking-widest font-mono">
-          0{currentIndex + 1}
         </div>
       </div>
     </section>

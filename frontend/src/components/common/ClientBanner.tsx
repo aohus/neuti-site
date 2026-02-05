@@ -1,0 +1,82 @@
+'use client'
+
+import React from 'react'
+import Image from 'next/image'
+
+const clients = [
+  { name: 'gyeonggi', src: '/images/clients/gyeonggi.jpg' },
+  { name: 'gongsuchco', src: '/images/clients/gongsuchco.jpg' },
+  { name: 'seongnam_dev', src: '/images/clients/seongnam_dev.jpg' },
+  { name: 'seongnam_city', src: '/images/clients/seongnam_city.png' },
+  { name: 'gov_complex', src: '/images/clients/gov_complex.png' },
+]
+
+export default function ClientBanner() {
+  // 무한 롤링을 위해 리스트 복제
+  const doubleClients = [...clients, ...clients]
+
+  return (
+    <div className="w-full bg-white border-b border-gray-100 py-10 overflow-hidden relative">
+      <div className="mb-6 text-center">
+        <p className="text-gray-400 text-sm font-black tracking-widest uppercase">
+          With Our Clients
+        </p>
+      </div>
+      
+      <div className="flex w-full overflow-hidden">
+        <div 
+          className="flex whitespace-nowrap animate-marquee"
+          style={{ 
+            display: 'flex',
+            width: 'max-content'
+          }}
+        >
+          {/* 첫 번째 세트 */}
+          <div className="flex items-center px-4">
+            {clients.map((client, index) => (
+              <div 
+                key={`c1-${index}`} 
+                className="flex-shrink-0 mx-8 md:mx-16 min-w-[160px] md:min-w-[200px] flex justify-center grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
+              >
+                <Image
+                  src={client.src}
+                  alt={client.name}
+                  width={180}
+                  height={80}
+                  className="h-10 md:h-14 w-auto object-contain"
+                />
+              </div>
+            ))}
+          </div>
+          {/* 두 번째 세트 (무한 스크롤용) */}
+          <div className="flex items-center px-4">
+            {clients.map((client, index) => (
+              <div 
+                key={`c2-${index}`} 
+                className="flex-shrink-0 mx-8 md:mx-16 min-w-[160px] md:min-w-[200px] flex justify-center grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
+              >
+                <Image
+                  src={client.src}
+                  alt={client.name}
+                  width={180}
+                  height={80}
+                  className="h-10 md:h-14 w-auto object-contain"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <style jsx global>{`
+        @keyframes marquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+          animation: marquee 30s linear infinite;
+        }
+      `}</style>
+    </div>
+  )
+}

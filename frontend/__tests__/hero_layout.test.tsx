@@ -31,7 +31,7 @@ describe('MainCarousel Layout', () => {
     const contentWrapper = title.parentElement // motion.div
     const container = contentWrapper?.parentElement // Container
     
-    expect(container).toHaveClass('pt-16')
-    expect(container).toHaveClass('md:pt-20')
+    expect(container).toHaveClass('pt-20')
+    expect(container).toHaveClass('md:pt-24')
   })
 })
