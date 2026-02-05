@@ -1,75 +1,42 @@
 #!/bin/bash
 
-if ! [ -x "$(command -v docker)" ]; then
-  echo 'Error: docker is not installed.' >&2
-  exit 1
-fi
+# 사용자가 이해하기 쉽게 한글 도메인 변수 사용
+domains=("느티나무병원.com" "느티나무병원.net")
+# 실제 컴퓨터가 사용할 퓨니코드
+puny_domains=("xn--o39am4cy8gnsc00kvxe.com" "xn--o39am4cy8gnsc00kvxe.net")
 
-domains=(xn--o39am4cy8gnsc00kvxe.com xn--o39am4cy8gnsc00kvxe.net)
 rsa_key_size=4096
 data_path="./certbot"
 email="info@neuti.co.kr"
-staging=0 # 실제 발급 시 0으로 설정
+staging=0 # 실제 발급 시 0
 
-# 첫 번째 도메인을 기준으로 경로 설정
-main_domain="${domains[0]}"
-
-if [ -d "$data_path/conf/live/$main_domain" ]; then
-  read -p "Existing data found for $main_domain. Continue and replace existing certificate? (y/N) " decision
-  if [ "$decision" != "Y" ] && [ "$decision" != "y" ]; then
-    exit
-  fi
-fi
-
+main_domain="${puny_domains[0]}"
 
 if [ ! -e "$data_path/conf/options-ssl-nginx.conf" ] || [ ! -e "$data_path/conf/ssl-dhparams.pem" ]; then
   echo "### Downloading recommended TLS parameters ..."
   mkdir -p "$data_path/conf"
   curl -s https://raw.githubusercontent.com/certbot/certbot/master/certbot-nginx/certbot_nginx/_internal/tls_configs/options-ssl-nginx.conf > "$data_path/conf/options-ssl-nginx.conf"
   curl -s https://raw.githubusercontent.com/certbot/certbot/master/certbot/certbot/ssl-dhparams.pem > "$data_path/conf/ssl-dhparams.pem"
-  echo
 fi
 
 echo "### Creating dummy certificate for $main_domain ..."
-path="/etc/letsencrypt/live/$main_domain"
 mkdir -p "$data_path/conf/live/$main_domain"
 sudo docker compose -f docker-compose.prod.yml run --rm --entrypoint \
-  "openssl req -x509 -nodes -newkey rsa:1024 -days 1\    -keyout '$path/privkey.pem' \
-    -out '$path/fullchain.pem' \
+  "openssl req -x509 -nodes -newkey rsa:1024 -days 1\
+    -keyout '/etc/letsencrypt/live/$main_domain/privkey.pem' \
+    -out '/etc/letsencrypt/live/$main_domain/fullchain.pem' \
     -subj '/CN=localhost'" certbot
-echo
 
 echo "### Starting nginx ..."
-# Nginx가 더미 인증서를 물고 실행됩니다.
 sudo docker compose -f docker-compose.prod.yml up --force-recreate -d nginx
-echo
 
-echo "### Deleting dummy certificate for $main_domain ..."
+echo "### Requesting Let's Encrypt certificate ..."
+# 에러 방지를 위해 명령어를 명시적으로 작성
 sudo docker compose -f docker-compose.prod.yml run --rm --entrypoint \
-  "rm -rf /etc/letsencrypt/live/$main_domain && \  rm -rf /etc/letsencrypt/archive/$main_domain && \  rm -rf /etc/letsencrypt/renewal/$main_domain.conf" certbot
-echo
-
-
-echo "### Requesting Let's Encrypt certificate for $domains ..."
-# Join $domains to -d domain1 -d domain2 ...
-domain_args=""
-for domain in "${domains[@]}"; do
-  domain_args="$domain_args -d $domain"
-done
-
-# Select appropriate email arg
-case "$email" in
-  "" ) email_arg="--register-unsafely-without-email" ;; 
-  * ) email_arg="--email $email" ;; 
-esac
-
-# Enable staging mode if needed
-if [ $staging != "0" ]; then staging_arg="--staging"; fi
-
-# 실제 인증서 발급 요청
-sudo docker compose -f docker-compose.prod.yml run --rm --entrypoint \
-  "certbot certonly --webroot -w /var/www/certbot \    $staging_arg \    $email_arg \    $domain_args \    --rsa-key-size $rsa_key_size \    --agree-tos \    --force-renewal" certbot
-echo
+  "certbot certonly --webroot -w /var/www/certbot \
+    $( [ $staging != "0" ] && echo "--staging" ) \
+    --email $email --agree-tos --no-eff-email --force-renewal \
+    -d ${puny_domains[0]} -d ${puny_domains[1]}" certbot
 
 echo "### Reloading nginx ..."
 sudo docker compose -f docker-compose.prod.yml exec nginx nginx -s reload
