@@ -19,8 +19,8 @@ export default function NoticeDetailPage() {
   const fetchNotice = async () => {
     setIsLoading(true)
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-      const response = await axios.get(`${apiUrl}/api/v1/notice/${id}`)
+      const apiUrl = '/backend-api'
+      const response = await axios.get(`${apiUrl}/notice/${id}`)
       setNotice(response.data)
     } catch (err) {
       console.error('Failed to fetch notice', err)
@@ -34,8 +34,8 @@ export default function NoticeDetailPage() {
     if (!confirm('정말로 삭제하시겠습니까?')) return
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-      await axios.delete(`${apiUrl}/api/v1/notice/${id}`, {
+      const apiUrl = '/backend-api'
+      await axios.delete(`${apiUrl}/notice/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       })
       router.push('/notice')

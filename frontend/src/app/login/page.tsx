@@ -20,12 +20,12 @@ export default function LoginPage() {
     setIsLoading(true)
 
     try {
-      const params = new URLSearchParams()
-      params.append('username', username)
-      params.append('password', password)
+      const formData = new URLSearchParams()
+      formData.append('username', username)
+      formData.append('password', password)
 
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-      const response = await axios.post(`${apiUrl}/api/v1/login/access-token`, params, {
+      const apiUrl = '/backend-api'
+      const response = await axios.post(`${apiUrl}/login/access-token`, formData, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }

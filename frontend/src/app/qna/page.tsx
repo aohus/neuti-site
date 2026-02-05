@@ -24,9 +24,9 @@ export default function QnAListPage() {
 
   const fetchInquiries = async () => {
     setIsLoading(true)
+    const apiUrl = '/backend-api'
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-      const response = await axios.get(`${apiUrl}/api/v1/inquiry/`, {
+      const response = await axios.get(`${apiUrl}/inquiry/`, {
         params: {
           skip: (currentPage - 1) * 10,
           limit: 10

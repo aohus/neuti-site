@@ -4,42 +4,38 @@ import json
 from pathlib import Path
 from typing import List, Dict, Any
 
-def normalize_img_url(url: str) -> str:
+def normalize_img_url(url: str, post_dir: str = "") -> str:
     """
-    이미지 파일명을 기반으로 uploads 폴더 내에서 실제 경로를 찾아 자동으로 보정합니다.
+    이미지 경로를 웹 서버(FastAPI)가 서빙하는 /uploads/ 구조로 정규화합니다.
+    힌트에 따라 파일 시스템 탐색을 제거하고 구조적 경로 생성을 우선합니다.
     """
     if not url:
         return ""
         
-    # 1. 파일명 추출 (예: 20241104_144706.jpg)
+    # 이미 올바른 절대 경로인 경우 그대로 반환
+    if url.startswith('/uploads/'):
+        return url
+        
+    # 파일명만 추출
     filename = url.split('/')[-1]
     
-    # 2. uploads 폴더 내에서 해당 파일의 실제 위치 검색
-    uploads_root = Path("uploads")
-    if not uploads_root.exists():
-        uploads_root = Path("backend/uploads") # 로컬 실행 환경 대응
-        
-    if uploads_root.exists():
-        for found_path in uploads_root.rglob(filename):
-            if 'uploads' in found_path.parts:
-                idx = found_path.parts.index('uploads')
-                return '/' + '/'.join(found_path.parts[idx:])
+    # 상위 폴더 정보(post_dir)가 있다면 해당 폴더를 포함한 경로 생성
+    if post_dir:
+        return f"/uploads/{post_dir}/{filename}"
+    
+    # 정보가 없으면 기본 uploads 경로 반환
+    return f"/uploads/{filename}"
 
-    # 3. 파일을 찾지 못한 경우 (최후의 수단으로 uploads/파일명 반환)
-    if 'uploads/' in url:
-        return '/uploads/' + url.split('uploads/')[-1]
-    return url
-
-def parse_markdown_performance(content: str) -> Dict[str, Any]:
+def parse_markdown_performance(content: str, post_dir: str = "") -> Dict[str, Any]:
     """
-    마크다운 문자열을 파싱하여 메타데이터와 블로그 형태의 본문(JSON)을 반환합니다.
+    마크다운 문자열을 파싱하여 메타데이터와 본문을 반환합니다.
     """
     post = frontmatter.loads(content.strip())
     metadata = post.metadata
     body = post.content.strip()
 
     blocks = []
-    img_pattern = re.compile(r'^!\[(.*?)\]\((.*?)\)\s*$')
+    img_pattern = re.compile(r'^![(.*?)](.*?)\s*$')
     
     lines = body.splitlines()
     current_text = []
@@ -66,8 +62,7 @@ def parse_markdown_performance(content: str) -> Dict[str, Any]:
         if img_match:
             flush_text()
             
-            # 단일 이미지 정보를 {url, alt} 객체로 관리하며, 최대 3장까지 그룹화
-            row_images = [{"url": normalize_img_url(img_match.group(2)), "alt": img_match.group(1)}]
+            row_images = [{"url": normalize_img_url(img_match.group(2), post_dir), "alt": img_match.group(1)}]
             j = i + 1
             while j < len(lines) and len(row_images) < 3:
                 next_line = lines[j].strip()
@@ -77,7 +72,7 @@ def parse_markdown_performance(content: str) -> Dict[str, Any]:
                 
                 next_img_match = img_pattern.match(next_line)
                 if next_img_match:
-                    row_images.append({"url": normalize_img_url(next_img_match.group(2)), "alt": next_img_match.group(1)})
+                    row_images.append({"url": normalize_img_url(next_img_match.group(2), post_dir), "alt": next_img_match.group(1)})
                     j += 1
                 else:
                     break

@@ -13,7 +13,8 @@ from app.utils.email import send_diagnosis_notification
 
 router = APIRouter()
 
-@router.post("/", response_model=DiagnosisRequestSchema)
+@router.post("", response_model=DiagnosisRequestSchema)
+@router.post("/", response_model=DiagnosisRequestSchema, include_in_schema=False)
 async def create_diagnosis_request(
     *,
     db: AsyncSession = Depends(get_db),

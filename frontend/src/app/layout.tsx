@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "느티나무 협동조합 나무병원",
+  title: "느티나무병원 협동조합",
   description: "나무는 우리 삶의 동반자 - 수목 진단, 치료, 조경 전문 느티나무 나무병원",
 };
 

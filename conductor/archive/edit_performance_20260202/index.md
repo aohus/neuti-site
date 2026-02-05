@@ -1,4 +1,4 @@
-# Track markdown_rendering_20260201 Context
+# Track edit_performance_20260202 Context
 
 - [Specification](./spec.md)
 - [Implementation Plan](./plan.md)

@@ -175,7 +175,7 @@ cython_debug/
 
 # local assets
 .assets/
-assets/
+# assets/
 .experiment
 logs/
 .DS_Store

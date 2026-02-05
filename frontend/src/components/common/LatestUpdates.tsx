@@ -20,43 +20,59 @@ export default function LatestUpdates() {
 
 
 
-    const fetchData = async () => {
+          const fetchData = async () => {
 
 
 
-      setIsLoading(true)
+            setIsLoading(true)
 
 
 
-      try {
+            const apiUrl = '/backend-api'
 
 
 
-        const noticeRes = await axios.get('/api/v1/notice/?limit=5')
+            try {
 
 
 
-        setNotices(noticeRes.data)
+        
 
 
 
-  
+      
 
 
 
-        // 실제 시공 사례(Performance) 데이터 가져오기
+          const noticeRes = await axios.get(`${apiUrl}/notice/?limit=5`)
 
 
 
-        const perfRes = await axios.get('/api/v1/performance/?limit=4')
+          setNotices(noticeRes.data)
 
 
 
-        setPerformances(perfRes.data)
+    
 
 
 
-      } catch (err) {
+          // 실제 시공 사례(Performance) 데이터 가져오기
+
+
+
+          const perfRes = await axios.get(`${apiUrl}/performance/?limit=4`)
+
+
+
+          setPerformances(perfRes.data)
+
+
+
+        } catch (err) {
+
+
+
+    
 
 
 

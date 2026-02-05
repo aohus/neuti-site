@@ -7,30 +7,30 @@ export interface Performance {
   id: number
   title: string
   content: string // JSON stringified ContentBlock[]
-  category?: string
-  thumbnail_url?: string
-  client?: string
-  year?: number
-  job_main_category?: string
-  job_sub_category?: string
-  site_type?: string
-  site_location?: string
-  construction_date?: string
+  category?: string | null
+  thumbnail_url?: string | null
+  client?: string | null
+  year?: number | null
+  job_main_category?: string | null
+  job_sub_category?: string | null
+  site_type?: string | null
+  site_location?: string | null
+  construction_date?: string | null
   created_at: string
 }
 
 export interface PerformanceCreate {
   title: string
   content: string
-  category?: string
-  thumbnail_url?: string
-  client?: string
-  year?: number
-  job_main_category?: string
-  job_sub_category?: string
-  site_type?: string
-  site_location?: string
-  construction_date?: string
+  category?: string | null
+  thumbnail_url?: string | null
+  client?: string | null
+  year?: number | null
+  job_main_category?: string | null
+  job_sub_category?: string | null
+  site_type?: string | null
+  site_location?: string | null
+  construction_date?: string | null
 }
 
 export interface PerformanceUpdate extends Partial<PerformanceCreate> {}

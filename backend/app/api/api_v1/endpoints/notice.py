@@ -10,7 +10,8 @@ from app.api import deps
 
 router = APIRouter()
 
-@router.get("/", response_model=List[Notice])
+@router.get("", response_model=List[Notice])
+@router.get("/", response_model=List[Notice], include_in_schema=False)
 async def read_notices(
     db: AsyncSession = Depends(get_db),
     skip: int = 0,
@@ -24,7 +25,8 @@ async def read_notices(
     )
     return result.scalars().all()
 
-@router.post("/", response_model=Notice)
+@router.post("", response_model=Notice)
+@router.post("/", response_model=Notice, include_in_schema=False)
 async def create_notice(
     *,
     db: AsyncSession = Depends(get_db),

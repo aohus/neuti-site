@@ -3,7 +3,7 @@
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 
 interface TiptapEditorProps {
   content: string;
@@ -48,6 +48,13 @@ const TiptapEditor = ({ content, onChange, editable = true }: TiptapEditorProps)
       },
     },
   });
+
+  // 외부에서 content가 변경될 때 (초기 로딩 등) 에디터 내용 동기화
+  useEffect(() => {
+    if (editor && content !== editor.getHTML()) {
+      editor.commands.setContent(content);
+    }
+  }, [content, editor]);
 
   const uploadImage = async (file: File): Promise<string | null> => {
     const formData = new FormData();

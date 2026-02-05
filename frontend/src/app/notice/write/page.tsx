@@ -23,8 +23,8 @@ export default function NoticeWritePage() {
     setIsSubmitting(true)
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-      await axios.post(`${apiUrl}/api/v1/notice/`, 
+      const apiUrl = '/backend-api'
+      await axios.post(`${apiUrl}/notice/`, 
         { title, content },
         { headers: { Authorization: `Bearer ${token}` } }
       )

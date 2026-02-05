@@ -63,5 +63,6 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: 홈화면 수정 (히어로 섹션 레이아웃 및 발주처 CI 롤링 배너)**
+- [x] **Track: 홈화면 수정 (히어로 섹션 레이아웃 및 발주처 CI 롤링 배너)**
 *Link: [./tracks/main_page_improvement_20260205/](./tracks/main_page_improvement_20260205/)*
+*Report: [./docs/main_page_improvement_20260205/report.md](./docs/main_page_improvement_20260205/report.md)*

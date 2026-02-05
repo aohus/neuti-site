@@ -19,8 +19,8 @@ export default function QnAWritePage() {
     setIsSubmitting(true)
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-      await axios.post(`${apiUrl}/api/v1/inquiry/`, {
+      const apiUrl = '/backend-api'
+      await axios.post(`${apiUrl}/inquiry/`, {
         title,
         author,
         content,

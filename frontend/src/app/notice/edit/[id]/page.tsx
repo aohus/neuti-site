@@ -20,8 +20,8 @@ export default function NoticeEditPage() {
   const fetchNotice = async () => {
     setIsLoading(true)
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-      const response = await axios.get(`${apiUrl}/api/v1/notice/${id}`)
+      const apiUrl = '/backend-api'
+      const response = await axios.get(`${apiUrl}/notice/${id}`)
       setTitle(response.data.title)
       setContent(response.data.content)
     } catch (err) {
@@ -45,8 +45,8 @@ export default function NoticeEditPage() {
     setIsSubmitting(true)
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-      await axios.put(`${apiUrl}/api/v1/notice/${id}`, 
+      const apiUrl = '/backend-api'
+      await axios.put(`${apiUrl}/notice/${id}`, 
         { title, content },
         { headers: { Authorization: `Bearer ${token}` } }
       )

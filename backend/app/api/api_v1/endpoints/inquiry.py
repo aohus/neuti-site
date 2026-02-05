@@ -12,7 +12,8 @@ from app.core import security
 
 router = APIRouter()
 
-@router.get("/", response_model=List[Inquiry])
+@router.get("", response_model=List[Inquiry])
+@router.get("/", response_model=List[Inquiry], include_in_schema=False)
 async def read_inquiries(
     db: AsyncSession = Depends(get_db),
     skip: int = 0,
@@ -29,7 +30,8 @@ async def read_inquiries(
     )
     return result.scalars().all()
 
-@router.post("/", response_model=Inquiry)
+@router.post("", response_model=Inquiry)
+@router.post("/", response_model=Inquiry, include_in_schema=False)
 async def create_inquiry(
     *,
     db: AsyncSession = Depends(get_db),

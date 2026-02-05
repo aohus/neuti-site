@@ -9,6 +9,9 @@ import Link from 'next/link';
 
 // JSON Content Block 타입을 HTML로 변환하는 헬퍼 함수
 const convertBlocksToHtml = (contentStr: string): string => {
+  if (!contentStr) return '';
+  
+  // 1. JSON check
   try {
     const blocks = JSON.parse(contentStr);
     if (Array.isArray(blocks)) {
@@ -16,16 +19,57 @@ const convertBlocksToHtml = (contentStr: string): string => {
         if (block.type === 'text') {
            return `<p>${block.value.replace(/\n/g, '<br>')}</p>`;
         } else if (block.type === 'image') {
-          return `<img src="${block.value}" alt="image" />`;
+          let src = block.value;
+          if (src.includes('uploads/')) {
+             src = '/uploads/' + src.split('uploads/')[1];
+          }
+          return `<img src="${src}" alt="image" />`;
         }
         return '';
       }).join('');
     }
   } catch (e) {
-    // JSON이 아니면 그대로 반환 (이미 HTML이거나 일반 텍스트)
-    return contentStr;
+    // Not JSON
   }
-  return contentStr;
+
+  // 2. 이미 HTML인 경우 경로만 보정
+  if (contentStr.includes('<p>') || contentStr.includes('<img')) {
+      return contentStr.replace(/src="(.*?)uploads\/(.*?)"/g, 'src="/uploads/$2"');
+  }
+
+  // 3. 마크다운 변환 로직 개선
+  let html = contentStr;
+
+  // 모든 상대 경로를 절대 경로로 보정
+  html = html.replace(/(\.\.\/)+uploads\//g, '/uploads/');
+
+  // 가로선 (Horizontal Rule)
+  html = html.replace(/^\s*---\s*$/gm, '<hr />');
+
+  // 제목 (Headings)
+  html = html.replace(/^### (.*$)/gm, '<h3>$1</h3>');
+  html = html.replace(/^## (.*$)/gm, '<h2>$1</h2>');
+  html = html.replace(/^# (.*$)/gm, '<h1>$1</h1>');
+
+  // 이미지 (Images) - 마크다운 문법을 HTML 태그로 변환
+  html = html.replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1" />');
+
+  // 줄바꿈 및 문단 처리
+  const lines = html.split('\n');
+  const processedLines = lines.map(line => {
+      const trimmed = line.trim();
+      if (!trimmed) return ''; // 빈 줄 무시
+      // 이미 HTML 태그로 시작하는 경우(제목, 이미지, 가로선 등) 그대로 반환
+      if (/^<(h[1-6]|img|hr|li|ul|ol|p|div)/i.test(trimmed)) {
+          return trimmed;
+      }
+      // 그 외 일반 텍스트는 <p>로 감싸서 Tiptap 호환성 확보
+      return `<p>${line}</p>`;
+  });
+
+  const finalHtml = processedLines.join('');
+  console.log('Converted HTML Result:', finalHtml);
+  return finalHtml;
 };
 
 export default function EditPerformancePage() {
@@ -34,26 +78,32 @@ export default function EditPerformancePage() {
   const id = params?.id;
   const [loading, setLoading] = useState(true);
 
+  console.log('EditPerformancePage rendering, id:', id);
+
   const { register, handleSubmit, control, setValue, reset, formState: { errors } } = useForm<Performance>();
 
   useEffect(() => {
+    console.log('useEffect triggered, id:', id);
     if (!id) return;
 
     const fetchData = async () => {
       try {
+        console.log('Fetching data for id:', id);
         const res = await fetch(`/backend-api/performance/${id}`);
         if (!res.ok) throw new Error('Failed to fetch data');
         const data: Performance = await res.json();
+        console.log('Fetched data content:', data.content);
         
         // 데이터 변환 및 폼 초기화
         const htmlContent = convertBlocksToHtml(data.content);
+        console.log('Converted HTML:', htmlContent);
         
         reset({
           ...data,
           content: htmlContent,
         });
       } catch (error) {
-        console.error(error);
+        console.error('Error fetching performance:', error);
         alert('데이터를 불러오는 데 실패했습니다.');
       } finally {
         setLoading(false);

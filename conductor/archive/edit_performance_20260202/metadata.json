@@ -1,0 +1,8 @@
+{
+  "track_id": "edit_performance_20260202",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-02-02T16:50:00Z",
+  "updated_at": "2026-02-02T16:50:00Z",
+  "description": "시공사례 글 수정 기능 개발 (DB 중심 관리, Tiptap 에디터 도입)"
+}

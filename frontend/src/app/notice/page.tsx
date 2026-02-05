@@ -24,9 +24,9 @@ export default function NoticeListPage() {
 
   const fetchNotices = async () => {
     setIsLoading(true)
+    const apiUrl = '/backend-api'
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-      const response = await axios.get(`${apiUrl}/api/v1/notice/`, {
+      const response = await axios.get(`${apiUrl}/notice/`, {
         params: {
           skip: (currentPage - 1) * 10,
           limit: 10

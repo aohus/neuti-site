@@ -1,8 +1,8 @@
 import axios from 'axios'
 import { Performance, PerformanceCreate, PerformanceUpdate } from '@/types/performance'
 
-// API_URL을 빈 문자열로 설정하여 상대 경로를 사용하게 함
-const API_URL = ''
+// 절대 주소 대신 반드시 현재 도메인을 경유하는 상대 경로를 사용합니다.
+const API_URL = '/backend-api'
 
 const getAuthHeader = () => {
   const token = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : null
@@ -29,7 +29,8 @@ export const performanceApi = {
       q?: string
     }
   ): Promise<Performance[]> => {
-    const response = await axios.get(`${API_URL}/api/v1/performance/`, {
+    // 경로 끝에 / 제거
+    const response = await axios.get(`${API_URL}/performance`, {
       params: { 
         skip, 
         limit, 
@@ -40,6 +41,14 @@ export const performanceApi = {
         q: filters?.q
       }
     })
+    
+    // 디버깅 로그
+    console.log('Raw API Response:', response.data);
+
+    if (!Array.isArray(response.data)) {
+      return [];
+    }
+
     return response.data.map((p: Performance) => ({
       ...p,
       thumbnail_url: getFullUrl(p.thumbnail_url)
@@ -48,11 +57,10 @@ export const performanceApi = {
 
   // 상세 조회
   getPerformance: async (id: number): Promise<Performance> => {
-    const response = await axios.get(`${API_URL}/api/v1/performance/${id}`)
-    const p = response.data
+    const response = await axios.get(`${API_URL}/performance/${id}`)
     return {
-      ...p,
-      thumbnail_url: getFullUrl(p.thumbnail_url)
+      ...response.data,
+      thumbnail_url: getFullUrl(response.data.thumbnail_url)
     }
   },
 
@@ -60,7 +68,7 @@ export const performanceApi = {
   uploadMarkdown: async (file: File): Promise<Performance> => {
     const formData = new FormData()
     formData.append('file', file)
-    const response = await axios.post(`${API_URL}/api/v1/performance/upload-md`, formData, {
+    const response = await axios.post(`${API_URL}/performance/upload-md`, formData, {
       headers: {
         ...getAuthHeader(),
         'Content-Type': 'multipart/form-data'
@@ -73,7 +81,7 @@ export const performanceApi = {
   uploadImage: async (file: File): Promise<string> => {
     const formData = new FormData()
     formData.append('image', file)
-    const response = await axios.post(`${API_URL}/api/v1/performance/upload-image`, formData, {
+    const response = await axios.post(`${API_URL}/performance/upload-image`, formData, {
       headers: {
         ...getAuthHeader(),
         'Content-Type': 'multipart/form-data'
@@ -85,7 +93,7 @@ export const performanceApi = {
 
   // 등록
   createPerformance: async (data: PerformanceCreate): Promise<Performance> => {
-    const response = await axios.post(`${API_URL}/api/v1/performance/`, data, {
+    const response = await axios.post(`${API_URL}/performance`, data, {
       headers: getAuthHeader()
     })
     return response.data
@@ -93,7 +101,7 @@ export const performanceApi = {
 
   // 수정
   updatePerformance: async (id: number, data: PerformanceUpdate): Promise<Performance> => {
-    const response = await axios.patch(`${API_URL}/api/v1/performance/${id}`, data, {
+    const response = await axios.patch(`${API_URL}/performance/${id}`, data, {
       headers: getAuthHeader()
     })
     return response.data
@@ -101,7 +109,7 @@ export const performanceApi = {
 
   // 삭제
   deletePerformance: async (id: number): Promise<void> => {
-    await axios.delete(`${API_URL}/api/v1/performance/${id}`, {
+    await axios.delete(`${API_URL}/performance/${id}`, {
       headers: getAuthHeader()
     })
   }

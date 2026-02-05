@@ -31,12 +31,12 @@
     - [x] '저장' 버튼 클릭 시 백엔드 API로 데이터 전송 (Payload 구성 확인).
     - [x] 성공 시 상세 페이지로 리다이렉트 및 토스트 메시지 출력.
     - [x] Jest를 이용한 에디터 렌더링 및 폼 제출 기본 동작 테스트.
-- [ ] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md)
 
 ## Phase 3: 최종 점검 및 안정화 (Stabilization)
-- [ ] Task: 전체 통합 테스트 (E2E Manual)
-    - [ ] 마크다운으로 생성된 글을 웹에서 수정해보고 DB 유지 여부 확인.
-    - [ ] 썸네일 변경 및 본문 이미지 순서 변경 동작 확인.
-- [ ] Task: 문서화 및 정리
-    - [ ] 변경된 API 스펙 및 데이터 관리 정책 문서 업데이트.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md)
+- [x] Task: 전체 통합 테스트 (E2E Manual)
+    - [x] 마크다운으로 생성된 글을 웹에서 수정해보고 DB 유지 여부 확인.
+    - [x] 썸네일 변경 및 본문 이미지 순서 변경 동작 확인.
+- [x] Task: 문서화 및 정리
+    - [x] 변경된 API 스펙 및 데이터 관리 정책 문서 업데이트.
+- [x] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md)

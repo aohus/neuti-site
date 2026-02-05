@@ -5,6 +5,8 @@ import time
 from pathlib import Path
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
 
 from app.db.session import async_session
 from app.models.performance import Performance
@@ -39,14 +41,6 @@ async def sync_performances():
                     print(f"Skip {md_file.name}: No title found in frontmatter.")
                     continue
                 
-                # DB에서 기존 항목 검색
-                result = await session.execute(select(Performance).filter(Performance.title == title))
-                db_obj = result.scalar_one_or_none()
-                
-                if db_obj:
-                    print(f"Skip {title}: Already exists in DB. Web edits take priority.")
-                    continue
-
                 # 썸네일 URL도 post_dir_name을 사용하여 보정
                 thumbnail_raw = metadata.get("thumbnail_url")
                 thumbnail_url = normalize_img_url(thumbnail_raw, post_dir_name)
@@ -64,10 +58,19 @@ async def sync_performances():
                     "thumbnail_url": thumbnail_url,
                     "construction_date": metadata.get("construction_date")
                 }
+
+                # DB에서 기존 항목 검색
+                result = await session.execute(select(Performance).filter(Performance.title == title))
+                db_obj = result.scalar_one_or_none()
                 
-                print(f"Creating: {title}")
-                new_performance = Performance(**performance_data)
-                session.add(new_performance)
+                if db_obj:
+                    print(f"Updating: {title}")
+                    for key, value in performance_data.items():
+                        setattr(db_obj, key, value)
+                else:
+                    print(f"Creating: {title}")
+                    new_performance = Performance(**performance_data)
+                    session.add(new_performance)
             except Exception as e:
                 import traceback
                 print(f"Error processing {md_file.name}: {str(e)}")

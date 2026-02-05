@@ -26,7 +26,7 @@
 - [x] Task: Fix ClientBanner overlap issue (increase spacing or fix animation).
 - [x] Task: Conductor - User Manual Verification 'Phase 4: Refinement' (Protocol in workflow.md)
 
-## Phase 5: Advanced Refinement (Reliability & Quality)
+## Phase 5: Advanced Refinement (Reliability & Quality) [checkpoint: 2d629c2]
 - [x] Task: Fix Rolling Banner overlap definitively (use min-width and margin).
 - [x] Task: Upgrade Hero Section with "Social Proof" metrics (completed projects count, etc.) and high-quality background overlay to convey trust.
-- [ ] Task: Conductor - User Manual Verification 'Phase 5: Advanced Refinement' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 5: Advanced Refinement' (Protocol in workflow.md)

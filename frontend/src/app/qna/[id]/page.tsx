@@ -23,11 +23,11 @@ export default function QnADetailPage() {
   const fetchInquiry = async (pw?: string) => {
     setIsLoading(true)
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+      const apiUrl = '/backend-api'
       const config: any = {}
       if (token) config.headers = { Authorization: `Bearer ${token}` }
       
-      const response = await axios.get(`${apiUrl}/api/v1/inquiry/${id}${pw ? `?password=${pw}` : ''}`, config)
+      const response = await axios.get(`${apiUrl}/inquiry/${id}${pw ? `?password=${pw}` : ''}`, config)
       setInquiry(response.data)
       setIsPasswordRequired(false)
     } catch (err: any) {
@@ -51,8 +51,8 @@ export default function QnADetailPage() {
     e.preventDefault()
     setIsAnswering(true)
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
-      await axios.post(`${apiUrl}/api/v1/inquiry/${id}/answer`, 
+      const apiUrl = '/backend-api'
+      await axios.post(`${apiUrl}/inquiry/${id}/answer`, 
         { inquiry_id: Number(id), content: answerContent },
         { headers: { Authorization: `Bearer ${token}` } }
       )
