@@ -8,13 +8,13 @@ This file tracks all major tracks for the project. Each track has its own detail
 ---
 
 - [x] **Track: 메인 페이지 구현**
-*Link: [./archive/main_page_20260131/](./tracks/main_page_20260131/)*
+*Link: [./archive/main_page_20260131/](./archive/main_page_20260131/)*
 *Report: [./docs/main_page_20260131/report.md](./docs/main_page_20260131/report.md)*
 
 ---
 
 - [x] **Track: 회사소개 페이지 고도화**
-*Link: [./archive/about_page_upgrade_20260131/](./tracks/about_page_upgrade_20260131/)*
+*Link: [./archive/about_page_upgrade_20260131/](./archive/about_page_upgrade_20260131/)*
 *Report: [./archive/about_page_upgrade_20260131/report.md](./archive/about_page_upgrade_20260131/report.md)*
 
 ---
@@ -25,7 +25,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 ---
 
 - [x] **Track: 주요 실적 페이지 콘텐츠 생성 및 게시글 볼 수 있도록 구현**
-*Link: [./archive/performance_records_20260131/](./tracks/performance_records_20260131/)*
+*Link: [./archive/performance_records_20260131/](./archive/performance_records_20260131/)*
 *Report: [./docs/performance_records_20260131/report.md](./docs/performance_records_20260131/report.md)*
 
 ---
@@ -43,3 +43,25 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: 시공사례 마크다운 렌더링 고도화**
 *Link: [./archive/markdown_rendering_20260201/](./archive/markdown_rendering_20260201/)*
+
+---
+
+- [x] **Track: 시공사례 글 수정 기능 개발**
+*Link: [./archive/edit_performance_20260202/](./archive/edit_performance_20260202/)*
+*Report: [./docs/edit_performance_20260202/report.md](./docs/edit_performance_20260202/report.md)*
+
+---
+
+- [x] **Track: Sync Watcher Update**
+*Link: [./archive/sync_watcher_update_20260203/](./archive/sync_watcher_update_20260203/)*
+*Report: [./docs/sync_watcher_update_20260203/report.md](./docs/sync_watcher_update_20260203/report.md)*
+
+---
+
+- [ ] **Track: 공지사항 게시판 구현**
+*Link: [./tracks/notice_board_20260203/](./tracks/notice_board_20260203/)*
+
+---
+
+- [~] **Track: 홈화면 수정 (히어로 섹션 레이아웃 및 발주처 CI 롤링 배너)**
+*Link: [./tracks/main_page_improvement_20260205/](./tracks/main_page_improvement_20260205/)*
