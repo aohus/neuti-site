@@ -34,3 +34,11 @@ export interface PerformanceCreate {
 }
 
 export interface PerformanceUpdate extends Partial<PerformanceCreate> {}
+
+export interface PerformanceStats {
+  total_count: number
+  public_client_count: number
+  categories: Record<string, number>
+  job_categories: Record<string, number>
+  years: Record<string, number>
+}

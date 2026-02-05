@@ -2,13 +2,22 @@ import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
 import Page from '../src/app/page'
 
-describe('Page', () => {
-  it('renders the homepage with Neuti title', () => {
+// Mock components that use fetch or framer-motion animations
+jest.mock('@/components/home/StatisticsDashboard', () => {
+  return function MockStats() { return <div data-testid="stats-dashboard">Stats</div> }
+})
+
+describe('Home Page', () => {
+  it('renders all strategic sections correctly', () => {
     render(<Page />)
  
-    // Check if at least one of the carousel titles is present
+    // Hero check (Carousel)
     const headings = screen.getAllByRole('heading', { level: 1 })
     expect(headings.length).toBeGreaterThan(0)
-    expect(headings[0]).toHaveTextContent(/자연과 사람이 함께 누리는/i)
+
+    // Strategic sections check
+    expect(screen.getByTestId('stats-dashboard')).toBeInTheDocument()
+    expect(screen.getByText(/맞춤형 관리로/i)).toBeInTheDocument()
+    expect(screen.getByText(/데이터와 과학으로/i)).toBeInTheDocument()
   })
 })

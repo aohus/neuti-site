@@ -26,12 +26,6 @@ const carouselItems = [
   }
 ]
 
-const stats = [
-  { value: '1,200+', label: '누적 시공 완료' },
-  { value: '50,000+', label: '관리 수목 (주)' },
-  { value: '100%', label: '나무의사 직접 진단' },
-]
-
 export default function MainCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0)
 
@@ -91,7 +85,7 @@ export default function MainCarousel() {
                 {carouselItems[currentIndex].description}
               </p>
               
-              <div className="flex flex-wrap gap-4 mb-16">
+              <div className="flex flex-wrap gap-4">
                 <Link
                   href={carouselItems[currentIndex].btnLink}
                   className="group inline-flex items-center bg-green-600 text-white px-10 py-5 font-black rounded-full hover:bg-green-700 transition-all shadow-2xl active:scale-95 text-lg"
@@ -105,16 +99,6 @@ export default function MainCarousel() {
                 >
                   시공사례 보기
                 </Link>
-              </div>
-
-              {/* Social Proof / Stats Section */}
-              <div className="grid grid-cols-3 gap-8 border-t border-white/10 pt-8 max-w-2xl">
-                {stats.map((stat, idx) => (
-                  <div key={idx}>
-                    <p className="text-3xl md:text-4xl font-black text-white mb-1">{stat.value}</p>
-                    <p className="text-sm md:text-base text-gray-400 font-bold">{stat.label}</p>
-                  </div>
-                ))}
               </div>
             </motion.div>
           </Container>
