@@ -69,6 +69,6 @@ export default function ClientBanner() {
           animation: marquee 30s linear infinite;
         }
       `}</style>
-    </div>
+    </section>
   )
 }
