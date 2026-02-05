@@ -26,8 +26,9 @@
 ## 4. Design Strategy
 
 - **Concept:** "생명을 살리는 전문가 & 따뜻한 마을 공동체".
-- **Tone & Manner:** 진정성 있는, 전문적인, 따뜻한, 신뢰할 수 있는.
+- **Tone & Manner:** 진정성 있는, 전문적인, 따뜻한, 신뢰할 수 있는 (공공기관 및 관리자 타겟).
 - **UI Reference:** https://www.namoohealthcoop.or.kr/s01/s01.php (기존 레퍼런스 스타일 계승 및 발전)
+- **Key Elements:** 대형 히어로 섹션(신뢰 지표 포함), 무한 롤링 발주처 배너, 반응형 최적화.
 
 ## 5. Site Structure (Navigation)
 
