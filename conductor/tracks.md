@@ -63,6 +63,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [x] **Track: 홈서버 배포**
-*Link: [./tracks/home_server_deploy_20260205/](./tracks/home_server_deploy_20260205/)*
-*Report: [./docs/home_server_deploy_20260205/report.md](./docs/home_server_deploy_20260205/report.md)*
+- [ ] **Track: 메인 페이지 히어로 및 기술력 섹션 컨텐츠 업데이트**
+*Link: [./tracks/home_content_20260206/](./tracks/home_content_20260206/)*
