@@ -17,7 +17,6 @@ describe('Home Page', () => {
 
     // Strategic sections check
     expect(screen.getByTestId('stats-dashboard')).toBeInTheDocument()
-    expect(screen.getByText(/맞춤형 관리로/i)).toBeInTheDocument()
-    expect(screen.getByText(/데이터와 과학으로/i)).toBeInTheDocument()
+    expect(screen.getByText(/귀하의 공간에 딱 맞는/i)).toBeInTheDocument()
   })
 })

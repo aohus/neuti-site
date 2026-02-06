@@ -9,10 +9,10 @@
 - [x] Task: Conductor - User Manual Verification 'Asset Preparation & Setup' (Protocol in workflow.md) [6bad758]
 
 ## Phase 2: Hero Section Update
-- [~] Task: Update Hero Component
-    - [ ] Sub-task: Modify `frontend/src/components/Hero.tsx` (or equivalent) to accept the new image list.
-    - [ ] Sub-task: Implement fade/slide animation for the 2 hero images.
-    - [ ] Sub-task: Verify responsive sizing for hero images.
+- [x] Task: Update Hero Component [a791426]
+    - [x] Sub-task: Modify `frontend/src/components/Hero.tsx` (or equivalent) to accept the new image list.
+    - [x] Sub-task: Implement fade/slide animation for the 2 hero images.
+    - [x] Sub-task: Verify responsive sizing for hero images.
 - [ ] Task: Conductor - User Manual Verification 'Hero Section Update' (Protocol in workflow.md)
 
 ## Phase 3: Technology Section Implementation

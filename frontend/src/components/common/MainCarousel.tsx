@@ -6,13 +6,14 @@ import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight, CheckCircle2 } from 'lucide-react'
 import Container from './Container'
+import { heroImages } from '@/data/home-content'
 
 const carouselItems = [
   {
     id: 1,
     title: <>나무는 우리 삶의 동반자,<br/>더불어 사는 초록빛 마을</>,
     description: <>전문적인 수목 관리와 정성 어린 치료를 통해<br/>자연과 사람이 공존하는 건강한 도시 생태계를 꿈꿉니다.</>,
-    image: '/images/home/carousel_1.jpg',
+    image: heroImages[0].src,
     btnText: '느티나무 이야기',
     btnLink: '/about',
   },
@@ -20,7 +21,7 @@ const carouselItems = [
     id: 2,
     title: <>나무의사의 과학적인<br/>진단과 맞춤형 처방</>,
     description: <>농약 오·남용 없는 안전한 관리, 1종 나무병원의 전문 장비로<br/>소중한 수목의 활력을 되찾아 드립니다.</>,
-    image: '/images/home/carousel_2.jpg',
+    image: heroImages[1].src,
     btnText: '수목 진단 의뢰',
     btnLink: '/request',
   }
