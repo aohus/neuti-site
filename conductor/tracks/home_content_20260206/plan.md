@@ -15,24 +15,19 @@
     - [x] Sub-task: Verify responsive sizing for hero images.
 - [x] Task: Conductor - User Manual Verification 'Hero Section Update' (Protocol in workflow.md) [2c79fc3]
 
-## Phase 3: Technology Section Implementation
-- [~] Task: Create 'Technology Grid' Component
-    - [ ] Sub-task: Create `frontend/src/components/TechnologySection.tsx`.
-    - [ ] Sub-task: Implement the layout for the 7 categories (Card/Container structure).
-- [ ] Task: Create 'Image Gallery' Sub-Component
-    - [ ] Sub-task: Create a component to render the 2-5 images within a category card.
-    - [ ] Sub-task: Implement Masonry or flexible grid styling for mixed aspect ratios.
-    - [ ] Sub-task: Implement the 'Tag Badge' component to display 'Before', 'After', etc., based on the data.
-- [ ] Task: Integrate Technology Section into Main Page
-    - [ ] Sub-task: Replace the old 3-card section in `frontend/src/app/page.tsx` with the new `TechnologySection`.
-- [ ] Task: Conductor - User Manual Verification 'Technology Section Implementation' (Protocol in workflow.md)
+## Phase 3: Technology Section Implementation [checkpoint: final]
+- [x] Task: Implement Interactive Technology Section with Tab & Grid [final]
+    - [x] Sub-task: Refactor `TechnologySection` to use Tab navigation for categories.
+    - [x] Sub-task: Implement 'Interactive Comparison' with 16:9 main frame and thumbnails.
+    - [x] Sub-task: Connect thumbnail clicks to main frame preview and main frame click to Lightbox.
+- [x] Task: Conductor - User Manual Verification 'Technology Section Implementation' (Protocol in workflow.md) [final]
 
-## Phase 4: Refinement & Polish
-- [ ] Task: Responsive Design Adjustments
-    - [ ] Sub-task: Adjust grid columns for mobile/tablet/desktop.
-    - [ ] Sub-task: Ensure text and badges are readable on all devices.
-- [ ] Task: Performance Optimization
-    - [ ] Sub-task: Ensure images use Next.js `Image` component for optimization.
-- [ ] Task: Final Review & Cleanup
-    - [ ] Sub-task: Remove unused old assets or code related to the old 3-card section.
-- [ ] Task: Conductor - User Manual Verification 'Refinement & Polish' (Protocol in workflow.md)
+## Phase 4: Refinement & Polish [checkpoint: final]
+- [x] Task: Hero & CTA Content Refinement [final]
+    - [x] Sub-task: Update Hero copy to focus on Green Maintenance and Landscape Planting.
+    - [x] Sub-task: Redesign TargetCTA cards for better visibility and modern clean style.
+- [x] Task: Global Layout & Spacing [final]
+    - [x] Sub-task: Slim down ClientBanner and show full color logos.
+    - [x] Sub-task: Implement scroll-based fade for StatisticsDashboard.
+    - [x] Sub-task: Increase spacing between main sections for better balance.
+- [x] Task: Conductor - User Manual Verification 'Refinement & Polish' (Protocol in workflow.md) [final]

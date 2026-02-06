@@ -6,7 +6,7 @@ import ClientBanner from '@/components/common/ClientBanner'
 import StatisticsDashboard from '@/components/home/StatisticsDashboard'
 import TargetCTA from '@/components/home/TargetCTA'
 import ProcessFlow from '@/components/home/ProcessFlow'
-import ImpactGallery from '@/components/home/ImpactGallery'
+import TechnologySection from '@/components/home/TechnologySection'
 import { MissionSection } from '@/components/common/HomeSections'
 import LatestUpdates from '@/components/common/LatestUpdates'
 
@@ -22,7 +22,7 @@ export default function Home() {
       
       {/* 3. Visual Evidence - 결과로 증명하는 기술력 (비포/애프터) */}
       {/* 사용자의 시각적 확신을 위해 전진 배치되었습니다. */}
-      <ImpactGallery />
+      <TechnologySection />
       
       {/* 4. Professionalism - 과학적이고 체계적인 작업 프로세스 */}
       {/* '왜 결과가 좋은지'에 대한 근거를 제시합니다. */}

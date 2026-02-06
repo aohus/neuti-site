@@ -1,7 +1,7 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
-import { motion, useSpring, useTransform, animate } from 'framer-motion'
+import React, { useEffect, useState, useRef } from 'react'
+import { motion, useScroll, useTransform, animate } from 'framer-motion'
 import Container from '../common/Container'
 import { PerformanceStats } from '@/types/performance'
 
@@ -26,11 +26,21 @@ function Counter({ value, suffix = "" }: { value: number; suffix?: string }) {
 
 export default function StatisticsDashboard() {
   const [stats, setStats] = useState<PerformanceStats | null>(null)
+  const containerRef = useRef<HTMLElement>(null)
+  
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "center center", "end start"]
+  })
+  
+  // Appears as it enters, peaks in the middle, disappears as it leaves
+  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0])
+  const y = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [50, 0, 0, -50])
+  const scale = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.9, 1, 1, 0.9])
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        // next.config.ts의 rewrite 설정에 의해 /backend-api/는 이미 /api/v1/으로 매핑되어 있음
         const response = await fetch('/backend-api/performance/stats')
         if (response.ok) {
           const data = await response.json()
@@ -67,16 +77,16 @@ export default function StatisticsDashboard() {
   ]
 
   return (
-    <section className="py-16 bg-white border-b border-gray-100 min-h-[200px]">
+    <motion.section 
+      ref={containerRef}
+      style={{ opacity, y, scale }}
+      className="py-32 bg-white border-b border-gray-100 min-h-[300px] flex items-center"
+    >
       <Container>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-12 md:gap-16 lg:gap-24 text-center">
           {items.map((item, idx) => (
             <motion.div
               key={idx}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: idx * 0.1 }}
-              viewport={{ once: true }}
               className="flex flex-col items-center"
             >
               <h3 className="text-4xl md:text-5xl font-black text-green-700 mb-2">
@@ -91,6 +101,6 @@ export default function StatisticsDashboard() {
           ))}
         </div>
       </Container>
-    </section>
+    </motion.section>
   )
 }

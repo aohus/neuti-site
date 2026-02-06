@@ -11,19 +11,19 @@ import { heroImages } from '@/data/home-content'
 const carouselItems = [
   {
     id: 1,
-    title: <>나무는 우리 삶의 동반자,<br/>더불어 사는 초록빛 마을</>,
-    description: <>전문적인 수목 관리와 정성 어린 치료를 통해<br/>자연과 사람이 공존하는 건강한 도시 생태계를 꿈꿉니다.</>,
+    title: <>체계적인 녹지 관리로<br/>완성하는 명품 단지의 가치</>,
+    description: <>아파트 및 공공기관의 수목을 과학적으로 관리하여<br/>사계절 푸르고 아름다운 프리미엄 조경 공간을 유지합니다.</>,
     image: heroImages[0].src,
-    btnText: '느티나무 이야기',
-    btnLink: '/about',
+    btnText: '녹지관리 솔루션',
+    btnLink: '/business',
   },
   {
     id: 2,
-    title: <>나무의사의 과학적인<br/>진단과 맞춤형 처방</>,
-    description: <>농약 오·남용 없는 안전한 관리, 1종 나무병원의 전문 장비로<br/>소중한 수목의 활력을 되찾아 드립니다.</>,
+    title: <>자연과 조화를 이루는<br/>고품격 조경식재 및 시공</>,
+    description: <>1종 나무병원의 전문 진단과 풍부한 시공 실적을 바탕으로<br/>주변 환경에 가장 적합하고 지속 가능한 숲을 조성합니다.</>,
     image: heroImages[1].src,
-    btnText: '수목 진단 의뢰',
-    btnLink: '/request',
+    btnText: '조경식재 포트폴리오',
+    btnLink: '/performance',
   }
 ]
 
@@ -40,7 +40,7 @@ export default function MainCarousel() {
   }, [nextSlide])
 
   return (
-    <section className="relative h-[70vh] min-h-[600px] w-full overflow-hidden bg-black">
+    <section className="relative h-[calc(100vh-160px)] min-h-[500px] w-full overflow-hidden bg-black">
       <AnimatePresence mode="wait">
         <motion.div
           key={currentIndex}
@@ -76,7 +76,7 @@ export default function MainCarousel() {
               </div>
               
               <h1 
-                className="text-white text-5xl md:text-7xl font-black mb-8 leading-[1.1] tracking-tighter"
+                className="text-white text-5xl md:text-7xl font-black mb-8 leading-[1.2] tracking-tighter"
               >
                 {carouselItems[currentIndex].title}
               </h1>

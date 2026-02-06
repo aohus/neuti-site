@@ -13,7 +13,7 @@ const clients = [
 
 export default function ClientBanner() {
   return (
-    <section className="py-12 bg-white overflow-hidden border-b border-gray-50">
+    <section className="py-6 bg-white overflow-hidden border-b border-gray-50">
       <div className="relative">
         {/* Rolling Banner */}
         <div 
@@ -28,14 +28,14 @@ export default function ClientBanner() {
             {clients.map((client, index) => (
               <div 
                 key={`c1-${index}`} 
-                className="flex-shrink-0 mx-8 md:mx-16 min-w-[160px] md:min-w-[200px] flex justify-center grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
+                className="flex-shrink-0 mx-8 md:mx-12 min-w-[140px] md:min-w-[180px] flex justify-center transition-all duration-500"
               >
                 <Image
                   src={client.src}
                   alt={client.name}
-                  width={180}
-                  height={80}
-                  className="h-10 md:h-14 w-auto object-contain"
+                  width={160}
+                  height={60}
+                  className="h-8 md:h-10 w-auto object-contain"
                 />
               </div>
             ))}
@@ -45,14 +45,14 @@ export default function ClientBanner() {
             {clients.map((client, index) => (
               <div 
                 key={`c2-${index}`} 
-                className="flex-shrink-0 mx-8 md:mx-16 min-w-[160px] md:min-w-[200px] flex justify-center grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
+                className="flex-shrink-0 mx-8 md:mx-12 min-w-[140px] md:min-w-[180px] flex justify-center transition-all duration-500"
               >
                 <Image
                   src={client.src}
                   alt={client.name}
-                  width={180}
-                  height={80}
-                  className="h-10 md:h-14 w-auto object-contain"
+                  width={160}
+                  height={60}
+                  className="h-8 md:h-10 w-auto object-contain"
                 />
               </div>
             ))}

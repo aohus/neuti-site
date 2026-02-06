@@ -4,91 +4,95 @@ import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { ArrowRight, Building2, Landmark, ShieldCheck } from 'lucide-react'
+import { ArrowRight, Building2, Landmark, CheckCircle2 } from 'lucide-react'
 import Container from '../common/Container'
 
 const targets = [
   {
     id: 'apartment',
-    title: '아파트 / 기업 / 산업단지',
-    description: '체계적인 수목 관리와 정밀 방제를 통해 단지의 가치를 높이고 쾌적한 환경을 조성합니다.',
+    title: '아파트 · 기업',
+    subtitle: '입주민 만족도와 단지의 가치를 높이는 프리미엄 관리',
     icon: Building2,
     image: '/images/home/carousel_1.jpg',
-    features: ['연간 수목 관리 대행', '대형 수목 전정/벌목', '병해충 정밀 방제'],
-    btnText: '관리 제안서 보기',
+    features: ['연간 수목 관리 계획 수립', '병해충 정밀 방제 및 전정', '단지 맞춤형 관리 제안서'],
+    btnText: '견적 문의하기',
     link: '/performance?type=apartment',
-    color: 'bg-blue-600',
+    color: 'text-blue-600',
+    bgColor: 'bg-blue-50/50',
+    borderColor: 'border-blue-100'
   },
   {
     id: 'public',
-    title: '공공기관 / 교육시설 / 공원',
-    description: '나무의사의 전문 진단과 풍부한 공공 시공 실적을 바탕으로 신뢰할 수 있는 최상의 솔루션을 제공합니다.',
+    title: '공공기관 · 공원',
+    subtitle: '전문 진단과 풍부한 실적으로 증명하는 신뢰의 조경 관리',
     icon: Landmark,
     image: '/images/home/carousel_2.jpg',
-    features: ['공공 조경 관리', '수목 진단 및 예찰', '하자 관리 및 기술 자문'],
+    features: ['나라장터 · 수의계약 전문', '위험목 긴급 대응 시스템', '수목 진단 및 예찰 보고서'],
     btnText: '공공 실적 확인',
     link: '/performance?type=public',
-    color: 'bg-green-700',
+    color: 'text-green-700',
+    bgColor: 'bg-green-50/50',
+    borderColor: 'border-green-100'
   }
 ]
 
 export default function TargetCTA() {
   return (
-    <section className="py-24 bg-green-50/50">
+    <section className="py-40 bg-white">
       <Container>
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-sm font-bold text-green-600 tracking-widest uppercase mb-4">Targeted Solutions</h2>
+        <div className="text-center max-w-3xl mx-auto mb-20">
+          <h2 className="text-sm font-black text-green-600 tracking-[0.2em] uppercase mb-4">Targeted Solutions</h2>
           <p className="text-4xl md:text-5xl font-black text-gray-900 leading-tight">
-            귀하의 공간에 딱 맞는<br/>정밀 솔루션을 제안합니다
+            공간에 가장 적합한<br/>솔루션을 확인하세요
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
           {targets.map((target, idx) => (
             <motion.div
               key={target.id}
-              initial={{ opacity: 0, x: idx === 0 ? -30 : 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: idx * 0.2 }}
               viewport={{ once: true }}
-              className="group relative overflow-hidden rounded-3xl bg-white shadow-xl hover:shadow-2xl transition-all border border-gray-100"
+              className={`group relative overflow-hidden rounded-[2.5rem] border ${target.borderColor} ${target.bgColor} p-8 md:p-12 hover:shadow-2xl transition-all duration-500`}
             >
-              {/* Image Section */}
-              <div className="relative h-64 md:h-80 overflow-hidden">
-                <div className={`absolute inset-0 ${target.color} opacity-20 z-10`} />
-                <Image
-                  src={target.image}
-                  alt={target.title}
-                  fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-1000"
-                />
-                <div className="absolute top-6 left-6 z-20">
-                   <div className={`${target.color} p-3 rounded-2xl text-white shadow-lg`}>
-                     <target.icon size={28} />
-                   </div>
+              <div className="flex flex-col h-full">
+                {/* Upper Section */}
+                <div className="flex-grow">
+                  <div className="flex items-start justify-between mb-8">
+                    <div className={`p-4 rounded-2xl bg-white shadow-sm ${target.color}`}>
+                      <target.icon size={32} />
+                    </div>
+                    <div className="relative w-32 h-20 rounded-xl overflow-hidden grayscale opacity-30 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700">
+                       <Image src={target.image} alt="" fill className="object-cover" />
+                    </div>
+                  </div>
+                  
+                  <h3 className="text-3xl md:text-4xl font-black text-gray-900 mb-4 tracking-tighter">
+                    {target.title}
+                  </h3>
+                  <p className="text-gray-600 text-lg md:text-xl font-bold leading-snug mb-10 max-w-[90%]">
+                    {target.subtitle}
+                  </p>
+
+                  <div className="space-y-4 mb-12">
+                    {target.features.map((feature, fIdx) => (
+                      <div key={fIdx} className="flex items-center text-gray-700 font-bold text-base md:text-lg">
+                        <CheckCircle2 className={`w-5 h-5 mr-3 flex-shrink-0 ${target.color}`} />
+                        {feature}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
 
-              {/* Content Section */}
-              <div className="p-8 md:p-10">
-                <h3 className="text-2xl md:text-3xl font-black text-gray-900 mb-4">{target.title}</h3>
-                <p className="text-gray-600 text-lg leading-relaxed mb-8">{target.description}</p>
-                
-                <ul className="space-y-3 mb-10">
-                  {target.features.map((feature, fIdx) => (
-                    <li key={fIdx} className="flex items-center text-gray-700 font-medium">
-                      <ShieldCheck className="text-green-500 w-5 h-5 mr-2" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-
+                {/* Button Section */}
                 <Link
                   href={target.link}
-                  className={`inline-flex items-center justify-center w-full md:w-auto px-8 py-4 rounded-full font-black text-white transition-all active:scale-95 ${target.color} hover:brightness-110 shadow-lg`}
+                  className={`inline-flex items-center justify-between w-full bg-white text-gray-900 px-8 py-5 rounded-full font-black text-lg border-2 ${target.borderColor} hover:bg-gray-900 hover:text-white hover:border-gray-900 transition-all transform active:scale-95 shadow-sm`}
                 >
-                  {target.btnText}
-                  <ArrowRight className="ml-2 w-5 h-5" />
+                  <span>{target.btnText}</span>
+                  <ArrowRight className="ml-4 w-6 h-6" />
                 </Link>
               </div>
             </motion.div>
