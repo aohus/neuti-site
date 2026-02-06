@@ -1,15 +1,15 @@
 # Implementation Plan - Home Content Update
 
-## Phase 1: Asset Preparation & Setup
-- [x] Task: Create directory structure for new assets in `frontend/public/images` (mirroring `assets/img`)
+## Phase 1: Asset Preparation & Setup [checkpoint: 6bad758]
+- [x] Task: Create directory structure for new assets in `frontend/public/images` (mirroring `assets/img`) [6bad758]
     - [x] Sub-task: Copy hero images to `frontend/public/images/hero`
     - [x] Sub-task: Copy technology section images to `frontend/public/images/technology` (organized by category folders)
-- [x] Task: Create a utility/config file to map image paths and tags
+- [x] Task: Create a utility/config file to map image paths and tags [6bad758]
     - [x] Sub-task: Define a data structure (array/object) in `frontend/src/data/home-content.ts` that holds the 7 categories, image paths, and tags (derived from filenames).
-- [ ] Task: Conductor - User Manual Verification 'Asset Preparation & Setup' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Asset Preparation & Setup' (Protocol in workflow.md) [6bad758]
 
 ## Phase 2: Hero Section Update
-- [ ] Task: Update Hero Component
+- [~] Task: Update Hero Component
     - [ ] Sub-task: Modify `frontend/src/components/Hero.tsx` (or equivalent) to accept the new image list.
     - [ ] Sub-task: Implement fade/slide animation for the 2 hero images.
     - [ ] Sub-task: Verify responsive sizing for hero images.
