@@ -8,15 +8,15 @@
     - [x] Sub-task: Define a data structure (array/object) in `frontend/src/data/home-content.ts` that holds the 7 categories, image paths, and tags (derived from filenames).
 - [x] Task: Conductor - User Manual Verification 'Asset Preparation & Setup' (Protocol in workflow.md) [6bad758]
 
-## Phase 2: Hero Section Update
-- [x] Task: Update Hero Component [a791426]
+## Phase 2: Hero Section Update [checkpoint: 2c79fc3]
+- [x] Task: Update Hero Component [2c79fc3]
     - [x] Sub-task: Modify `frontend/src/components/Hero.tsx` (or equivalent) to accept the new image list.
     - [x] Sub-task: Implement fade/slide animation for the 2 hero images.
     - [x] Sub-task: Verify responsive sizing for hero images.
-- [ ] Task: Conductor - User Manual Verification 'Hero Section Update' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Hero Section Update' (Protocol in workflow.md) [2c79fc3]
 
 ## Phase 3: Technology Section Implementation
-- [ ] Task: Create 'Technology Grid' Component
+- [~] Task: Create 'Technology Grid' Component
     - [ ] Sub-task: Create `frontend/src/components/TechnologySection.tsx`.
     - [ ] Sub-task: Implement the layout for the 7 categories (Card/Container structure).
 - [ ] Task: Create 'Image Gallery' Sub-Component
