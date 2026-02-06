@@ -63,5 +63,6 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: 메인 페이지 히어로 및 기술력 섹션 컨텐츠 업데이트**
+- [x] **Track: 메인 페이지 히어로 및 기술력 섹션 컨텐츠 업데이트**
 *Link: [./tracks/home_content_20260206/](./tracks/home_content_20260206/)*
+*Report: [./docs/home_content_20260206/report.md](./docs/home_content_20260206/report.md)*
