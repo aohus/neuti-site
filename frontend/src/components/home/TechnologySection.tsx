@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CheckCircle2, Maximize2, X, ChevronLeft, ChevronRight, Plus } from 'lucide-react'
 import Container from '../common/Container'
@@ -20,7 +20,7 @@ const Lightbox = ({
 }) => {
   const [currentIndex, setCurrentIndex] = useState(initialIndex)
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isOpen) setCurrentIndex(initialIndex)
   }, [isOpen, initialIndex])
 
@@ -51,9 +51,10 @@ const Lightbox = ({
         <AnimatePresence mode="wait">
           <motion.div
             key={currentIndex}
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.2 }}
             className="relative w-full h-full flex items-center justify-center"
           >
             <img 
@@ -100,22 +101,24 @@ const ThumbnailImage = ({
 }) => {
   return (
     <motion.div
-      className={`relative w-full h-full rounded-xl overflow-hidden group shadow-sm hover:shadow-md transition-all duration-300 bg-gray-50 border cursor-pointer ${
-        isActive ? 'ring-2 ring-green-500 border-green-500 opacity-100' : 'border-gray-100 opacity-70 hover:opacity-100'
+      className={`relative w-full h-full rounded-lg overflow-hidden cursor-pointer transition-all duration-300 ${
+        isActive 
+          ? 'ring-2 ring-green-600 opacity-100 scale-105 shadow-md' 
+          : 'border border-gray-200 opacity-50 hover:opacity-100 hover:scale-105'
       } ${className}`}
       onClick={onClick}
     >
       <img
         src={image.src}
         alt={image.alt}
-        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+        className="w-full h-full object-cover"
         loading="lazy"
       />
       
       {showPlus && (
-        <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px] flex flex-col items-center justify-center text-white z-20 hover:bg-black/40 transition-colors">
-          <Plus size={20} className="mb-0.5" />
-          <span className="text-xs font-black">+{plusCount}</span>
+        <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center text-white z-20">
+          <Plus size={16} className="mb-0.5" />
+          <span className="text-[10px] font-black">+{plusCount}</span>
         </div>
       )}
     </motion.div>
@@ -135,30 +138,52 @@ const InteractiveGallery = ({
   const afterIdx = images.findIndex(img => img.tag.toLowerCase() === 'after');
   
   const hasBeforeAfter = beforeIdx !== -1 && afterIdx !== -1;
-  const [activeViewIdx, setActiveViewIdx] = useState(hasBeforeAfter ? afterIdx : 0);
+  const initialIndex = hasBeforeAfter ? afterIdx : 0;
+  
+  const [activeViewIdx, setActiveViewIdx] = useState(initialIndex);
+  const [isPaused, setIsPaused] = useState(false);
 
-  React.useEffect(() => {
-    setActiveViewIdx(hasBeforeAfter ? afterIdx : 0);
-  }, [item.id, hasBeforeAfter, afterIdx]);
+  useEffect(() => {
+    setActiveViewIdx(initialIndex);
+    setIsPaused(false);
+  }, [item.id, initialIndex]);
+
+  useEffect(() => {
+    if (isPaused) return;
+    const timer = setInterval(() => {
+      setActiveViewIdx((prev) => (prev + 1) % images.length);
+    }, 2500);
+    return () => clearInterval(timer);
+  }, [isPaused, images.length]);
 
   const priorityIndices: number[] = [];
   if (beforeIdx !== -1) priorityIndices.push(beforeIdx);
   if (afterIdx !== -1) priorityIndices.push(afterIdx);
-  
   images.forEach((_, idx) => {
-    if (idx !== beforeIdx && idx !== afterIdx) {
-      priorityIndices.push(idx);
-    }
+    if (idx !== beforeIdx && idx !== afterIdx) priorityIndices.push(idx);
   });
 
   const activeImage = images[activeViewIdx];
 
+  const handleThumbnailClick = (idx: number) => {
+    setActiveViewIdx(idx);
+    setIsPaused(true);
+  };
+
   return (
-    <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 lg:gap-12 items-center">
+    <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 lg:gap-16 items-center">
       
-      {/* LEFT: Main Frame (7/12) */}
-      <div className="w-full xl:col-span-7">
-        <div className="relative aspect-[16/9] w-full rounded-3xl overflow-hidden shadow-xl bg-gray-100 group border border-gray-200">
+      {/* LEFT: Main Frame & Compact Thumbnails */}
+      <div 
+        className="w-full xl:col-span-7 flex flex-col items-center"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+      >
+        {/* Main Image Frame */}
+        <div 
+          className="relative aspect-[16/9] w-full rounded-3xl overflow-hidden shadow-xl bg-gray-100 group border border-gray-200 cursor-zoom-in mb-6"
+          onClick={() => onMainClick(activeViewIdx)}
+        >
           <AnimatePresence mode="wait">
             <motion.img
               key={activeViewIdx}
@@ -167,14 +192,13 @@ const InteractiveGallery = ({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="absolute inset-0 w-full h-full object-cover cursor-zoom-in"
-              onClick={() => onMainClick(activeViewIdx)}
+              transition={{ duration: 0.25 }}
+              className="absolute inset-0 w-full h-full object-cover"
             />
           </AnimatePresence>
 
           <div className="absolute top-5 left-5 z-20">
-            <span className={`px-4 py-1.5 rounded-full text-xs font-black tracking-widest uppercase shadow-lg backdrop-blur-md ${
+            <span className={`px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase shadow-lg backdrop-blur-md ${
               activeImage.tag.toLowerCase() === 'before'
                 ? 'bg-black/80 text-white border border-white/20'
                 : activeImage.tag.toLowerCase() === 'after'
@@ -185,91 +209,62 @@ const InteractiveGallery = ({
             </span>
           </div>
 
-          {hasBeforeAfter && (
-            <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 flex bg-black/60 backdrop-blur-md rounded-full p-1 border border-white/10">
-              <button
-                onClick={(e) => { e.stopPropagation(); setActiveViewIdx(beforeIdx); }}
-                className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
-                  activeViewIdx === beforeIdx ? 'bg-white text-black shadow-sm' : 'text-white/70 hover:text-white'
-                }`}
-              >
-                Before
-              </button>
-              <button
-                onClick={(e) => { e.stopPropagation(); setActiveViewIdx(afterIdx); }}
-                className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
-                  activeViewIdx === afterIdx ? 'bg-green-500 text-white shadow-sm' : 'text-white/70 hover:text-white'
-                }`}
-              >
-                After
-              </button>
-            </div>
-          )}
-
           <div className="absolute bottom-5 right-5 z-20 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
             <div className="p-2 bg-white/20 backdrop-blur-md rounded-full text-white">
               <Maximize2 size={18} />
             </div>
           </div>
         </div>
-      </div>
 
-      {/* RIGHT: Text & Thumbnails (5/12) */}
-      <div className="flex flex-col w-full xl:col-span-5 h-full justify-center">
-        <div className="flex items-center space-x-3 mb-5">
-          <div className="h-[1.5px] w-6 bg-green-600" />
-          <span className="text-green-600 text-[10px] font-black uppercase tracking-[0.2em]">Our Performance</span>
-        </div>
-        
-        <h3 className="text-2xl md:text-3xl font-black text-gray-900 mb-4 leading-tight">
-          {item.title}
-        </h3>
-        
-        <p className="text-gray-500 text-sm md:text-base leading-relaxed mb-6 font-medium">
-          {item.description}
-        </p>
-        
-        <div className="space-y-3 mb-8">
-          {item.keyPoints?.map((text, i) => (
-            <div key={i} className="flex items-center">
-              <div className="w-1.5 h-1.5 bg-green-500 rounded-full mr-3 flex-shrink-0" />
-              <p className="text-gray-700 font-bold text-xs md:text-sm">{text}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Gallery Preview */}
-        <div className="bg-gray-50 rounded-2xl p-4 border border-gray-100 mb-4">
-          <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Gallery Preview</p>
-          <div className="grid grid-cols-5 gap-2 md:gap-3">
-            {priorityIndices.map((originalIdx, displayIdx) => {
-              if (displayIdx > 4) return null;
-              const isLastVisible = displayIdx === 4 && priorityIndices.length > 5;
-              const hiddenCount = priorityIndices.length - 5;
-              
-              return (
+        {/* Gallery Preview - Compact Thumbnails, Centered, No Background box */}
+        <div className="w-full flex flex-wrap justify-center gap-2 md:gap-3 px-1">
+          {priorityIndices.map((originalIdx, displayIdx) => {
+            if (displayIdx > 5) return null; 
+            const isLastVisible = displayIdx === 5 && priorityIndices.length > 6;
+            const hiddenCount = priorityIndices.length - 6;
+            
+            return (
+              <div key={originalIdx} className="w-16 h-12 md:w-20 md:h-14 lg:w-24 lg:h-16">
                 <ThumbnailImage 
-                  key={originalIdx} 
                   image={images[originalIdx]} 
                   isActive={activeViewIdx === originalIdx}
                   onClick={() => {
                     if (isLastVisible) {
                       onMainClick(originalIdx);
                     } else {
-                      setActiveViewIdx(originalIdx);
+                      handleThumbnailClick(originalIdx);
                     }
                   }}
                   showPlus={isLastVisible}
                   plusCount={hiddenCount}
-                  className="aspect-square"
                 />
-              )
-            })}
-          </div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      {/* RIGHT: Text Content - Re-added label & fixed spacing */}
+      <div className="flex flex-col w-full xl:col-span-5 h-full justify-center xl:sticky xl:top-32 py-4">
+        <h3 className="text-2xl md:text-4xl font-black text-gray-900 mb-6 leading-tight tracking-tighter">
+          {item.title}
+        </h3>
+        
+        <p className="text-gray-500 text-sm md:text-base leading-relaxed mb-8 font-medium">
+          {item.description}
+        </p>
+        
+        <div className="space-y-4 mb-10">
+          {item.keyPoints?.map((text, i) => (
+            <div key={i} className="flex items-center">
+              <div className="w-1.5 h-1.5 bg-green-500 rounded-full mr-3 flex-shrink-0" />
+              <p className="text-gray-700 font-bold text-sm md:text-base">{text}</p>
+            </div>
+          ))}
         </div>
         
         {item.doctorNote && (
-          <div className="flex items-start p-4 bg-green-50/50 rounded-xl border border-green-100/50">
+          <div className="flex items-start p-5 bg-green-50/50 rounded-2xl border border-green-100/50 mt-auto shadow-sm">
              <CheckCircle2 className="text-green-600 mr-3 w-5 h-5 flex-shrink-0 mt-0.5" />
              <div>
                <p className="text-gray-900 text-xs font-black mb-1">나무의사의 한마디</p>
@@ -295,17 +290,17 @@ export default function TechnologySection() {
   const closeLightbox = () => setLightbox({ isOpen: false, index: 0 })
 
   return (
-    <section className="py-40 bg-white overflow-hidden">
+    <section className="py-24 bg-white overflow-hidden">
       <Container>
         <div className="text-center max-w-4xl mx-auto mb-16">
           <h2 className="text-xs font-bold text-green-600 tracking-widest uppercase mb-4">Evidence of Excellence</h2>
           <p className="text-3xl md:text-5xl font-black text-gray-900 mb-12 tracking-tighter">결과로 증명하는 기술력</p>
           
-          {/* Tabs - Single Row with Wrap, no drag scroll */}
           <div className="flex flex-wrap justify-center gap-2 md:gap-4 px-4">
             {technologyItems.map((item) => (
               <button
                 key={item.id}
+                onMouseEnter={() => setActiveTabId(item.id)}
                 onClick={() => setActiveTabId(item.id)}
                 className={`px-6 py-3 rounded-full text-xs md:text-sm font-black transition-all duration-300 shadow-sm ${
                   activeTabId === item.id 
