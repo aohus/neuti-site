@@ -1,12 +1,11 @@
 from typing import Any, List
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, update, delete, desc
 
 from app.db.session import get_db
-from app.models.board import Notice as NoticeModel
 from app.schemas.board import Notice, NoticeCreate, NoticeUpdate
 from app.api import deps
+from app.services.notice_service import notice_service
 
 router = APIRouter()
 
@@ -20,10 +19,7 @@ async def read_notices(
     """
     Retrieve notices.
     """
-    result = await db.execute(
-        select(NoticeModel).order_by(desc(NoticeModel.created_at)).offset(skip).limit(limit)
-    )
-    return result.scalars().all()
+    return await notice_service.get_notices(db, skip=skip, limit=limit)
 
 @router.post("", response_model=Notice)
 @router.post("/", response_model=Notice, include_in_schema=False)
@@ -36,11 +32,7 @@ async def create_notice(
     """
     Create new notice.
     """
-    db_obj = NoticeModel(**notice_in.model_dump())
-    db.add(db_obj)
-    await db.commit()
-    await db.refresh(db_obj)
-    return db_obj
+    return await notice_service.create_notice(db, obj_in=notice_in)
 
 @router.get("/{id}", response_model=Notice)
 async def read_notice(
@@ -51,18 +43,7 @@ async def read_notice(
     """
     Get notice by ID.
     """
-    result = await db.execute(select(NoticeModel).where(NoticeModel.id == id))
-    notice = result.scalar_one_or_none()
-    if not notice:
-        raise HTTPException(status_code=404, detail="Notice not found")
-    
-    # Increment views
-    await db.execute(
-        update(NoticeModel).where(NoticeModel.id == id).values(views=notice.views + 1)
-    )
-    await db.commit()
-    await db.refresh(notice)
-    return notice
+    return await notice_service.get_notice(db, id=id)
 
 @router.put("/{id}", response_model=Notice)
 async def update_notice(
@@ -75,19 +56,7 @@ async def update_notice(
     """
     Update a notice.
     """
-    result = await db.execute(select(NoticeModel).where(NoticeModel.id == id))
-    notice = result.scalar_one_or_none()
-    if not notice:
-        raise HTTPException(status_code=404, detail="Notice not found")
-    
-    update_data = notice_in.model_dump(exclude_unset=True)
-    for field, value in update_data.items():
-        setattr(notice, field, value)
-    
-    db.add(notice)
-    await db.commit()
-    await db.refresh(notice)
-    return notice
+    return await notice_service.update_notice(db, id=id, obj_in=notice_in)
 
 @router.delete("/{id}", response_model=Notice)
 async def delete_notice(
@@ -99,11 +68,4 @@ async def delete_notice(
     """
     Delete a notice.
     """
-    result = await db.execute(select(NoticeModel).where(NoticeModel.id == id))
-    notice = result.scalar_one_or_none()
-    if not notice:
-        raise HTTPException(status_code=404, detail="Notice not found")
-    
-    await db.delete(notice)
-    await db.commit()
-    return notice
+    return await notice_service.delete_notice(db, id=id)

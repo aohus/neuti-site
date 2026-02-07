@@ -65,7 +65,13 @@ export default function TargetCTA() {
                       <target.icon size={32} />
                     </div>
                     <div className="relative w-32 h-20 rounded-xl overflow-hidden grayscale opacity-30 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700">
-                       <Image src={target.image} alt="" fill className="object-cover" />
+              <Image
+                src={target.image}
+                alt={target.title}
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                className="object-cover transition-transform duration-1000 group-hover:scale-105"
+              />
                     </div>
                   </div>
                   

@@ -56,6 +56,7 @@ export default function MainCarousel() {
               src={carouselItems[currentIndex].image}
               alt="Hero Image"
               fill
+              sizes="100vw"
               className="object-cover opacity-80"
               priority
             />

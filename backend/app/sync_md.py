@@ -3,13 +3,11 @@ import os
 import sys
 import time
 from pathlib import Path
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 from app.db.session import async_session
-from app.models.performance import Performance
+from app.repositories.performance_repo import performance_repo
 from app.utils.markdown import parse_markdown_performance, normalize_img_url
 
 # 마크다운 파일 경로 설정
@@ -59,9 +57,8 @@ async def sync_performances():
                     "construction_date": metadata.get("construction_date")
                 }
 
-                # DB에서 기존 항목 검색
-                result = await session.execute(select(Performance).filter(Performance.title == title))
-                db_obj = result.scalar_one_or_none()
+                # Use repository instead of direct DB filter
+                db_obj = await performance_repo.get_by_title(session, title=title)
                 
                 if db_obj:
                     print(f"Updating: {title}")
@@ -69,8 +66,11 @@ async def sync_performances():
                         setattr(db_obj, key, value)
                 else:
                     print(f"Creating: {title}")
-                    new_performance = Performance(**performance_data)
-                    session.add(new_performance)
+                    # Using repository create method would require a schema, 
+                    # but here we have a dict. We can manually add it or use repo.
+                    from app.schemas.performance import PerformanceCreate
+                    perf_in = PerformanceCreate(**performance_data)
+                    await performance_repo.create(session, obj_in=perf_in)
             except Exception as e:
                 import traceback
                 print(f"Error processing {md_file.name}: {str(e)}")

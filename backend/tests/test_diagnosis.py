@@ -13,7 +13,7 @@ async def test_create_diagnosis_request():
         "symptom": "잎이 노랗게 변해요"
     }
     
-    with patch("app.api.api_v1.endpoints.diagnosis.send_diagnosis_notification") as mock_send:
+    with patch("app.services.diagnosis_service.send_diagnosis_notification") as mock_send:
         async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
             response = await ac.post("/api/v1/diagnosis/", data=data)
             
@@ -34,7 +34,7 @@ async def test_create_diagnosis_request_with_file():
     }
     files = {"image": ("test.jpg", b"fake-image-content", "image/jpeg")}
     
-    with patch("app.api.api_v1.endpoints.diagnosis.send_diagnosis_notification") as mock_send:
+    with patch("app.services.diagnosis_service.send_diagnosis_notification") as mock_send:
         async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
             response = await ac.post("/api/v1/diagnosis/", data=data, files=files)
             

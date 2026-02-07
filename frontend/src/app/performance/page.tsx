@@ -13,10 +13,8 @@ export default function PerformancePage() {
   const { isAdmin } = useAuth()
 
   const [category, setCategory] = useState('All')
-  const [year, setYear] = useState<number | undefined>(undefined)
   const [jobMain, setJobMain] = useState<string | undefined>(undefined)
   const [siteType, setSiteType] = useState<string | undefined>(undefined)
-  const [searchQuery, setSearchQuery] = useState('')
   const [currentPage, setPage] = useState(1)
   const ITEMS_PER_PAGE = 9
 
@@ -26,10 +24,8 @@ export default function PerformancePage() {
     refresh
   } = usePerformances({
     category: category === 'All' ? undefined : category,
-    year,
     job_main: jobMain === 'All' ? undefined : jobMain,
     site_type: siteType === 'All' ? undefined : siteType,
-    q: searchQuery || undefined
   })
 
   const [isFormOpen, setIsFormOpen] = useState(false)
@@ -65,7 +61,6 @@ export default function PerformancePage() {
     return allCombinedItems.slice(start, start + ITEMS_PER_PAGE)
   }, [allCombinedItems, currentPage])
 
-  const years = [2025, 2024, 2023, 2022, 2021, 2020]
   const jobCategories = ['고사목제거', '관리', '조경공사', '진단']
   const siteTypes = ['공공기관', '공원', '아파트', '기업', '개인정원']
 
@@ -96,50 +91,19 @@ export default function PerformancePage() {
           )}
         </div>
 
-        {/* Search & Advanced Filters */}
-        <div className="mb-16 space-y-8">
-          <div className="relative mx-auto max-w-2xl">
-            <Search className="absolute top-1/2 left-5 h-5 w-5 -translate-y-1/2 text-gray-300" />
-            <input
-              type="text"
-              placeholder="작업명, 발주처, 대상지 등으로 검색하세요"
-              className="border-surface bg-surface/50 focus:border-primary focus:shadow-primary/5 w-full rounded-[2rem] border-2 py-5 pr-6 pl-14 text-lg font-bold shadow-sm transition-all outline-none focus:bg-white focus:shadow-xl"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-
-          <div className="bg-surface/30 mx-auto grid max-w-4xl grid-cols-2 gap-4 rounded-[2.5rem] border border-black/5 p-8 md:grid-cols-4">
-            <div className="space-y-3">
-              <label className="text-primary ml-1 flex items-center gap-2 text-[10px] font-black tracking-[0.2em] uppercase">
-                <Calendar size={14} /> 연도
-              </label>
-              <select
-                className="text-deep focus:ring-primary w-full rounded-xl border-none bg-white px-4 py-3.5 font-bold shadow-sm transition-all outline-none focus:ring-2"
-                value={year || ''}
-                onChange={(e) =>
-                  setYear(e.target.value ? Number(e.target.value) : undefined)
-                }
-              >
-                <option value="">전체</option>
-                {years.map((y) => (
-                  <option key={y} value={y}>
-                    {y}년
-                  </option>
-                ))}
-              </select>
-            </div>
-
+        {/* Simplified Filters */}
+        <div className="mb-16">
+          <div className="mx-auto grid max-w-2xl grid-cols-1 gap-6 sm:grid-cols-2">
             <div className="space-y-3">
               <label className="text-primary ml-1 flex items-center gap-2 text-[10px] font-black tracking-[0.2em] uppercase">
                 <Wrench size={14} /> 작업분류
               </label>
               <select
-                className="text-deep focus:ring-primary w-full rounded-xl border-none bg-white px-4 py-3.5 font-bold shadow-sm transition-all outline-none focus:ring-2"
+                className="text-deep focus:ring-primary w-full rounded-2xl border-2 border-black/5 bg-surface/30 px-6 py-4 font-bold shadow-sm transition-all outline-none focus:bg-white focus:ring-2"
                 value={jobMain || ''}
                 onChange={(e) => setJobMain(e.target.value || undefined)}
               >
-                <option value="">전체</option>
+                <option value="">전체 작업</option>
                 {jobCategories.map((c) => (
                   <option key={c} value={c}>
                     {c}
@@ -153,31 +117,16 @@ export default function PerformancePage() {
                 <MapPin size={14} /> 대상지분류
               </label>
               <select
-                className="text-deep focus:ring-primary w-full rounded-xl border-none bg-white px-4 py-3.5 font-bold shadow-sm transition-all outline-none focus:ring-2"
+                className="text-deep focus:ring-primary w-full rounded-2xl border-2 border-black/5 bg-surface/30 px-6 py-4 font-bold shadow-sm transition-all outline-none focus:bg-white focus:ring-2"
                 value={siteType || ''}
                 onChange={(e) => setSiteType(e.target.value || undefined)}
               >
-                <option value="">전체</option>
+                <option value="">전체 대상지</option>
                 {siteTypes.map((t) => (
                   <option key={t} value={t}>
                     {t}
                   </option>
                 ))}
-              </select>
-            </div>
-
-            <div className="space-y-3">
-              <label className="text-primary ml-1 flex items-center gap-2 text-[10px] font-black tracking-[0.2em] uppercase">
-                <Filter size={14} /> 사업분야
-              </label>
-              <select
-                className="text-deep focus:ring-primary w-full rounded-xl border-none bg-white px-4 py-3.5 font-bold shadow-sm transition-all outline-none focus:ring-2"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-              >
-                <option value="All">전체</option>
-                <option value="나무병원">나무병원</option>
-                <option value="조경식재">조경식재</option>
               </select>
             </div>
           </div>

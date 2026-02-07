@@ -49,7 +49,9 @@ thumbnail_url: /uploads/thumb.jpg
     
     # 네 번째 블록 (단독 이미지)
     assert blocks[3]["type"] == "image"
-    assert blocks[3]["value"] == "/uploads/img3.jpg"
+    img_data = json.loads(blocks[3]["value"])
+    assert img_data["url"] == "/uploads/img3.jpg"
+    assert img_data["alt"] == "단독이미지"
 
 def test_markdown_parsing_plain_text():
     md_content = """---

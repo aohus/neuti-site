@@ -38,7 +38,7 @@ def parse_markdown_performance(content: str, post_dir: str = "") -> dict[str, An
     blocks = []
     # 정규표현식 수정: 명시적인 캡처 그룹 정의 (1) alt text, (2) url
     # ![alt](url) 형식을 정확히 매칭합니다.
-    img_pattern = re.compile(r"^!\[(.*?)](.*?)\)\\s*$")
+    img_pattern = re.compile(r"^!\[(.*?)\]\((.*?)\)\s*$")
 
     lines = body.splitlines()
     current_text = []

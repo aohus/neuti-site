@@ -36,6 +36,7 @@ class Settings(BaseSettings):
 
     # Storage
     UPLOAD_DIR: Path = Path("uploads")
+    PERFORMANCE_DATA_DIR: Path = Path("data/performances")
 
     # Authentication
     SECRET_KEY: str = "your-super-secret-key-for-development" # In production, use a strong key

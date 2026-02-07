@@ -33,10 +33,10 @@ export default function StatisticsDashboard() {
     offset: ["start end", "center center", "end start"]
   })
   
-  // Appears as it enters, peaks in the middle, disappears as it leaves
-  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0])
-  const y = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [50, 0, 0, -50])
-  const scale = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.9, 1, 1, 0.9])
+  // Appears as it enters, peaks very early, disappears quickly
+  const opacity = useTransform(scrollYProgress, [0, 0.05, 0.2, 0.3], [0, 1, 1, 0])
+  const y = useTransform(scrollYProgress, [0, 0.1, 0.3, 0.4], [40, 0, 0, -40])
+  const scale = useTransform(scrollYProgress, [0, 0.05, 0.2, 0.3], [0.95, 1, 1, 0.95])
 
   useEffect(() => {
     const fetchStats = async () => {

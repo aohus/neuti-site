@@ -1,0 +1,8 @@
+{
+  "track_id": "backend_refactoring_20260206",
+  "type": "refactor",
+  "status": "new",
+  "created_at": "2026-02-06T15:30:00Z",
+  "updated_at": "2026-02-06T15:30:00Z",
+  "description": "백엔드 아키텍처 리팩토링: 계층형 구조 도입 및 코드 품질 개선"
+}
