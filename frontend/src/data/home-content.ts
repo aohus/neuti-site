@@ -88,27 +88,27 @@ export const technologyItems: TechnologyItem[] = [
     ],
     images: [
       {
-        src: "/images/technology/seasonal_flowers/대형화분봄.jpg",
+        src: "/images/technology/seasonal_flowers/planter_spring.jpg",
         tag: "봄 식재",
         alt: "대형화분 봄 식재",
       },
       {
-        src: "/images/technology/seasonal_flowers/대형화분가을.jpg",
+        src: "/images/technology/seasonal_flowers/planter_autumn.jpg",
         tag: "가을 식재",
         alt: "대형화분 가을 식재",
       },
       {
-        src: "/images/technology/seasonal_flowers/거리화분.jpeg",
+        src: "/images/technology/seasonal_flowers/street_planter.jpeg",
         tag: "거리화분",
         alt: "거리화분 식재",
       },
       {
-        src: "/images/technology/seasonal_flowers/걸이화분.jpg",
+        src: "/images/technology/seasonal_flowers/hanging_planter.jpg",
         tag: "걸이화분",
         alt: "걸이화분 식재",
       },
       {
-        src: "/images/technology/seasonal_flowers/디자인.jpeg",
+        src: "/images/technology/seasonal_flowers/design.jpeg",
         tag: "디자인",
         alt: "화단 디자인",
       },
@@ -149,17 +149,17 @@ export const technologyItems: TechnologyItem[] = [
     ],
     images: [
       {
-        src: "/images/technology/pest_control/해충예찰.jpg",
+        src: "/images/technology/pest_control/pest_inspection.jpg",
         tag: "해충예찰",
         alt: "해충 예찰",
       },
       {
-        src: "/images/technology/pest_control/방제작업1.jpg",
+        src: "/images/technology/pest_control/control_work_1.jpg",
         tag: "방제작업",
         alt: "방제 작업 1",
       },
       {
-        src: "/images/technology/pest_control/방제작업2.jpg",
+        src: "/images/technology/pest_control/control_work_2.jpg",
         tag: "방제작업",
         alt: "방제 작업 2",
       },
@@ -187,12 +187,12 @@ export const technologyItems: TechnologyItem[] = [
         alt: "수세회복 후",
       },
       {
-        src: "/images/technology/tree_recovery/진단.jpg",
+        src: "/images/technology/tree_recovery/diagnois.jpg",
         tag: "진단",
         alt: "수목 진단",
       },
       {
-        src: "/images/technology/tree_recovery/치료.jpg",
+        src: "/images/technology/tree_recovery/treatment.jpg",
         tag: "치료",
         alt: "수목 치료",
       },
@@ -220,7 +220,7 @@ export const technologyItems: TechnologyItem[] = [
         alt: "위험목 제거 후",
       },
       {
-        src: "/images/technology/risk_tree_removal/작업.jpg",
+        src: "/images/technology/risk_tree_removal/work.jpg",
         tag: "작업",
         alt: "제거 작업",
       },
