@@ -19,7 +19,7 @@ services:
       - "traefik.enable=true"
       
       # Backend API Router
-      - "traefik.http.routers.neuti-backend.rule=(Host(`xn--ob0bm3s4uh8sb.com`) || Host(`xn--ob0bm3s4uh8sb.net`)) && PathPrefix(`/backend-api`)"
+      - "traefik.http.routers.neuti-backend.rule=(Host(`XN--910B90BW7NHUBU9W9VR.COM`) || Host(`XN--910B90BW7NHUBU9W9VR.NET`)) && PathPrefix(`/backend-api`)"
       - "traefik.http.routers.neuti-backend.entrypoints=websecure"
       - "traefik.http.routers.neuti-backend.tls.certresolver=letsencrypt"
       - "traefik.http.routers.neuti-backend.priority=10"
@@ -51,7 +51,7 @@ services:
       - "traefik.enable=true"
       
       # Frontend Router
-      - "traefik.http.routers.neuti-frontend.rule=Host(`xn--ob0bm3s4uh8sb.com`) || Host(`xn--ob0bm3s4uh8sb.net`)"
+      - "traefik.http.routers.neuti-frontend.rule=Host(`XN--910B90BW7NHUBU9W9VR.COM`) || Host(`XN--910B90BW7NHUBU9W9VR.NET`)"
       - "traefik.http.routers.neuti-frontend.entrypoints=websecure"
       - "traefik.http.routers.neuti-frontend.tls.certresolver=letsencrypt"
       - "traefik.http.routers.neuti-frontend.priority=1"
