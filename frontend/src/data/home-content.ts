@@ -187,7 +187,7 @@ export const technologyItems: TechnologyItem[] = [
         alt: "수세회복 후",
       },
       {
-        src: "/images/technology/tree_recovery/diagnois.jpg",
+        src: "/images/technology/tree_recovery/diagnosis.jpg",
         tag: "진단",
         alt: "수목 진단",
       },
