@@ -20,11 +20,11 @@ export interface TechnologyItem {
 
 export const heroImages: HeroImage[] = [
   {
-    src: "/images/hero/신구대식물원_방제.jpg",
+    src: "/images/hero/hero_1.jpg",
     alt: "신구대식물원 방제 작업",
   },
   {
-    src: "/images/hero/정부청사_소나무전정.jpg",
+    src: "/images/hero/hero_2.jpg",
     alt: "정부청사 소나무 전정 작업",
   },
 ];

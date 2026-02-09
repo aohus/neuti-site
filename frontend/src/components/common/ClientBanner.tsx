@@ -8,7 +8,7 @@ const clients = [
   { name: 'gongsuchco', src: '/images/clients/gongsuchco.jpg' },
   { name: 'seongnam_dev', src: '/images/clients/seongnam_dev.jpg' },
   { name: 'seongnam_city', src: '/images/clients/seongnam_city.png' },
-  { name: 'gov_complex', src: '/images/clients/gov_complex.png' },
+  { name: 'gov_complex', src: '/images/clients/gov-complex.png' },
 ]
 
 export default function ClientBanner() {
