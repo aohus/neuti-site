@@ -28,7 +28,7 @@ export default function LatestUpdates() {
 
 
 
-            const apiUrl = '/backend-api'
+            const apiUrl = '/backend-api/api/v1'
 
 
 

@@ -24,7 +24,7 @@ export default function LoginPage() {
       formData.append('username', username)
       formData.append('password', password)
 
-      const apiUrl = '/backend-api'
+      const apiUrl = '/backend-api/api/v1'
       const response = await axios.post(`${apiUrl}/login/access-token`, formData, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'

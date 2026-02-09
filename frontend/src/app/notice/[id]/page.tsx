@@ -19,7 +19,7 @@ export default function NoticeDetailPage() {
   const fetchNotice = async () => {
     setIsLoading(true)
     try {
-      const apiUrl = '/backend-api'
+      const apiUrl = '/backend-api/api/v1'
       const response = await axios.get(`${apiUrl}/notice/${id}`)
       setNotice(response.data)
     } catch (err) {
@@ -34,7 +34,7 @@ export default function NoticeDetailPage() {
     if (!confirm('정말로 삭제하시겠습니까?')) return
 
     try {
-      const apiUrl = '/backend-api'
+      const apiUrl = '/backend-api/api/v1'
       await axios.delete(`${apiUrl}/notice/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       })

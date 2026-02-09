@@ -20,7 +20,7 @@ export default function NoticeEditPage() {
   const fetchNotice = async () => {
     setIsLoading(true)
     try {
-      const apiUrl = '/backend-api'
+      const apiUrl = '/backend-api/api/v1'
       const response = await axios.get(`${apiUrl}/notice/${id}`)
       setTitle(response.data.title)
       setContent(response.data.content)
@@ -45,7 +45,7 @@ export default function NoticeEditPage() {
     setIsSubmitting(true)
 
     try {
-      const apiUrl = '/backend-api'
+      const apiUrl = '/backend-api/api/v1'
       await axios.put(`${apiUrl}/notice/${id}`, 
         { title, content },
         { headers: { Authorization: `Bearer ${token}` } }

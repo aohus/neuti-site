@@ -24,7 +24,7 @@ export default function NoticeListPage() {
 
   const fetchNotices = async () => {
     setIsLoading(true)
-    const apiUrl = '/backend-api'
+    const apiUrl = '/backend-api/api/v1'
     try {
       const response = await axios.get(`${apiUrl}/notice/`, {
         params: {

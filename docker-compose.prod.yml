@@ -5,11 +5,10 @@ services:
       target: runtime
     container_name: neuti-backend
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    env_file:
+      - .env
     environment:
       - POSTGRES_SERVER=neuti-db
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
       - PYTHONPATH=/app
     volumes:
       - ./assets:/app/assets
@@ -72,18 +71,16 @@ services:
       target: runtime
     container_name: neuti-sync-watcher
     command: python app/sync_md.py --watch
+    env_file:
+      - .env
     environment:
       - POSTGRES_SERVER=neuti-db
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
       - PYTHONPATH=/app
     volumes:
       - ./backend/app:/app/app
       - ./backend/data:/app/data
       - ./assets/img:/app/uploads
       - ./assets:/app/assets
-      - .env.prod:/app/.env
     restart: always
     networks:
       - neuti-internal
@@ -93,10 +90,8 @@ services:
     container_name: neuti-db
     volumes:
       - postgres_data_prod:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
+    env_file:
+      - .env
     restart: always
     networks:
       - neuti-internal
