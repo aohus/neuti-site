@@ -5,8 +5,6 @@ services:
       target: runtime
     container_name: neuti-backend
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000
-    expose:
-      - "8000"
     environment:
       - POSTGRES_SERVER=neuti-db
       - POSTGRES_USER=${POSTGRES_USER}
@@ -14,9 +12,56 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - PYTHONPATH=/app
     restart: always
+    expose:
+      - "8000"
+    
+    labels:
+      - "traefik.enable=true"
+      
+      # Backend API Router
+      - "traefik.http.routers.neuti-backend.rule=(Host(`xn--ob0bm3s4uh8sb.com`) || Host(`xn--ob0bm3s4uh8sb.net`)) && PathPrefix(`/backend-api`)"
+      - "traefik.http.routers.neuti-backend.entrypoints=websecure"
+      - "traefik.http.routers.neuti-backend.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.neuti-backend.priority=10"
+      
+      # Strip /backend-api prefix
+      - "traefik.http.middlewares.neuti-strip.stripprefix.prefixes=/backend-api"
+      - "traefik.http.routers.neuti-backend.middlewares=neuti-strip"
+      
+      # Service
+      - "traefik.http.services.neuti-backend.loadbalancer.server.port=8000"
+    
     networks:
       - neuti-internal
-      - existing-s2r-network
+      - proxy-network
+
+  neuti-frontend:
+    build:
+      context: ./frontend
+      target: runner
+    container_name: neuti-frontend
+    environment:
+      - NEXT_PUBLIC_API_URL=/backend-api
+      - BACKEND_INTERNAL_URL=http://neuti-backend:8000
+    restart: always
+    expose:
+      - "3000"
+    
+    labels:
+      - "traefik.enable=true"
+      
+      # Frontend Router
+      - "traefik.http.routers.neuti-frontend.rule=Host(`xn--ob0bm3s4uh8sb.com`) || Host(`xn--ob0bm3s4uh8sb.net`)"
+      - "traefik.http.routers.neuti-frontend.entrypoints=websecure"
+      - "traefik.http.routers.neuti-frontend.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.neuti-frontend.priority=1"
+      
+      # Service
+      - "traefik.http.services.neuti-frontend.loadbalancer.server.port=3000"
+    
+    networks:
+      - neuti-internal
+      - proxy-network
 
   neuti-sync-watcher:
     build:
@@ -34,21 +79,6 @@ services:
     networks:
       - neuti-internal
 
-  neuti-frontend:
-    build:
-      context: ./frontend
-      target: runner
-    container_name: neuti-frontend
-    expose:
-      - "3000"
-    environment:
-      - NEXT_PUBLIC_API_URL=/backend-api
-      - BACKEND_INTERNAL_URL=http://neuti-backend:8000
-    restart: always
-    networks:
-      - neuti-internal
-      - existing-s2r-network
-
   neuti-db:
     image: postgres:15-alpine
     container_name: neuti-db
@@ -65,9 +95,8 @@ services:
 networks:
   neuti-internal:
     driver: bridge
-  existing-s2r-network:
+  proxy-network:
     external: true
-    name: app-network # 기존 서비스의 docker-compose에 정의된 네트워크 이름
 
 volumes:
   postgres_data_prod:
