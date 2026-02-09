@@ -12,6 +12,7 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - PYTHONPATH=/app
     volumes:
+      - ./assets:/app/assets
       - ./assets/img:/app/uploads
     restart: always
     expose:
@@ -21,7 +22,7 @@ services:
       - "traefik.enable=true"
       
       # Backend API Router
-      - "traefik.http.routers.neuti-backend.rule=(Host(`XN--910B90BW7NHUBU9W9VR.COM`) || Host(`XN--910B90BW7NHUBU9W9VR.NET`)) && PathPrefix(`/backend-api`)"
+      - "traefik.http.routers.neuti-backend.rule=(Host(`XN--910B90BW7NHUBU9W9VR.COM`) || Host(`XN--910B90BW7NHUBU9W9VR.NET`)) && (PathPrefix(`/backend-api`) || PathPrefix(`/uploads`) || PathPrefix(`/images`))"
       - "traefik.http.routers.neuti-backend.entrypoints=websecure"
       - "traefik.http.routers.neuti-backend.tls.certresolver=letsencrypt"
       - "traefik.http.routers.neuti-backend.priority=10"
@@ -81,6 +82,7 @@ services:
       - ./backend/app:/app/app
       - ./backend/data:/app/data
       - ./assets/img:/app/uploads
+      - ./assets:/app/assets
       - .env.prod:/app/.env
     restart: always
     networks:
