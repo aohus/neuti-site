@@ -5,14 +5,12 @@ import { useAuth } from '@/context/AuthContext'
 import { usePerformances } from '@/hooks/usePerformance'
 import PerformanceForm from '@/components/performance/PerformanceForm'
 import ProjectGrid from '@/components/performance/ProjectGrid'
-import SearchBar from '@/components/common/SearchBar'
 import Pagination from '@/components/common/Pagination'
-import { Plus, Calendar, MapPin, Wrench, Search, Filter } from 'lucide-react'
+import { Plus, MapPin, Wrench } from 'lucide-react'
 
 export default function PerformancePage() {
   const { isAdmin } = useAuth()
 
-  const [category, setCategory] = useState('All')
   const [jobMain, setJobMain] = useState<string | undefined>(undefined)
   const [siteType, setSiteType] = useState<string | undefined>(undefined)
   const [currentPage, setPage] = useState(1)
@@ -22,23 +20,31 @@ export default function PerformancePage() {
     performances,
     isLoading: isBackLoading,
     refresh
-  } = usePerformances({
-    category: category === 'All' ? undefined : category,
-    job_main: jobMain === 'All' ? undefined : jobMain,
-    site_type: siteType === 'All' ? undefined : siteType,
-  })
+  } = usePerformances()
 
   const [isFormOpen, setIsFormOpen] = useState(false)
 
-  // Combine back-end data
-  const allCombinedItems = useMemo(() => {
-    console.log('Performances from API:', performances)
-    return performances.map((p) => {
-      const item = {
+  // Derive filter options from all data
+  const jobCategories = useMemo(() => {
+    const values = performances.map(p => p.job_main_category).filter(Boolean) as string[]
+    return [...new Set(values)].sort()
+  }, [performances])
+
+  const siteTypes = useMemo(() => {
+    const values = performances.map(p => p.site_type).filter(Boolean) as string[]
+    return [...new Set(values)].sort()
+  }, [performances])
+
+  // Client-side filtering
+  const filteredItems = useMemo(() => {
+    return performances
+      .filter((p) => !jobMain || p.job_main_category === jobMain)
+      .filter((p) => !siteType || p.site_type === siteType)
+      .map((p) => ({
         id: p.id,
         title: p.title,
         client: p.client || '느티나무병원 협동조합',
-        category: p.category || '시공사례',
+        category: p.job_main_category || '시공사례',
         image: p.thumbnail_url || '/images/hero-bg.jpg',
         year:
           p.year?.toString() ||
@@ -48,21 +54,15 @@ export default function PerformancePage() {
         tags: [p.job_main_category, p.site_type].filter(Boolean) as string[],
         content: p.content,
         isBackend: true
-      }
-      console.log('Mapped item:', item.title, 'Image:', item.image)
-      return item
-    })
-  }, [performances])
+      }))
+  }, [performances, jobMain, siteType])
 
   // Pagination
-  const totalPages = Math.ceil(allCombinedItems.length / ITEMS_PER_PAGE) || 1
+  const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE) || 1
   const paginatedItems = useMemo(() => {
     const start = (currentPage - 1) * ITEMS_PER_PAGE
-    return allCombinedItems.slice(start, start + ITEMS_PER_PAGE)
-  }, [allCombinedItems, currentPage])
-
-  const jobCategories = ['고사목제거', '관리', '조경공사', '진단']
-  const siteTypes = ['공공기관', '공원', '아파트', '기업', '개인정원']
+    return filteredItems.slice(start, start + ITEMS_PER_PAGE)
+  }, [filteredItems, currentPage])
 
   return (
     <div className="min-h-screen bg-white pt-32 pb-20 md:pt-40 md:pb-32">
@@ -91,7 +91,7 @@ export default function PerformancePage() {
           )}
         </div>
 
-        {/* Simplified Filters */}
+        {/* Filters */}
         <div className="mb-16">
           <div className="mx-auto grid max-w-2xl grid-cols-1 gap-6 sm:grid-cols-2">
             <div className="space-y-3">
@@ -101,7 +101,7 @@ export default function PerformancePage() {
               <select
                 className="text-deep focus:ring-primary w-full rounded-2xl border-2 border-black/5 bg-surface/30 px-6 py-4 font-bold shadow-sm transition-all outline-none focus:bg-white focus:ring-2"
                 value={jobMain || ''}
-                onChange={(e) => setJobMain(e.target.value || undefined)}
+                onChange={(e) => { setJobMain(e.target.value || undefined); setPage(1) }}
               >
                 <option value="">전체 작업</option>
                 {jobCategories.map((c) => (
@@ -119,7 +119,7 @@ export default function PerformancePage() {
               <select
                 className="text-deep focus:ring-primary w-full rounded-2xl border-2 border-black/5 bg-surface/30 px-6 py-4 font-bold shadow-sm transition-all outline-none focus:bg-white focus:ring-2"
                 value={siteType || ''}
-                onChange={(e) => setSiteType(e.target.value || undefined)}
+                onChange={(e) => { setSiteType(e.target.value || undefined); setPage(1) }}
               >
                 <option value="">전체 대상지</option>
                 {siteTypes.map((t) => (
