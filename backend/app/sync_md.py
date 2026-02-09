@@ -11,7 +11,7 @@ from app.repositories.performance_repo import performance_repo
 from app.utils.markdown import parse_markdown_performance, normalize_img_url
 
 # 마크다운 파일 경로 설정
-DATA_DIR = Path("data/content_text")
+DATA_DIR = Path("data/performances")
 
 async def sync_performances():
     if not DATA_DIR.exists():
