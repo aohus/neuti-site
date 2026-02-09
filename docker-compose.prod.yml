@@ -11,8 +11,7 @@ services:
       - POSTGRES_SERVER=neuti-db
       - PYTHONPATH=/app
     volumes:
-      - ./assets:/app/assets
-      - ./assets/img:/app/uploads
+      - ./backend/uploads:/app/uploads
     restart: always
     expose:
       - "8000"
@@ -88,8 +87,7 @@ services:
     volumes:
       - ./backend/app:/app/app
       - ./backend/data:/app/data
-      - ./assets/img:/app/uploads
-      - ./assets:/app/assets
+      - ./backend/uploads:/app/uploads
     restart: always
     depends_on:
       neuti-backend:
