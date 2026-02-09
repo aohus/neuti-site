@@ -18,17 +18,17 @@ async def sync_performances():
         print(f"Data directory {DATA_DIR} not found.")
         return
 
-    async with async_session() as session:
-        for md_file in DATA_DIR.glob("*.md"):
+    for md_file in DATA_DIR.glob("*.md"):
+        async with async_session() as session:
             print(f"Processing {md_file.name}...")
             
             # 마크다운 파일의 이름을 이미지 하위 폴더명으로 간주 (힌트 반영)
             post_dir_name = md_file.stem
             
-            with open(md_file, "r", encoding="utf-8") as f:
-                content = f.read()
-            
             try:
+                with open(md_file, "r", encoding="utf-8") as f:
+                    content = f.read()
+            
                 # 텍스트 내 이미지 보정을 위해 post_dir_name 전달
                 parsed = parse_markdown_performance(content, post_dir_name)
                 metadata = parsed["metadata"]
@@ -64,6 +64,7 @@ async def sync_performances():
                     print(f"Updating: {title}")
                     for key, value in performance_data.items():
                         setattr(db_obj, key, value)
+                    await session.commit()
                 else:
                     print(f"Creating: {title}")
                     # Using repository create method would require a schema, 
@@ -75,9 +76,8 @@ async def sync_performances():
                 import traceback
                 print(f"Error processing {md_file.name}: {str(e)}")
                 traceback.print_exc()
-        
-        await session.commit()
-        print("Sync completed.")
+    
+    print("Sync completed.")
 
 class MarkdownHandler(FileSystemEventHandler):
     def __init__(self, loop):
