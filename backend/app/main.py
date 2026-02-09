@@ -8,7 +8,6 @@ app = FastAPI(title=settings.PROJECT_NAME, version=settings.VERSION)
 
 # Static files
 app.mount("/uploads", StaticFiles(directory=settings.UPLOAD_DIR), name="uploads")
-app.mount("/images", StaticFiles(directory="/app/assets/images"), name="images")
 
 # Set all CORS enabled origins
 app.add_middleware(
