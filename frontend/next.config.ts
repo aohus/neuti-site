@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   output: "standalone",
   async rewrites() {
-    const backendUrl = 'http://backend:8000'
+    const backendUrl = process.env.BACKEND_INTERNAL_URL || 'http://backend:8000'
     
     return {
       beforeFiles: [

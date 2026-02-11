@@ -38,6 +38,10 @@ class Settings(BaseSettings):
     UPLOAD_DIR: Path = Path("uploads")
     PERFORMANCE_DATA_DIR: Path = Path("data/performances")
 
+    # Runtime
+    SQL_ECHO: bool = False
+    CORS_ORIGINS: list[str] = ["*"]
+
     # Authentication
     SECRET_KEY: str = "your-super-secret-key-for-development" # In production, use a strong key
     ALGORITHM: str = "HS256"

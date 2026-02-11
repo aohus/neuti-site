@@ -19,9 +19,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <div className="space-y-4 text-sm leading-relaxed font-bold text-gray-400">
                 <p>
                   느티나무병원 협동조합 <br />
-                  본점: 성남시 수정구 공원로 445번길 8 | 031-752-6000 <br />
-                  분당지점: 성남시 분당구 성남대로 331번길 8, 킨스타워 2층 |
-                  031-752-6000
+                  본점: 성남시 수정구 태평로 104 | 031-752-6000 <br />
                 </p>
                 <p>© 2026 느티나무병원 협동조합. All rights reserved.</p>
               </div>

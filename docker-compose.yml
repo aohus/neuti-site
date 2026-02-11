@@ -23,6 +23,12 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health')\""]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   sync-watcher:
     build:
@@ -40,7 +46,7 @@ services:
       - POSTGRES_DB=app
       - PYTHONPATH=/app
     depends_on:
-      db:
+      backend:
         condition: service_healthy
 
   frontend:
@@ -57,7 +63,8 @@ services:
       - NEXT_PUBLIC_API_URL=/backend-api
       - BACKEND_INTERNAL_URL=http://backend:8000
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
 
   db:
     image: postgres:15-alpine

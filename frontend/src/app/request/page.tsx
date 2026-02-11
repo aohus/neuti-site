@@ -38,8 +38,8 @@ export default function RequestPage() {
               <span className="text-[10px] font-black tracking-[0.2em] text-primary uppercase mb-6 block">Contact Info</span>
               <ul className="text-[15px] text-gray-500 space-y-4 font-bold">
                 <li><span className="text-deep mr-2">팩스:</span> 031-752-6001</li>
-                <li><span className="text-deep mr-2">이메일:</span> info@neuti.co.kr</li>
-                <li><span className="text-deep mr-2">방문:</span> 성남시 수정구 공원로 445번길 8</li>
+                <li><span className="text-deep mr-2">이메일:</span> coopneuti@naver.com</li>
+                <li><span className="text-deep mr-2">방문:</span> 성남시 태평로 104, 느티나무병원협동조합</li>
               </ul>
             </div>
           </div>

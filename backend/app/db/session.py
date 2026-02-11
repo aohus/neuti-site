@@ -2,8 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from app.core.config import settings
 
-print(f"Connecting to database at: {settings.POSTGRES_SERVER}")
-engine = create_async_engine(settings.async_database_url, echo=True)
+engine = create_async_engine(settings.async_database_url, echo=settings.SQL_ECHO)
 async_session = sessionmaker(
     engine, class_=AsyncSession, expire_on_commit=False
 )
