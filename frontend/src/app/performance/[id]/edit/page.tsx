@@ -1,16 +1,19 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useForm, Controller } from 'react-hook-form';
-import TiptapEditor from '@/components/Editor/TiptapEditor';
+import dynamic from 'next/dynamic';
+const TiptapEditor = dynamic(() => import('@/components/Editor/TiptapEditor'), { ssr: false });
 import { Performance } from '@/types/performance';
+import { performanceApi } from '@/lib/performanceApi';
 import Link from 'next/link';
+import { Upload } from 'lucide-react';
 
 // JSON Content Block 타입을 HTML로 변환하는 헬퍼 함수
 const convertBlocksToHtml = (contentStr: string): string => {
   if (!contentStr) return '';
-  
+
   // 1. JSON check
   try {
     const blocks = JSON.parse(contentStr);
@@ -68,36 +71,52 @@ const convertBlocksToHtml = (contentStr: string): string => {
   });
 
   const finalHtml = processedLines.join('');
-  console.log('Converted HTML Result:', finalHtml);
   return finalHtml;
 };
+
+const JOB_MAIN_OPTIONS = [
+  '녹지관리',
+  '소나무 전정',
+  '계절꽃 식재',
+  '조경식재',
+  '병충해 방제',
+  '수목수세회복',
+  '위험목 제거',
+];
+
+const SITE_TYPE_OPTIONS = [
+  '공공기관',
+  '아파트',
+  '학교',
+  '공원',
+  '도로',
+  '기타',
+];
 
 export default function EditPerformancePage() {
   const router = useRouter();
   const params = useParams();
   const id = params?.id;
   const [loading, setLoading] = useState(true);
+  const [thumbnailUploading, setThumbnailUploading] = useState(false);
+  const thumbnailInputRef = useRef<HTMLInputElement>(null);
 
-  console.log('EditPerformancePage rendering, id:', id);
+  const { register, handleSubmit, control, setValue, watch, reset, formState: { errors } } = useForm<Performance>();
 
-  const { register, handleSubmit, control, setValue, reset, formState: { errors } } = useForm<Performance>();
+  const thumbnailUrl = watch('thumbnail_url');
 
   useEffect(() => {
-    console.log('useEffect triggered, id:', id);
     if (!id) return;
 
     const fetchData = async () => {
       try {
-        console.log('Fetching data for id:', id);
         const res = await fetch(`/backend-api/performance/${id}`);
         if (!res.ok) throw new Error('Failed to fetch data');
         const data: Performance = await res.json();
-        console.log('Fetched data content:', data.content);
-        
+
         // 데이터 변환 및 폼 초기화
         const htmlContent = convertBlocksToHtml(data.content);
-        console.log('Converted HTML:', htmlContent);
-        
+
         reset({
           ...data,
           content: htmlContent,
@@ -113,13 +132,29 @@ export default function EditPerformancePage() {
     fetchData();
   }, [id, reset]);
 
+  const handleThumbnailUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setThumbnailUploading(true);
+    try {
+      const url = await performanceApi.uploadImage(file);
+      setValue('thumbnail_url', url);
+    } catch (error) {
+      console.error('Thumbnail upload failed:', error);
+      alert('썸네일 업로드에 실패했습니다.');
+    } finally {
+      setThumbnailUploading(false);
+    }
+  };
+
   const onSubmit = async (data: Performance) => {
     try {
       const res = await fetch(`/backend-api/performance/${id}`, {
-        method: 'PUT',
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+          'Authorization': `Bearer ${localStorage.getItem('admin_token')}`
         },
         body: JSON.stringify(data),
       });
@@ -133,7 +168,7 @@ export default function EditPerformancePage() {
       }
 
       alert('수정되었습니다.');
-      router.push(`/performance/${id}`); // 상세 페이지 경로는 프로젝트 구조에 따라 다를 수 있음
+      router.push(`/performance/${id}`);
       router.refresh();
     } catch (error) {
       console.error(error);
@@ -147,7 +182,7 @@ export default function EditPerformancePage() {
     <div className="max-w-4xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-6">시공사례 수정</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        
+
         {/* Title */}
         <div>
           <label className="block text-sm font-medium mb-1">제목</label>
@@ -173,7 +208,7 @@ export default function EditPerformancePage() {
                  <input type="number" {...register('year')} className="w-full p-2 border rounded" />
             </div>
         </div>
-        
+
         {/* Other Metadata */}
         <div className="grid grid-cols-2 gap-4">
             <div>
@@ -186,13 +221,72 @@ export default function EditPerformancePage() {
             </div>
         </div>
 
-         {/* Thumbnail URL */}
-        <div>
-            <label className="block text-sm font-medium mb-1">썸네일 URL</label>
-            <input {...register('thumbnail_url')} className="w-full p-2 border rounded" />
-            <p className="text-xs text-gray-500">이미지 주소를 입력하거나, 에디터에 업로드 후 주소를 복사하세요.</p>
+        {/* Job Category & Sub Category */}
+        <div className="grid grid-cols-2 gap-4">
+            <div>
+                <label className="block text-sm font-medium mb-1">작업 대분류</label>
+                <select {...register('job_main_category')} className="w-full p-2 border rounded">
+                    <option value="">선택하세요</option>
+                    {JOB_MAIN_OPTIONS.map((opt) => (
+                      <option key={opt} value={opt}>{opt}</option>
+                    ))}
+                </select>
+            </div>
+            <div>
+                <label className="block text-sm font-medium mb-1">작업 소분류</label>
+                <input {...register('job_sub_category')} className="w-full p-2 border rounded" placeholder="예: 수간주사, 가지치기" />
+            </div>
         </div>
 
+        {/* Site Type & Construction Date */}
+        <div className="grid grid-cols-2 gap-4">
+            <div>
+                <label className="block text-sm font-medium mb-1">현장 유형</label>
+                <select {...register('site_type')} className="w-full p-2 border rounded">
+                    <option value="">선택하세요</option>
+                    {SITE_TYPE_OPTIONS.map((opt) => (
+                      <option key={opt} value={opt}>{opt}</option>
+                    ))}
+                </select>
+            </div>
+            <div>
+                <label className="block text-sm font-medium mb-1">시공일</label>
+                <input type="date" {...register('construction_date')} className="w-full p-2 border rounded" />
+            </div>
+        </div>
+
+        {/* Thumbnail */}
+        <div>
+            <label className="block text-sm font-medium mb-1">썸네일</label>
+            <div className="flex items-start gap-4">
+              <div className="flex-1">
+                <input {...register('thumbnail_url')} className="w-full p-2 border rounded" placeholder="이미지 URL" />
+                <div className="flex items-center gap-2 mt-2">
+                  <input
+                    ref={thumbnailInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleThumbnailUpload}
+                    className="hidden"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => thumbnailInputRef.current?.click()}
+                    disabled={thumbnailUploading}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm border rounded hover:bg-gray-50 disabled:opacity-50"
+                  >
+                    <Upload size={14} />
+                    {thumbnailUploading ? '업로드 중...' : '파일 업로드'}
+                  </button>
+                </div>
+              </div>
+              {thumbnailUrl && (
+                <div className="w-32 h-20 rounded border overflow-hidden bg-gray-50 flex-shrink-0">
+                  <img src={thumbnailUrl} alt="썸네일 미리보기" className="w-full h-full object-cover" />
+                </div>
+              )}
+            </div>
+        </div>
 
         {/* Editor */}
         <div>
@@ -202,7 +296,7 @@ export default function EditPerformancePage() {
             control={control}
             render={({ field }) => (
               <TiptapEditor
-                content={field.value}
+                content={field.value || ''}
                 onChange={field.onChange}
               />
             )}

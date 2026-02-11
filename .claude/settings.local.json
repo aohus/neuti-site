@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep:*)",
+      "Bash(xargs:*)",
+      "Bash(git check-ignore:*)",
+      "Bash(echo:*)",
+      "Bash(head:*)",
+      "mcp__ide__getDiagnostics",
+      "Bash(python3 -c:*)"
+    ]
+  }
+}

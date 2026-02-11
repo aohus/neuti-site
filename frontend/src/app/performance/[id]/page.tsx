@@ -359,9 +359,12 @@ export default function PerformanceDetailPage() {
           <div className="lg:col-span-3">
             {isAdmin && (
               <div className="mb-8 flex justify-end gap-3">
-                <button className="flex items-center gap-2 rounded-2xl border border-gray-200 px-5 py-2.5 font-bold text-gray-600 transition-all hover:bg-gray-50 hover:shadow-md">
+                <Link
+                  href={`/performance/${id}/edit`}
+                  className="flex items-center gap-2 rounded-2xl border border-gray-200 px-5 py-2.5 font-bold text-gray-600 transition-all hover:bg-gray-50 hover:shadow-md"
+                >
                   <Edit size={18} /> 수정하기
-                </button>
+                </Link>
                 <button
                   onClick={handleDelete}
                   className="flex items-center gap-2 rounded-2xl bg-red-50 px-5 py-2.5 font-bold text-red-600 transition-all hover:bg-red-100 hover:shadow-md"

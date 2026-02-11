@@ -52,6 +52,15 @@
   }
 }
 
+/* Rolling animation */
+@keyframes scroll-x {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-33.333%); }
+}
+.animate-scroll-x {
+  animation: scroll-x 20s linear infinite;
+}
+
 /* UI Utilities */
 .section-py {
   @apply py-16 md:py-24;

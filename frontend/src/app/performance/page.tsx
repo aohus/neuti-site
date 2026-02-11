@@ -1,6 +1,7 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { Suspense, useMemo, useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
 import { usePerformances } from '@/hooks/usePerformance'
 import PerformanceForm from '@/components/performance/PerformanceForm'
@@ -8,11 +9,21 @@ import ProjectGrid from '@/components/performance/ProjectGrid'
 import Pagination from '@/components/common/Pagination'
 import { Plus, MapPin, Wrench } from 'lucide-react'
 
-export default function PerformancePage() {
+function PerformanceContent() {
   const { isAdmin } = useAuth()
+  const searchParams = useSearchParams()
 
   const [jobMain, setJobMain] = useState<string | undefined>(undefined)
   const [siteType, setSiteType] = useState<string | undefined>(undefined)
+
+  // Read URL query params on mount
+  useEffect(() => {
+    const jobMainParam = searchParams.get('job_main')
+    if (jobMainParam) {
+      setJobMain(jobMainParam)
+    }
+  }, [searchParams])
+
   const [currentPage, setPage] = useState(1)
   const ITEMS_PER_PAGE = 9
 
@@ -162,5 +173,19 @@ export default function PerformancePage() {
         />
       )}
     </div>
+  )
+}
+
+export default function PerformancePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-white pt-32 pb-20 md:pt-40 md:pb-32">
+        <div className="py-24 text-center">
+          <div className="border-green-600 mb-6 inline-block h-10 w-10 animate-spin rounded-full border-t-2 border-b-2" />
+        </div>
+      </div>
+    }>
+      <PerformanceContent />
+    </Suspense>
   )
 }

@@ -2,7 +2,8 @@ import axios from 'axios'
 import { Performance, PerformanceCreate, PerformanceUpdate } from '@/types/performance'
 
 // 절대 주소 대신 반드시 현재 도메인을 경유하는 상대 경로를 사용합니다.
-const API_URL = '/backend-api/api/v1'
+// next.config.ts rewrite: /backend-api/:path* → http://backend:8000/api/v1/:path*
+const API_URL = '/backend-api'
 
 const getAuthHeader = () => {
   const token = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : null

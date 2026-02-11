@@ -23,7 +23,7 @@ export default function QnADetailPage() {
   const fetchInquiry = async (pw?: string) => {
     setIsLoading(true)
     try {
-      const apiUrl = '/backend-api/api/v1'
+      const apiUrl = '/backend-api'
       const config: any = {}
       if (token) config.headers = { Authorization: `Bearer ${token}` }
       
@@ -51,7 +51,7 @@ export default function QnADetailPage() {
     e.preventDefault()
     setIsAnswering(true)
     try {
-      const apiUrl = '/backend-api/api/v1'
+      const apiUrl = '/backend-api'
       await axios.post(`${apiUrl}/inquiry/${id}/answer`, 
         { inquiry_id: Number(id), content: answerContent },
         { headers: { Authorization: `Bearer ${token}` } }

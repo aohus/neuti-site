@@ -44,7 +44,7 @@ export default function DiagnosisForm() {
         formData.append('image', data.image[0])
       }
 
-      const apiUrl = '/backend-api/api/v1'
+      const apiUrl = '/backend-api'
       await axios.post(`${apiUrl}/diagnosis/`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',

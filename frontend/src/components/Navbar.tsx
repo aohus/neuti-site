@@ -22,7 +22,7 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   return (
-    <header className="fixed top-0 left-0 z-[100] w-full border-b border-black/5 bg-white/70 backdrop-blur-xl transition-all">
+    <header className="fixed top-0 left-0 z-[100] w-full border-b border-black/5 bg-white/95 shadow-sm backdrop-blur-md transition-all">
       <Container className="flex h-16 items-center justify-between md:h-20">
         {/* Logo */}
         <Link href="/" className="group flex flex-shrink-0 items-center">
@@ -40,7 +40,7 @@ export default function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`px-4 py-2 text-[14px] font-black transition-all ${
+                  className={`px-4 py-2 text-[15px] font-black transition-all ${
                     isActive ? 'text-primary' : 'hover:text-deep text-gray-400'
                   }`}
                 >
@@ -82,14 +82,14 @@ export default function Navbar() {
 
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
-        <div className="animate-in fade-in slide-in-from-top-5 fixed inset-0 top-20 z-[90] bg-white p-6 lg:hidden">
+        <div className="animate-in fade-in slide-in-from-top-5 fixed inset-0 top-16 md:top-20 z-[90] border-t border-gray-100 bg-white p-6 lg:hidden">
           <div className="flex flex-col space-y-4">
             {links.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block rounded-2xl bg-gray-50 px-6 py-4 text-lg font-bold text-gray-800"
+                className="block border-b border-gray-100 px-6 py-4 text-lg font-bold text-gray-800"
               >
                 {link.name}
               </Link>

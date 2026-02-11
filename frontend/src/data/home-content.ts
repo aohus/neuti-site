@@ -31,25 +31,25 @@ export const heroImages: HeroImage[] = [
 
 export const technologyItems: TechnologyItem[] = [
   {
-    id: "green_maintenance",
-    title: "녹지관리",
-    description: "아파트 단지와 공공시설의 녹지를 체계적으로 관리하여, 사계절 내내 푸르고 쾌적한 쉼터를 제공합니다. 정기적인 예초와 잡초 제거는 병해충 서식지를 줄이고 수목의 생육 환경을 개선하는 가장 기초적이고 중요한 작업입니다.",
-    doctorNote: "잡초만 제거해도 나무가 숨을 쉽니다. 깔끔하게 정돈된 녹지는 입주민의 삶의 질을 높이고 건물의 가치까지 올려줍니다.",
+    id: "landscape_planting",
+    title: "조경식재",
+    description: "주변 환경과 토양 조건을 분석하여 해당 장소에 가장 적합한 수종을 식재합니다. 단순한 나무 심기를 넘어, 시간이 지날수록 더욱 울창하고 아름다워지는 지속 가능한 조경 공간을 설계하고 시공합니다.",
+    doctorNote: "나무도 제 자리가 있습니다. 그늘을 좋아하는지, 물을 좋아하는지 꼼꼼히 따져 심어야 뿌리를 잘 내리고 튼튼하게 자랍니다.",
     keyPoints: [
-      "정밀 예초 및 잡초 제거로 쾌적성 유지",
-      "수목 생육을 방해하는 덩굴류 집중 관리",
-      "사계절 맞춤형 수목 시비 및 관수"
+      "공간의 가치를 높이는 전략적 수종 배치",
+      "하자 발생을 최소화하는 정밀 식재 공법",
+      "주변 경관과 조화를 이루는 고품격 조경 연출"
     ],
     images: [
       {
-        src: "/images/technology/green_maintenance/before.jpg",
+        src: "/images/technology/landscape_planting/before.jpg",
         tag: "Before",
-        alt: "녹지관리 전",
+        alt: "조경식재 전",
       },
       {
-        src: "/images/technology/green_maintenance/after.jpg",
+        src: "/images/technology/landscape_planting/after.jpg",
         tag: "After",
-        alt: "녹지관리 후",
+        alt: "조경식재 후",
       },
     ],
   },
@@ -115,25 +115,25 @@ export const technologyItems: TechnologyItem[] = [
     ],
   },
   {
-    id: "landscape_planting",
-    title: "조경식재",
-    description: "주변 환경과 토양 조건을 분석하여 해당 장소에 가장 적합한 수종을 식재합니다. 단순한 나무 심기를 넘어, 시간이 지날수록 더욱 울창하고 아름다워지는 지속 가능한 조경 공간을 설계하고 시공합니다.",
-    doctorNote: "나무도 제 자리가 있습니다. 그늘을 좋아하는지, 물을 좋아하는지 꼼꼼히 따져 심어야 뿌리를 잘 내리고 튼튼하게 자랍니다.",
+    id: "green_maintenance",
+    title: "녹지관리",
+    description: "아파트 단지와 공공시설의 녹지를 체계적으로 관리하여, 사계절 내내 푸르고 쾌적한 쉼터를 제공합니다. 정기적인 예초와 잡초 제거는 병해충 서식지를 줄이고 수목의 생육 환경을 개선하는 가장 기초적이고 중요한 작업입니다.",
+    doctorNote: "잡초만 제거해도 나무가 숨을 쉽니다. 깔끔하게 정돈된 녹지는 입주민의 삶의 질을 높이고 건물의 가치까지 올려줍니다.",
     keyPoints: [
-      "공간의 가치를 높이는 전략적 수종 배치",
-      "하자 발생을 최소화하는 정밀 식재 공법",
-      "주변 경관과 조화를 이루는 고품격 조경 연출"
+      "정밀 예초 및 잡초 제거로 쾌적성 유지",
+      "수목 생육을 방해하는 덩굴류 집중 관리",
+      "사계절 맞춤형 수목 시비 및 관수"
     ],
     images: [
       {
-        src: "/images/technology/landscape_planting/before.jpg",
+        src: "/images/technology/green_maintenance/before.jpg",
         tag: "Before",
-        alt: "조경식재 전",
+        alt: "녹지관리 전",
       },
       {
-        src: "/images/technology/landscape_planting/after.jpg",
+        src: "/images/technology/green_maintenance/after.jpg",
         tag: "After",
-        alt: "조경식재 후",
+        alt: "녹지관리 후",
       },
     ],
   },
@@ -186,16 +186,6 @@ export const technologyItems: TechnologyItem[] = [
         tag: "After",
         alt: "수세회복 후",
       },
-      {
-        src: "/images/technology/tree_recovery/diagnosis.jpg",
-        tag: "진단",
-        alt: "수목 진단",
-      },
-      {
-        src: "/images/technology/tree_recovery/treatment.jpg",
-        tag: "치료",
-        alt: "수목 치료",
-      },
     ],
   },
   {
@@ -218,11 +208,6 @@ export const technologyItems: TechnologyItem[] = [
         src: "/images/technology/risk_tree_removal/after.jpg",
         tag: "After",
         alt: "위험목 제거 후",
-      },
-      {
-        src: "/images/technology/risk_tree_removal/work.jpg",
-        tag: "작업",
-        alt: "제거 작업",
       },
     ],
   },

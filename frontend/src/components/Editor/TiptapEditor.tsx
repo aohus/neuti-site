@@ -13,6 +13,7 @@ interface TiptapEditorProps {
 
 const TiptapEditor = ({ content, onChange, editable = true }: TiptapEditorProps) => {
   const editor = useEditor({
+    immediatelyRender: false,
     extensions: [
       StarterKit,
       Image.configure({

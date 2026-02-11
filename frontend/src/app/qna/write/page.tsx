@@ -19,7 +19,7 @@ export default function QnAWritePage() {
     setIsSubmitting(true)
 
     try {
-      const apiUrl = '/backend-api/api/v1'
+      const apiUrl = '/backend-api'
       await axios.post(`${apiUrl}/inquiry/`, {
         title,
         author,

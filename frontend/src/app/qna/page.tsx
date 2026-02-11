@@ -24,7 +24,7 @@ export default function QnAListPage() {
 
   const fetchInquiries = async () => {
     setIsLoading(true)
-    const apiUrl = '/backend-api/api/v1'
+    const apiUrl = '/backend-api'
     try {
       const response = await axios.get(`${apiUrl}/inquiry/`, {
         params: {
