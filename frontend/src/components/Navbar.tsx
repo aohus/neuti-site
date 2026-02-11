@@ -82,7 +82,7 @@ export default function Navbar() {
 
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
-        <div className="animate-in fade-in slide-in-from-top-5 fixed inset-0 top-16 md:top-20 z-[90] border-t border-gray-100 bg-white p-6 lg:hidden">
+        <div className="fixed inset-0 top-16 md:top-20 z-[90] border-t border-gray-100 bg-white p-6 lg:hidden overflow-y-auto">
           <div className="flex flex-col space-y-4">
             {links.map((link) => (
               <Link

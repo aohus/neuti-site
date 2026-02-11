@@ -9,6 +9,17 @@ import { technologyItems, TechnologyItem, TechnologyImage } from '@/data/home-co
 import { performanceApi } from '@/lib/performanceApi'
 import { Performance } from '@/types/performance'
 
+// 홈 탭 title → 시공사례 DB job_main_category 매핑
+const TAB_TO_FILTER: Record<string, string> = {
+  '조경식재': '대형목이식',
+  '소나무 전정': '소나무전정',
+  '계절꽃 식재': '꽃식재',
+  '녹지관리': '잔디깎이',
+  '병충해 방제': '병해충방제',
+  '수목수세회복': '수세회복',
+  '위험목 제거': '고사목제거',
+}
+
 // --- Lightbox Component ---
 const Lightbox = ({
   isOpen,
@@ -215,14 +226,15 @@ const PhotoGridLayout = ({
 // --- Filtered Performance Cards ---
 const FilteredPerformanceCards = ({ tabTitle }: { tabTitle: string }) => {
   const [performances, setPerformances] = useState<Performance[]>([])
+  const filterValue = TAB_TO_FILTER[tabTitle] || tabTitle
 
   useEffect(() => {
-    performanceApi.getPerformances(0, 3, { job_main: tabTitle }).then((data) => {
+    performanceApi.getPerformances(0, 3, { job_main: filterValue }).then((data) => {
       setPerformances(data)
     }).catch(() => {
       setPerformances([])
     })
-  }, [tabTitle])
+  }, [filterValue])
 
   if (performances.length === 0) return null
 
@@ -231,7 +243,7 @@ const FilteredPerformanceCards = ({ tabTitle }: { tabTitle: string }) => {
       <div className="flex items-center justify-between mb-4">
         <h4 className="text-sm font-black text-gray-900">관련 시공사례</h4>
         <Link
-          href={`/performance?job_main=${encodeURIComponent(tabTitle)}`}
+          href={`/performance?job_main=${encodeURIComponent(filterValue)}`}
           className="group inline-flex items-center text-green-700 font-black text-xs hover:text-green-900 transition-colors"
         >
           전체 보기
@@ -292,7 +304,7 @@ const TabContent = ({
       {/* "더 보기" link — 이미지 바로 아래 */}
       <div className="mt-4 mb-6">
         <Link
-          href={`/performance?job_main=${encodeURIComponent(item.title)}`}
+          href={`/performance?job_main=${encodeURIComponent(TAB_TO_FILTER[item.title] || item.title)}`}
           className="group inline-flex items-center text-green-700 font-black text-sm hover:text-green-900 transition-colors"
         >
           {item.title} 사례 더 보기

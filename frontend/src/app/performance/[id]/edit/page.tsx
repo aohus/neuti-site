@@ -75,13 +75,15 @@ const convertBlocksToHtml = (contentStr: string): string => {
 };
 
 const JOB_MAIN_OPTIONS = [
-  '녹지관리',
-  '소나무 전정',
-  '계절꽃 식재',
-  '조경식재',
-  '병충해 방제',
-  '수목수세회복',
-  '위험목 제거',
+  '소나무전정',
+  '꽃식재',
+  '잔디깎이',
+  '수목전정',
+  '대형목이식',
+  '수세회복',
+  '고사목제거',
+  '병해충방제',
+  '수간주사',
 ];
 
 const SITE_TYPE_OPTIONS = [

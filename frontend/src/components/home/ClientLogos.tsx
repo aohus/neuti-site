@@ -26,31 +26,31 @@ export default function ClientLogos() {
           </p>
         </div>
 
-        <div className="max-w-3xl mx-auto space-y-8 md:space-y-10">
-          {/* 1줄: 4개 */}
-          <div className="flex justify-center gap-8 md:gap-14">
+        <div className="max-w-3xl mx-auto space-y-6 md:space-y-10">
+          {/* 1줄: 4개 (모바일 2+2) */}
+          <div className="flex flex-wrap justify-center gap-6 md:gap-14">
             {clients.slice(0, 4).map((client) => (
-              <div key={client.name} className="flex-shrink-0 flex items-center justify-center">
+              <div key={client.name} className="flex items-center justify-center">
                 <Image
                   src={client.src}
                   alt={client.name}
                   width={200}
                   height={70}
-                  className="h-10 md:h-14 w-auto object-contain"
+                  className="h-8 md:h-14 w-auto object-contain"
                 />
               </div>
             ))}
           </div>
           {/* 2줄: 3개 (가운데 정렬) */}
-          <div className="flex justify-center gap-8 md:gap-14">
+          <div className="flex flex-wrap justify-center gap-6 md:gap-14">
             {clients.slice(4, 7).map((client) => (
-              <div key={client.name} className="flex-shrink-0 flex items-center justify-center">
+              <div key={client.name} className="flex items-center justify-center">
                 <Image
                   src={client.src}
                   alt={client.name}
                   width={200}
                   height={70}
-                  className="h-10 md:h-14 w-auto object-contain"
+                  className="h-8 md:h-14 w-auto object-contain"
                 />
               </div>
             ))}

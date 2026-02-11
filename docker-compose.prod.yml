@@ -34,9 +34,10 @@ services:
       - "traefik.http.routers.neuti-backend.tls.certresolver=letsencrypt"
       - "traefik.http.routers.neuti-backend.priority=10"
       
-      # Strip /backend-api prefix
-      - "traefik.http.middlewares.neuti-strip.stripprefix.prefixes=/backend-api"
-      - "traefik.http.routers.neuti-backend.middlewares=neuti-strip"
+      # Rewrite /backend-api/* → /api/v1/*
+      - "traefik.http.middlewares.neuti-rewrite.replacepathregex.regex=^/backend-api/(.*)"
+      - "traefik.http.middlewares.neuti-rewrite.replacepathregex.replacement=/api/v1/$$1"
+      - "traefik.http.routers.neuti-backend.middlewares=neuti-rewrite"
       
       # Service
       - "traefik.http.services.neuti-backend.loadbalancer.server.port=8000"
