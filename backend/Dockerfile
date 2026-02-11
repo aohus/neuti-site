@@ -35,16 +35,12 @@ WORKDIR /app
 
 ENV PATH="/app/.venv/bin:$PATH"
 
-RUN groupadd --system --gid 1001 appgroup && useradd --system --uid 1001 --gid appgroup appuser
-
 COPY --from=builder /app/.venv /app/.venv
 COPY alembic.ini ./
 COPY alembic ./alembic
 COPY app ./app
 
-RUN mkdir -p uploads data && chown appuser:appgroup uploads data
-
-USER appuser
+RUN mkdir -p uploads data
 
 EXPOSE 8000
 
