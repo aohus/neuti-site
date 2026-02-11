@@ -89,7 +89,7 @@ export const performanceApi = {
       }
     })
     const imageUrl = response.data
-    return imageUrl.startsWith('http') ? imageUrl : `${API_URL}${imageUrl}`
+    return getFullUrl(imageUrl) ?? imageUrl
   },
 
   // 등록
