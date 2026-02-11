@@ -37,7 +37,7 @@ export default function QnAWritePage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+    <div className="max-w-7xl mx-auto pt-32 pb-12 md:pt-40 px-4 sm:px-6 lg:px-8">
       <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center text-gray-900">시공/견적 문의하기</h2>
       
       <form onSubmit={handleSubmit} className="space-y-8 bg-white p-8 rounded-3xl shadow-xl border border-gray-100">
@@ -121,6 +121,14 @@ export default function QnAWritePage() {
           </button>
         </div>
       </form>
+
+      <div className="mt-12 p-10 border-2 border-dashed border-black/5 rounded-[2.5rem] text-center bg-white max-w-xl mx-auto">
+        <span className="text-[10px] font-black tracking-[0.2em] text-green-700 uppercase mb-6 block">Contact Info</span>
+        <ul className="text-[15px] text-gray-500 space-y-4 font-bold">
+          <li><span className="text-gray-900 mr-2">전화:</span> 031-752-6000</li>
+          <li><span className="text-gray-900 mr-2">이메일:</span> coopneuti@naver.com</li>
+        </ul>
+      </div>
     </div>
   )
 }
