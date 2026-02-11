@@ -172,26 +172,9 @@ export default function AboutPage() {
                 <div className="rounded-[2.5rem] border-2 border-green-100 bg-green-50 p-8 transition-colors group-hover:bg-green-100">
                   <p className="mb-2 text-xl font-black text-green-900">본점</p>
                   <p className="text-sm leading-relaxed font-bold text-green-800/60">
-                    성남시 수정구 공원로 445번길 8
+                    성남시 수정구 태평로 104
                   </p>
                   <p className="mt-4 text-lg font-black text-green-900">
-                    031-752-6000
-                  </p>
-                </div>
-              </div>
-
-              <div className="group">
-                <h4 className="mb-4 text-xs font-black tracking-[0.2em] text-gray-400 uppercase">
-                  Branch Office
-                </h4>
-                <div className="rounded-[2.5rem] border-2 border-gray-100 bg-gray-50 p-8 transition-colors group-hover:bg-gray-100">
-                  <p className="mb-2 text-xl font-black text-gray-900">
-                    분당지점
-                  </p>
-                  <p className="text-sm leading-relaxed font-bold text-gray-500/60">
-                    성남시 분당구 성남대로 331번길 8, 킨스타워 2층
-                  </p>
-                  <p className="mt-4 text-lg font-black text-gray-900">
                     031-752-6000
                   </p>
                 </div>

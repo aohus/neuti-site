@@ -25,7 +25,7 @@ const certs = [
   },
   { 
     category: 'Award', 
-    title: '성남시 우수 기업 표창', 
+    title: '농림부 장관 표창 수상', 
     desc: '마을 정원 가꾸기 및 환경 개선 유공 표창',
     icon: <Award className="w-8 h-8" />
   }

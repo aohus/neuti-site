@@ -12,7 +12,6 @@ const links = [
   { name: '회사소개', href: '/about' },
   { name: '주요사업', href: '/business' },
   { name: '시공 사례', href: '/performance' },
-  { name: '공지사항', href: '/notice' },
   { name: '시공/견적문의', href: '/qna' }
 ]
 

@@ -31,29 +31,6 @@ export const heroImages: HeroImage[] = [
 
 export const technologyItems: TechnologyItem[] = [
   {
-    id: "landscape_planting",
-    title: "조경식재",
-    description: "주변 환경과 토양 조건을 분석하여 해당 장소에 가장 적합한 수종을 식재합니다. 단순한 나무 심기를 넘어, 시간이 지날수록 더욱 울창하고 아름다워지는 지속 가능한 조경 공간을 설계하고 시공합니다.",
-    doctorNote: "나무도 제 자리가 있습니다. 그늘을 좋아하는지, 물을 좋아하는지 꼼꼼히 따져 심어야 뿌리를 잘 내리고 튼튼하게 자랍니다.",
-    keyPoints: [
-      "공간의 가치를 높이는 전략적 수종 배치",
-      "하자 발생을 최소화하는 정밀 식재 공법",
-      "주변 경관과 조화를 이루는 고품격 조경 연출"
-    ],
-    images: [
-      {
-        src: "/images/technology/landscape_planting/before.jpg",
-        tag: "Before",
-        alt: "조경식재 전",
-      },
-      {
-        src: "/images/technology/landscape_planting/after.jpg",
-        tag: "After",
-        alt: "조경식재 후",
-      },
-    ],
-  },
-  {
     id: "pine_pruning",
     title: "소나무 전정",
     description: "소나무의 고유한 수형을 살리고 햇빛과 바람이 잘 통하도록 가지를 정리합니다. 묵은 가지와 웃자란 가지를 솎아내면 병충해를 예방할 뿐만 아니라, 소나무 특유의 기품 있고 웅장한 자태가 되살아납니다.",
@@ -66,13 +43,59 @@ export const technologyItems: TechnologyItem[] = [
     images: [
       {
         src: "/images/technology/pine_pruning/before.jpg",
-        tag: "Before",
+        tag: "전",
         alt: "소나무 전정 전",
       },
       {
         src: "/images/technology/pine_pruning/after.jpg",
-        tag: "After",
+        tag: "후",
         alt: "소나무 전정 후",
+      },
+    ],
+  },
+  {
+    id: "risk_tree_removal",
+    title: "위험목 제거",
+    description: "태풍이나 노후화로 인해 쓰러질 위험이 있는 수목을 사전에 파악하여 안전하게 제거합니다. 주변 시설물이나 보행자의 안전을 최우선으로 고려하여, 전문 장비와 숙련된 기술로 신속하게 처리합니다.",
+    doctorNote: "위험목은 시한폭탄과 같습니다. 사고가 나기 전에 전문가의 진단을 받고 미리 제거하는 것이 가장 안전한 예방책입니다.",
+    keyPoints: [
+      "전문 장비를 활용한 신속하고 안전한 벌목",
+      "주변 시설물 손상 방지를 위한 정밀 로핑 작업",
+      "제거 후 근그루 제거 및 현장 깔끔 정리"
+    ],
+    images: [
+      {
+        src: "/images/technology/risk_tree_removal/government_building_risk_tree.jpeg",
+        tag: "과천정부청사 위험목",
+        alt: "과천정부청사 위험목",
+      },
+      {
+        src: "/images/technology/risk_tree_removal/risk_tree_removal.jpg",
+        tag: "위험목제거",
+        alt: "위험목 제거 작업",
+      },
+    ],
+  },
+  {
+    id: "landscape_planting",
+    title: "조경식재",
+    description: "주변 환경과 토양 조건을 분석하여 해당 장소에 가장 적합한 수종을 식재합니다. 단순한 나무 심기를 넘어, 시간이 지날수록 더욱 울창하고 아름다워지는 지속 가능한 조경 공간을 설계하고 시공합니다.",
+    doctorNote: "나무도 제 자리가 있습니다. 그늘을 좋아하는지, 물을 좋아하는지 꼼꼼히 따져 심어야 뿌리를 잘 내리고 튼튼하게 자랍니다.",
+    keyPoints: [
+      "공간의 가치를 높이는 전략적 수종 배치",
+      "하자 발생을 최소화하는 정밀 식재 공법",
+      "주변 경관과 조화를 이루는 고품격 조경 연출"
+    ],
+    images: [
+      {
+        src: "/images/technology/landscape_planting/government_building_planting.png",
+        tag: "정부과천청사 식재",
+        alt: "정부과천청사 식재",
+      },
+      {
+        src: "/images/technology/landscape_planting/highway_corp_planting.jpg",
+        tag: "한국도로공사 식재",
+        alt: "한국도로공사 식재",
       },
     ],
   },
@@ -88,9 +111,14 @@ export const technologyItems: TechnologyItem[] = [
     ],
     images: [
       {
-        src: "/images/technology/seasonal_flowers/planter_spring.jpg",
-        tag: "봄 식재",
-        alt: "대형화분 봄 식재",
+        src: "/images/technology/seasonal_flowers/large_planter.jpeg",
+        tag: "대형화분",
+        alt: "대형화분 식재",
+      },
+      {
+        src: "/images/technology/seasonal_flowers/pansy.jpg",
+        tag: "팬지",
+        alt: "팬지 식재",
       },
       {
         src: "/images/technology/seasonal_flowers/planter_autumn.jpg",
@@ -126,14 +154,19 @@ export const technologyItems: TechnologyItem[] = [
     ],
     images: [
       {
-        src: "/images/technology/green_maintenance/before.jpg",
-        tag: "Before",
-        alt: "녹지관리 전",
+        src: "/images/technology/green_maintenance/weeding.jpeg",
+        tag: "제초",
+        alt: "제초 작업",
       },
       {
-        src: "/images/technology/green_maintenance/after.jpg",
-        tag: "After",
-        alt: "녹지관리 후",
+        src: "/images/technology/green_maintenance/mowing.jpeg",
+        tag: "예초",
+        alt: "예초 작업",
+      },
+      {
+        src: "/images/technology/green_maintenance/crane_pruning.jpeg",
+        tag: "크레인 전정",
+        alt: "크레인 전정 작업",
       },
     ],
   },
@@ -149,19 +182,19 @@ export const technologyItems: TechnologyItem[] = [
     ],
     images: [
       {
-        src: "/images/technology/pest_control/pest_inspection.jpg",
-        tag: "해충예찰",
-        alt: "해충 예찰",
-      },
-      {
-        src: "/images/technology/pest_control/control_work_1.jpg",
+        src: "/images/technology/pest_control/control_work_1.jpeg",
         tag: "방제작업",
         alt: "방제 작업 1",
       },
       {
-        src: "/images/technology/pest_control/control_work_2.jpg",
+        src: "/images/technology/pest_control/control_work_2.jpeg",
         tag: "방제작업",
         alt: "방제 작업 2",
+      },
+      {
+        src: "/images/technology/pest_control/control_work_3.jpg",
+        tag: "방제작업",
+        alt: "방제 작업 3",
       },
     ],
   },
@@ -178,37 +211,27 @@ export const technologyItems: TechnologyItem[] = [
     images: [
       {
         src: "/images/technology/tree_recovery/before.jpg",
-        tag: "Before",
+        tag: "전",
         alt: "수세회복 전",
       },
       {
         src: "/images/technology/tree_recovery/after.jpeg",
-        tag: "After",
+        tag: "후",
         alt: "수세회복 후",
       },
     ],
   },
-  {
-    id: "risk_tree_removal",
-    title: "위험목 제거",
-    description: "태풍이나 노후화로 인해 쓰러질 위험이 있는 수목을 사전에 파악하여 안전하게 제거합니다. 주변 시설물이나 보행자의 안전을 최우선으로 고려하여, 전문 장비와 숙련된 기술로 신속하게 처리합니다.",
-    doctorNote: "위험목은 시한폭탄과 같습니다. 사고가 나기 전에 전문가의 진단을 받고 미리 제거하는 것이 가장 안전한 예방책입니다.",
-    keyPoints: [
-      "전문 장비를 활용한 신속하고 안전한 벌목",
-      "주변 시설물 손상 방지를 위한 정밀 로핑 작업",
-      "제거 후 근그루 제거 및 현장 깔끔 정리"
-    ],
-    images: [
-      {
-        src: "/images/technology/risk_tree_removal/before.jpg",
-        tag: "Before",
-        alt: "위험목 제거 전",
-      },
-      {
-        src: "/images/technology/risk_tree_removal/after.jpg",
-        tag: "After",
-        alt: "위험목 제거 후",
-      },
-    ],
-  },
-];
+]
+
+// Text-only data for merge with dynamic images
+export const technologyTextData: Record<string, Omit<TechnologyItem, 'images'>> = {}
+technologyItems.forEach(item => {
+  technologyTextData[item.id] = {
+    id: item.id,
+    title: item.title,
+    description: item.description,
+    doctorNote: item.doctorNote,
+    keyPoints: item.keyPoints,
+  }
+})
+

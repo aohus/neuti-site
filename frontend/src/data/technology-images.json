@@ -1,0 +1,116 @@
+{
+  "green_maintenance": [
+    {
+      "src": "/images/technology/green_maintenance/weeding.jpeg",
+      "tag": "제초",
+      "alt": "제초"
+    },
+    {
+      "src": "/images/technology/green_maintenance/mowing.jpeg",
+      "tag": "예초",
+      "alt": "예초"
+    },
+    {
+      "src": "/images/technology/green_maintenance/crane_pruning.jpeg",
+      "tag": "크레인 전정",
+      "alt": "크레인 전정"
+    }
+  ],
+  "landscape_planting": [
+    {
+      "src": "/images/technology/landscape_planting/government_building_planting.png",
+      "tag": "정부과천청사 식재",
+      "alt": "정부과천청사 식재"
+    },
+    {
+      "src": "/images/technology/landscape_planting/highway_corp_planting.jpg",
+      "tag": "한국도로공사 식재",
+      "alt": "한국도로공사 식재"
+    }
+  ],
+  "pest_control": [
+    {
+      "src": "/images/technology/pest_control/control_work_1.jpeg",
+      "tag": "방제1",
+      "alt": "방제1"
+    },
+    {
+      "src": "/images/technology/pest_control/control_work_2.jpeg",
+      "tag": "방제2",
+      "alt": "방제2"
+    },
+    {
+      "src": "/images/technology/pest_control/control_work_3.jpg",
+      "tag": "방제작업1",
+      "alt": "방제작업1"
+    }
+  ],
+  "pine_pruning": [
+    {
+      "src": "/images/technology/pine_pruning/after.jpg",
+      "tag": "후",
+      "alt": "후"
+    },
+    {
+      "src": "/images/technology/pine_pruning/before.jpg",
+      "tag": "전",
+      "alt": "전"
+    }
+  ],
+  "risk_tree_removal": [
+    {
+      "src": "/images/technology/risk_tree_removal/government_building_risk_tree.jpeg",
+      "tag": "과천정부청사 위험목",
+      "alt": "과천정부청사 위험목"
+    },
+    {
+      "src": "/images/technology/risk_tree_removal/risk_tree_removal.jpg",
+      "tag": "위험목제거",
+      "alt": "위험목제거"
+    }
+  ],
+  "seasonal_flowers": [
+    {
+      "src": "/images/technology/seasonal_flowers/street_planter.jpeg",
+      "tag": "거리화분",
+      "alt": "거리화분"
+    },
+    {
+      "src": "/images/technology/seasonal_flowers/hanging_planter.jpg",
+      "tag": "걸이화분",
+      "alt": "걸이화분"
+    },
+    {
+      "src": "/images/technology/seasonal_flowers/large_planter.jpeg",
+      "tag": "대형화분",
+      "alt": "대형화분"
+    },
+    {
+      "src": "/images/technology/seasonal_flowers/planter_autumn.jpg",
+      "tag": "대형화분가을",
+      "alt": "대형화분가을"
+    },
+    {
+      "src": "/images/technology/seasonal_flowers/design.jpeg",
+      "tag": "디자인",
+      "alt": "디자인"
+    },
+    {
+      "src": "/images/technology/seasonal_flowers/pansy.jpg",
+      "tag": "팬지",
+      "alt": "팬지"
+    }
+  ],
+  "tree_recovery": [
+    {
+      "src": "/images/technology/tree_recovery/after.jpeg",
+      "tag": "후",
+      "alt": "후"
+    },
+    {
+      "src": "/images/technology/tree_recovery/before.jpg",
+      "tag": "전",
+      "alt": "전"
+    }
+  ]
+}

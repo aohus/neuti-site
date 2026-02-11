@@ -21,7 +21,7 @@ export default function KakaoMap() {
       window.kakao.maps.load(() => {
         const container = document.getElementById('map')
         const options = {
-          center: new window.kakao.maps.LatLng(37.4526, 127.146), // 본점 위치 (수정구 공원로)
+          center: new window.kakao.maps.LatLng(37.4526, 127.146), 
           level: 4
         }
         const map = new window.kakao.maps.Map(container, options)
@@ -31,13 +31,6 @@ export default function KakaoMap() {
           position: new window.kakao.maps.LatLng(37.4526, 127.146),
           map: map,
           title: '느티나무병원 협동조합 본점'
-        })
-
-        // 분당지점 마커 (분당구 성남대로)
-        const branchMarker = new window.kakao.maps.Marker({
-          position: new window.kakao.maps.LatLng(37.3827, 127.1124),
-          map: map,
-          title: '느티나무병원 협동조합 분당지점'
         })
       })
     }

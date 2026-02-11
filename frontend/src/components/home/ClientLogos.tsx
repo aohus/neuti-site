@@ -20,9 +20,9 @@ export default function ClientLogos() {
       <Container>
         <div className="text-center mb-14 md:mb-20">
           <h2 className="text-xs font-bold text-green-600 tracking-widest uppercase mb-3">Our Clients</h2>
-          <p className="text-[2rem] md:text-[3rem] font-black text-gray-900 tracking-tighter mb-4">함께하는 기관과 기업</p>
+          <p className="text-[2rem] md:text-[3rem] font-black text-gray-900 tracking-tighter mb-4">주요 계약 기관</p>
           <p className="text-sm md:text-base text-gray-500 font-medium max-w-lg mx-auto">
-            정부기관부터 공기업까지, <br />신뢰를 바탕으로 지속적인 파트너십을 이어가고 있습니다.
+            정부기관, 공기업과의 다양한 프로젝트 경험으로 검증된 기술력과 <br />신뢰성을 바탕으로 성장해가고 있습니다.
           </p>
         </div>
 

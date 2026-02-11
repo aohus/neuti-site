@@ -1,13 +1,16 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { CheckCircle2, Maximize2, X, ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react'
+import { Maximize2, X, ChevronLeft, ChevronRight, ArrowRight, Pencil } from 'lucide-react'
 import Link from 'next/link'
 import Container from '../common/Container'
-import { technologyItems, TechnologyItem, TechnologyImage } from '@/data/home-content'
+import { technologyItems as staticItems, TechnologyItem, TechnologyImage } from '@/data/home-content'
 import { performanceApi } from '@/lib/performanceApi'
 import { Performance } from '@/types/performance'
+import { technologyApi, TechnologyItemData } from '@/lib/technologyApi'
+import { useAuth } from '@/context/AuthContext'
+import TechnologyEditModal from './TechnologyEditModal'
 
 // 홈 탭 title → 시공사례 DB job_main_category 매핑
 const TAB_TO_FILTER: Record<string, string> = {
@@ -18,6 +21,22 @@ const TAB_TO_FILTER: Record<string, string> = {
   '병충해 방제': '병해충방제',
   '수목수세회복': '수세회복',
   '위험목 제거': '고사목제거',
+}
+
+// Convert API data to frontend TechnologyItem format
+function apiToLocal(apiItem: TechnologyItemData): TechnologyItem {
+  return {
+    id: apiItem.item_key,
+    title: apiItem.title,
+    description: apiItem.description || undefined,
+    doctorNote: apiItem.doctor_note || undefined,
+    keyPoints: apiItem.key_points || undefined,
+    images: (apiItem.images || []).map(img => ({
+      src: img.src,
+      tag: img.tag,
+      alt: img.alt,
+    })),
+  }
 }
 
 // --- Lightbox Component ---
@@ -106,47 +125,46 @@ const BeforeAfterLayout = ({
   onImageClick: (index: number) => void
 }) => {
   const images = item.images
-  const beforeImg = images.find((img) => img.tag.toLowerCase() === 'before')
-  const afterImg = images.find((img) => img.tag.toLowerCase() === 'after')
+  const beforeImg = images.find((img) => img.tag === '전')
+  const afterImg = images.find((img) => img.tag === '후')
   const extraImages = images.filter(
-    (img) => img.tag.toLowerCase() !== 'before' && img.tag.toLowerCase() !== 'after'
+    (img) => img.tag !== '전' && img.tag !== '후'
   )
 
   return (
     <div>
       {/* Before / After side-by-side */}
       {beforeImg && afterImg && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           {[beforeImg, afterImg].map((img) => {
             const idx = images.indexOf(img)
             return (
-              <div
-                key={img.tag}
-                className="relative aspect-[16/9] rounded-2xl overflow-hidden cursor-zoom-in group bg-gray-100"
-                onClick={() => onImageClick(idx)}
-              >
-                <img
-                  src={img.src}
-                  alt={img.alt}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  loading="lazy"
-                />
-                <div className="absolute top-4 left-4 z-10">
-                  <span
-                    className={`px-3 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase shadow-lg ${
-                      img.tag.toLowerCase() === 'before'
-                        ? 'bg-black/80 text-white'
-                        : 'bg-green-600 text-white'
-                    }`}
-                  >
-                    {img.tag}
-                  </span>
-                </div>
-                <div className="absolute bottom-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div className="p-2 bg-white/20 backdrop-blur-md rounded-full text-white">
-                    <Maximize2 size={16} />
+              <div key={img.tag}>
+                <div
+                  className="relative aspect-[16/9] rounded-2xl overflow-hidden cursor-zoom-in group bg-gray-100"
+                  onClick={() => onImageClick(idx)}
+                >
+                  <img
+                    src={img.src}
+                    alt={img.alt}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  <div className="absolute bottom-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="p-2 bg-white/20 backdrop-blur-md rounded-full text-white">
+                      <Maximize2 size={16} />
+                    </div>
                   </div>
                 </div>
+                <p
+                  className={`text-center mt-3 text-sm font-black ${
+                    img.tag === '전'
+                      ? 'text-gray-400'
+                      : 'text-green-600'
+                  }`}
+                >
+                  {img.tag}
+                </p>
               </div>
             )
           })}
@@ -159,22 +177,21 @@ const BeforeAfterLayout = ({
           {extraImages.map((img) => {
             const idx = images.indexOf(img)
             return (
-              <div
-                key={idx}
-                className="relative aspect-[16/9] rounded-xl overflow-hidden cursor-zoom-in group bg-gray-100"
-                onClick={() => onImageClick(idx)}
-              >
-                <img
-                  src={img.src}
-                  alt={img.alt}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  loading="lazy"
-                />
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="px-2.5 py-1 rounded-full text-[9px] font-black tracking-wider bg-white/90 text-gray-900 border border-gray-200 shadow">
-                    {img.tag}
-                  </span>
+              <div key={idx}>
+                <div
+                  className="relative aspect-[16/9] rounded-xl overflow-hidden cursor-zoom-in group bg-gray-100"
+                  onClick={() => onImageClick(idx)}
+                >
+                  <img
+                    src={img.src}
+                    alt={img.alt}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  />
                 </div>
+                <p className="text-center mt-3 text-sm font-black text-gray-400">
+                  {img.tag}
+                </p>
               </div>
             )
           })}
@@ -196,27 +213,26 @@ const PhotoGridLayout = ({
   return (
     <div className={`grid grid-cols-2 ${images.length >= 3 ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-4 md:gap-6`}>
       {images.map((img, idx) => (
-        <div
-          key={idx}
-          className="relative aspect-[16/9] rounded-2xl overflow-hidden cursor-zoom-in group bg-gray-100"
-          onClick={() => onImageClick(idx)}
-        >
-          <img
-            src={img.src}
-            alt={img.alt}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-            loading="lazy"
-          />
-          <div className="absolute top-4 left-4 z-10">
-            <span className="px-3 py-1.5 rounded-full text-[10px] font-black tracking-widest bg-white/90 text-gray-900 border border-gray-200 shadow-lg">
-              {img.tag}
-            </span>
-          </div>
-          <div className="absolute bottom-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-            <div className="p-2 bg-white/20 backdrop-blur-md rounded-full text-white">
-              <Maximize2 size={16} />
+        <div key={idx}>
+          <div
+            className="relative aspect-[16/9] rounded-2xl overflow-hidden cursor-zoom-in group bg-gray-100"
+            onClick={() => onImageClick(idx)}
+          >
+            <img
+              src={img.src}
+              alt={img.alt}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
+            />
+            <div className="absolute bottom-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="p-2 bg-white/20 backdrop-blur-md rounded-full text-white">
+                <Maximize2 size={16} />
+              </div>
             </div>
           </div>
+          <p className="text-center mt-3 text-sm font-black text-gray-400">
+            {img.tag}
+          </p>
         </div>
       ))}
     </div>
@@ -289,8 +305,8 @@ const TabContent = ({
   onImageClick: (index: number) => void
 }) => {
   const hasBeforeAfter =
-    item.images.some((img) => img.tag.toLowerCase() === 'before') &&
-    item.images.some((img) => img.tag.toLowerCase() === 'after')
+    item.images.some((img) => img.tag === '전') &&
+    item.images.some((img) => img.tag === '후')
 
   return (
     <div>
@@ -301,27 +317,16 @@ const TabContent = ({
         <PhotoGridLayout item={item} onImageClick={onImageClick} />
       )}
 
-      {/* "더 보기" link — 이미지 바로 아래 */}
-      <div className="mt-4 mb-6">
-        <Link
-          href={`/performance?job_main=${encodeURIComponent(TAB_TO_FILTER[item.title] || item.title)}`}
-          className="group inline-flex items-center text-green-700 font-black text-sm hover:text-green-900 transition-colors"
-        >
-          {item.title} 사례 더 보기
-          <ArrowRight className="ml-1.5 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-        </Link>
-      </div>
-
       {/* Description + Key Points */}
-      <div>
+      <div className="mt-5">
         {item.description && (
-          <p className="text-gray-500 text-sm md:text-base leading-relaxed mb-6 font-medium">
+          <p className="text-gray-500 text-sm md:text-base leading-relaxed mb-4 font-medium">
             {item.description}
           </p>
         )}
 
         {item.keyPoints && item.keyPoints.length > 0 && (
-          <div className="space-y-3 mb-6">
+          <div className="space-y-2 mb-4">
             {item.keyPoints.map((text, i) => (
               <div key={i} className="flex items-center">
                 <div className="w-1.5 h-1.5 bg-green-500 rounded-full mr-3 flex-shrink-0" />
@@ -332,14 +337,11 @@ const TabContent = ({
         )}
 
         {item.doctorNote && (
-          <div className="flex items-start p-5 bg-green-50/50 rounded-2xl border border-green-100/50 shadow-sm">
-            <CheckCircle2 className="text-green-600 mr-3 w-5 h-5 flex-shrink-0 mt-0.5" />
-            <div>
-              <p className="text-gray-900 text-xs font-black mb-1">나무의사의 한마디</p>
-              <p className="text-gray-600 text-[11px] md:text-xs leading-relaxed font-medium">
-                &ldquo;{item.doctorNote}&rdquo;
-              </p>
-            </div>
+          <div className="relative p-5 md:p-6 bg-gray-50 rounded-2xl mt-4">
+            <p className="text-green-600 text-xs font-black tracking-wider uppercase mb-2">나무의사의 한마디</p>
+            <p className="text-gray-700 text-sm md:text-base leading-relaxed font-medium">
+              &ldquo;{item.doctorNote}&rdquo;
+            </p>
           </div>
         )}
       </div>
@@ -351,13 +353,45 @@ const TabContent = ({
 }
 
 export default function TechnologySection() {
-  const [activeTabId, setActiveTabId] = useState(technologyItems[0].id)
+  const { isAdmin } = useAuth()
+  const [items, setItems] = useState<TechnologyItem[]>(staticItems)
+  const [apiItems, setApiItems] = useState<TechnologyItemData[]>([])
+  const [activeTabId, setActiveTabId] = useState(staticItems[0].id)
   const [lightbox, setLightbox] = useState({ isOpen: false, index: 0 })
+  const [editModal, setEditModal] = useState<{ isOpen: boolean; apiItem: TechnologyItemData | null }>({ isOpen: false, apiItem: null })
 
-  const activeItem = technologyItems.find(item => item.id === activeTabId) || technologyItems[0]
+  const fetchItems = useCallback(async () => {
+    try {
+      const data = await technologyApi.getItems()
+      if (data.length > 0) {
+        setApiItems(data)
+        setItems(data.map(apiToLocal))
+      }
+    } catch {
+      // API failed — keep static fallback
+    }
+  }, [])
+
+  useEffect(() => {
+    fetchItems()
+  }, [fetchItems])
+
+  const activeItem = items.find(item => item.id === activeTabId) || items[0]
+  const activeApiItem = apiItems.find(a => a.item_key === activeTabId)
 
   const openLightbox = (index: number) => setLightbox({ isOpen: true, index })
   const closeLightbox = () => setLightbox({ isOpen: false, index: 0 })
+
+  const handleEdit = () => {
+    if (activeApiItem) {
+      setEditModal({ isOpen: true, apiItem: activeApiItem })
+    }
+  }
+
+  const handleSaved = (updated: TechnologyItemData) => {
+    setApiItems(prev => prev.map(a => a.id === updated.id ? updated : a))
+    setItems(prev => prev.map(item => item.id === updated.item_key ? apiToLocal(updated) : item))
+  }
 
   return (
     <section id="services" className="py-16 md:py-24 bg-white overflow-hidden scroll-mt-20">
@@ -367,10 +401,11 @@ export default function TechnologySection() {
           <p className="text-[2rem] md:text-[3rem] font-black text-gray-900 mb-12 tracking-tighter">결과로 증명하는 기술력</p>
 
           <div className="flex flex-wrap justify-center gap-1.5 md:gap-3 px-2 md:px-4">
-            {technologyItems.map((item) => (
+            {items.map((item) => (
               <button
                 key={item.id}
                 onClick={() => setActiveTabId(item.id)}
+                onMouseEnter={() => setActiveTabId(item.id)}
                 className={`px-3 py-2 md:px-6 md:py-3 rounded-full text-[11px] md:text-sm font-black transition-all duration-300 shadow-sm ${
                   activeTabId === item.id
                     ? 'bg-green-600 text-white shadow-xl scale-105 ring-2 ring-green-600 ring-offset-2'
@@ -384,6 +419,19 @@ export default function TechnologySection() {
         </div>
 
         <div className="max-w-5xl mx-auto">
+          {/* Admin edit button */}
+          {isAdmin && activeApiItem && (
+            <div className="flex justify-end mb-4">
+              <button
+                onClick={handleEdit}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-green-700 bg-green-50 hover:bg-green-100 rounded-lg transition-colors"
+              >
+                <Pencil size={14} />
+                편집
+              </button>
+            </div>
+          )}
+
           <AnimatePresence mode="wait">
             <motion.div
               key={activeItem.id}
@@ -404,6 +452,15 @@ export default function TechnologySection() {
         images={activeItem.images}
         initialIndex={lightbox.index}
       />
+
+      {editModal.isOpen && editModal.apiItem && (
+        <TechnologyEditModal
+          item={editModal.apiItem}
+          isOpen={editModal.isOpen}
+          onClose={() => setEditModal({ isOpen: false, apiItem: null })}
+          onSaved={handleSaved}
+        />
+      )}
     </section>
   )
 }
