@@ -62,24 +62,23 @@ const TiptapEditor = ({ content, onChange, editable = true }: TiptapEditorProps)
     formData.append('image', file);
 
     try {
+      const token = localStorage.getItem('admin_token');
+      const headers: Record<string, string> = {};
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
       const response = await fetch('/backend-api/upload/image', {
         method: 'POST',
+        headers,
         body: formData,
-        // Next.js might need this to handle the proxy correctly if not configured globally
-        // assuming standard fetch works with relative paths due to proxy setup
       });
 
       if (!response.ok) {
-        console.error('Image upload failed');
+        console.error('Image upload failed:', response.status);
         return null;
       }
 
-      // The API returns the URL as a plain string (based on response_model=str)
-      // If it returns JSON like "/uploads/...", we might need to parse it.
-      // Checking the backend implementation: return f"/uploads/{file_name}"
-      // FastAPI returns a string literal if response_model=str and it's just a string returned.
-      // However, FastAPI typically wraps responses in JSON unless specified otherwise or using specific Response class.
-      // Let's assume it returns a JSON string: "url"
       const url = await response.json();
       return url;
     } catch (error) {
