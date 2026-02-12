@@ -20,7 +20,15 @@ const convertBlocksToHtml = (contentStr: string): string => {
     if (Array.isArray(blocks)) {
       return blocks.map((block: any) => {
         if (block.type === 'text') {
-           return `<p>${block.value.replace(/\n/g, '<br>')}</p>`;
+           // 각 줄을 개별 HTML 요소로 변환 (마크다운 → HTML)
+           return block.value.split('\n').map((line: string) => {
+             if (line.startsWith('### ')) return `<h3>${line.slice(4)}</h3>`;
+             if (line.startsWith('## ')) return `<h2>${line.slice(3)}</h2>`;
+             if (line.startsWith('# ')) return `<h1>${line.slice(2)}</h1>`;
+             // 볼드: **text** → <strong>text</strong>
+             const formatted = line.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+             return `<p>${formatted}</p>`;
+           }).join('');
         } else if (block.type === 'image') {
           let src = block.value;
           if (src.includes('uploads/')) {
@@ -72,6 +80,122 @@ const convertBlocksToHtml = (contentStr: string): string => {
 
   const finalHtml = processedLines.join('');
   return finalHtml;
+};
+
+// TiptapEditor HTML을 JSON ContentBlock 배열로 변환
+const convertHtmlToBlocks = (html: string): { type: string; value: string }[] => {
+  if (!html || !html.trim()) return [];
+
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+  const blocks: { type: string; value: string }[] = [];
+  let textLines: string[] = [];
+
+  const flushText = () => {
+    if (textLines.length > 0) {
+      blocks.push({ type: 'text', value: textLines.join('\n') });
+      textLines = [];
+    }
+  };
+
+  // 인라인 서식을 마크다운으로 변환
+  const getMarkdownText = (el: Element | ChildNode): string => {
+    let result = '';
+    for (const child of el.childNodes) {
+      if (child.nodeType === Node.TEXT_NODE) {
+        result += child.textContent || '';
+      } else if (child.nodeType === Node.ELEMENT_NODE) {
+        const tag = (child as Element).tagName.toLowerCase();
+        if (tag === 'strong' || tag === 'b') {
+          result += `**${getMarkdownText(child)}**`;
+        } else if (tag === 'em' || tag === 'i') {
+          result += `*${getMarkdownText(child)}*`;
+        } else if (tag === 'br') {
+          result += '\n';
+        } else if (tag === 'img') {
+          // 인라인 이미지는 별도 처리
+        } else {
+          result += getMarkdownText(child);
+        }
+      }
+    }
+    return result;
+  };
+
+  for (const node of doc.body.childNodes) {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const text = node.textContent?.trim();
+      if (text) textLines.push(text);
+      continue;
+    }
+    if (node.nodeType !== Node.ELEMENT_NODE) continue;
+
+    const el = node as Element;
+    const tag = el.tagName.toLowerCase();
+
+    // <p> 안에 <img>만 있는 경우 → 이미지 블록
+    if (tag === 'p' && el.children.length === 1 && el.children[0].tagName?.toLowerCase() === 'img') {
+      flushText();
+      const img = el.children[0] as HTMLImageElement;
+      blocks.push({ type: 'image', value: img.getAttribute('src') || '' });
+      continue;
+    }
+
+    // 독립 <img>
+    if (tag === 'img') {
+      flushText();
+      blocks.push({ type: 'image', value: el.getAttribute('src') || '' });
+      continue;
+    }
+
+    // 제목
+    if (tag === 'h1') { textLines.push(`# ${getMarkdownText(el)}`); continue; }
+    if (tag === 'h2') { textLines.push(`## ${getMarkdownText(el)}`); continue; }
+    if (tag === 'h3') { textLines.push(`### ${getMarkdownText(el)}`); continue; }
+
+    // 일반 문단
+    if (tag === 'p') {
+      const imgs = el.querySelectorAll('img');
+      if (imgs.length > 0) {
+        // 인라인 이미지가 있으면 텍스트/이미지 분리
+        const md = getMarkdownText(el).trim();
+        if (md) textLines.push(md);
+        flushText();
+        imgs.forEach(img => {
+          blocks.push({ type: 'image', value: img.getAttribute('src') || '' });
+        });
+      } else {
+        const md = getMarkdownText(el);
+        if (md.trim()) textLines.push(md);
+      }
+      continue;
+    }
+
+    // 리스트
+    if (tag === 'ul' || tag === 'ol') {
+      el.querySelectorAll('li').forEach((li, i) => {
+        const prefix = tag === 'ol' ? `${i + 1}. ` : '- ';
+        textLines.push(`${prefix}${getMarkdownText(li)}`);
+      });
+      continue;
+    }
+
+    // 인용문
+    if (tag === 'blockquote') {
+      textLines.push(`> ${getMarkdownText(el)}`);
+      continue;
+    }
+
+    // 수평선
+    if (tag === 'hr') { textLines.push('---'); continue; }
+
+    // 기타
+    const text = getMarkdownText(el);
+    if (text.trim()) textLines.push(text);
+  }
+
+  flushText();
+  return blocks;
 };
 
 const JOB_MAIN_OPTIONS = [
@@ -152,13 +276,20 @@ export default function EditPerformancePage() {
 
   const onSubmit = async (data: Performance) => {
     try {
+      // TiptapEditor HTML → JSON ContentBlock 배열로 변환하여 저장
+      const contentBlocks = convertHtmlToBlocks(data.content);
+      const payload = {
+        ...data,
+        content: JSON.stringify(contentBlocks),
+      };
+
       const res = await fetch(`/backend-api/performance/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('admin_token')}`
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
       });
 
       if (!res.ok) {

@@ -254,6 +254,16 @@ export default function PerformanceDetailPage() {
         )
       })
     } catch (e) {
+      // JSON 파싱 실패 시: HTML 또는 마크다운 콘텐츠 처리
+      if (contentStr.includes('<p>') || contentStr.includes('<img') || contentStr.includes('<h')) {
+        // 이미 HTML인 경우 (이전 수정으로 HTML이 저장된 데이터 대응)
+        return (
+          <div
+            className="prose-magazine my-12 px-4 md:px-0"
+            dangerouslySetInnerHTML={{ __html: contentStr }}
+          />
+        )
+      }
       return (
         <div className="prose-magazine my-12 px-4 md:px-0">
           <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>
