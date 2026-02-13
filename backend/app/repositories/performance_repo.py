@@ -17,6 +17,7 @@ class CRUDPerformance(CRUDBase[Performance, PerformanceCreate, PerformanceUpdate
         year: Optional[int] = None,
         job_main: Optional[str] = None,
         site_type: Optional[str] = None,
+        client_type: Optional[str] = None,
         q: Optional[str] = None,
     ) -> List[Performance]:
         query = select(self.model)
@@ -29,6 +30,8 @@ class CRUDPerformance(CRUDBase[Performance, PerformanceCreate, PerformanceUpdate
             query = query.filter(self.model.job_main_category == job_main)
         if site_type:
             query = query.filter(self.model.site_type == site_type)
+        if client_type:
+            query = query.filter(self.model.client_type == client_type)
         if q:
             query = query.filter(
                 (self.model.title.ilike(f"%{q}%"))

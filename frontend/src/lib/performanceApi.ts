@@ -27,18 +27,20 @@ export const performanceApi = {
       year?: number,
       job_main?: string,
       site_type?: string,
+      client_type?: string,
       q?: string
     }
   ): Promise<Performance[]> => {
     // 경로 끝에 / 제거
     const response = await axios.get(`${API_URL}/performance`, {
-      params: { 
-        skip, 
-        limit, 
+      params: {
+        skip,
+        limit,
         category: filters?.category,
         year: filters?.year,
         job_main: filters?.job_main,
         site_type: filters?.site_type,
+        client_type: filters?.client_type,
         q: filters?.q
       }
     })

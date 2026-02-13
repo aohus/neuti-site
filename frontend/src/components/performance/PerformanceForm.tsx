@@ -19,6 +19,7 @@ export default function PerformanceForm({ onClose, onSuccess }: PerformanceFormP
   const [jobMain, setJobMain] = useState('고사목제거')
   const [jobSub, setJobSub] = useState('')
   const [siteType, setSiteType] = useState('공공기관')
+  const [clientType, setClientType] = useState('관공서')
   const [siteLocation, setSiteLocation] = useState('')
   const [constructionDate, setConstructionDate] = useState(new Date().toISOString().split('T')[0])
   const [thumbnailUrl, setThumbnailUrl] = useState('')
@@ -129,6 +130,7 @@ export default function PerformanceForm({ onClose, onSuccess }: PerformanceFormP
         job_main_category: jobMain,
         job_sub_category: jobSub,
         site_type: siteType,
+        client_type: clientType,
         site_location: siteLocation,
         construction_date: constructionDate,
         thumbnail_url: thumbnailUrl,
@@ -261,8 +263,18 @@ export default function PerformanceForm({ onClose, onSuccess }: PerformanceFormP
                     />
                   </div>
                 </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                  <div className="space-y-2.5">
+                    <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Client Type</label>
+                    <select
+                      className="w-full px-5 py-3 rounded-xl border-2 border-white focus:border-green-500 outline-none font-bold bg-white shadow-sm"
+                      value={clientType}
+                      onChange={e => setClientType(e.target.value)}
+                    >
+                      {['관공서', '공공기관', '민간'].map(t => <option key={t} value={t}>{t}</option>)}
+                    </select>
+                  </div>
                   <div className="space-y-2.5">
                     <label className="block text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Site Type</label>
                     <select

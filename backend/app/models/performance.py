@@ -8,6 +8,7 @@ class Performance(Base):
     content = Column(Text, nullable=False)  # 블로그 형태의 본문 (HTML 또는 JSON)
     thumbnail_url = Column(String, nullable=True) # 목록에 표시될 대표 이미지
     client = Column(String, nullable=True) # 발주처
+    client_type = Column(String, nullable=True) # 발주처 유형: 관공서, 공공기관, 민간
     category = Column(String, nullable=True) # 사업 분야 (나무병원, 조경식재 등)
     year = Column(Integer, nullable=True) # 연도
     job_main_category = Column(String, nullable=True) # 작업분류

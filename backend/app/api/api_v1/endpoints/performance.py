@@ -78,6 +78,7 @@ async def read_performances(
     year: int | None = None,
     job_main: str | None = None,
     site_type: str | None = None,
+    client_type: str | None = None,
     q: str | None = None,
 ) -> Any:
     """
@@ -91,6 +92,7 @@ async def read_performances(
         year=year,
         job_main=job_main,
         site_type=site_type,
+        client_type=client_type,
         q=q,
     )
 

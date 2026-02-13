@@ -14,6 +14,7 @@ class PerformanceBase(BaseModel):
     site_location: str | None = None
     thumbnail_url: str | None = None
     client: str | None = None
+    client_type: str | None = None
     construction_date: datetime | None = None
 
 class PerformanceCreate(PerformanceBase):
@@ -30,6 +31,7 @@ class PerformanceUpdate(PerformanceBase):
     site_location: str | None = None
     thumbnail_url: str | None = None
     client: str | None = None
+    client_type: str | None = None
     construction_date: datetime | None = None
 
 class Performance(PerformanceBase):
@@ -44,3 +46,4 @@ class PerformanceStats(BaseModel):
     categories: dict[str, int]
     job_categories: dict[str, int]
     years: dict[str, int]
+    client_types: dict[str, int]

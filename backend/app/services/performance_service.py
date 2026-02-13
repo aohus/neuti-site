@@ -22,6 +22,7 @@ class PerformanceService:
         categories: dict[str, int] = {}
         job_categories: dict[str, int] = {}
         years: dict[str, int] = {}
+        client_types: dict[str, int] = {}
 
         for p in all_performances:
             if p.category:
@@ -33,6 +34,8 @@ class PerformanceService:
             if p.year:
                 yr_str = str(p.year)
                 years[yr_str] = years.get(yr_str, 0) + 1
+            ct = p.client_type or "미분류"
+            client_types[ct] = client_types.get(ct, 0) + 1
 
         return {
             "total_count": total_count,
@@ -40,6 +43,7 @@ class PerformanceService:
             "categories": categories,
             "job_categories": job_categories,
             "years": years,
+            "client_types": client_types,
         }
 
     async def get_performances(
@@ -52,6 +56,7 @@ class PerformanceService:
         year: Optional[int] = None,
         job_main: Optional[str] = None,
         site_type: Optional[str] = None,
+        client_type: Optional[str] = None,
         q: Optional[str] = None,
     ) -> List[Any]:
         return await performance_repo.get_multi_with_filters(
@@ -62,6 +67,7 @@ class PerformanceService:
             year=year,
             job_main=job_main,
             site_type=site_type,
+            client_type=client_type,
             q=q,
         )
 
@@ -94,6 +100,7 @@ class PerformanceService:
             site_type=metadata.get("site_type"),
             site_location=metadata.get("site_location"),
             client=metadata.get("client"),
+            client_type=metadata.get("client_type"),
             thumbnail_url=metadata.get("thumbnail_url"),
             construction_date=metadata.get("construction_date"),
         )

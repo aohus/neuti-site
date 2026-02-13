@@ -10,6 +10,7 @@ export interface Performance {
   category?: string | null
   thumbnail_url?: string | null
   client?: string | null
+  client_type?: string | null
   year?: number | null
   job_main_category?: string | null
   job_sub_category?: string | null
@@ -25,6 +26,7 @@ export interface PerformanceCreate {
   category?: string | null
   thumbnail_url?: string | null
   client?: string | null
+  client_type?: string | null
   year?: number | null
   job_main_category?: string | null
   job_sub_category?: string | null
@@ -41,4 +43,5 @@ export interface PerformanceStats {
   categories: Record<string, number>
   job_categories: Record<string, number>
   years: Record<string, number>
+  client_types: Record<string, number>
 }

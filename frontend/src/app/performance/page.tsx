@@ -7,7 +7,7 @@ import { usePerformances } from '@/hooks/usePerformance'
 import PerformanceForm from '@/components/performance/PerformanceForm'
 import ProjectGrid from '@/components/performance/ProjectGrid'
 import Pagination from '@/components/common/Pagination'
-import { Plus, MapPin, Wrench } from 'lucide-react'
+import { Plus, MapPin, Wrench, Building2 } from 'lucide-react'
 
 function PerformanceContent() {
   const { isAdmin } = useAuth()
@@ -15,6 +15,7 @@ function PerformanceContent() {
 
   const [jobMain, setJobMain] = useState<string | undefined>(undefined)
   const [siteType, setSiteType] = useState<string | undefined>(undefined)
+  const [clientType, setClientType] = useState<string | undefined>(undefined)
 
   // Read URL query params on mount
   useEffect(() => {
@@ -46,11 +47,17 @@ function PerformanceContent() {
     return [...new Set(values)].sort()
   }, [performances])
 
+  const clientTypes = useMemo(() => {
+    const values = performances.map(p => p.client_type).filter(Boolean) as string[]
+    return [...new Set(values)].sort()
+  }, [performances])
+
   // Client-side filtering
   const filteredItems = useMemo(() => {
     return performances
       .filter((p) => !jobMain || p.job_main_category === jobMain)
       .filter((p) => !siteType || p.site_type === siteType)
+      .filter((p) => !clientType || p.client_type === clientType)
       .map((p) => ({
         id: p.id,
         title: p.title,
@@ -66,7 +73,7 @@ function PerformanceContent() {
         content: p.content,
         isBackend: true
       }))
-  }, [performances, jobMain, siteType])
+  }, [performances, jobMain, siteType, clientType])
 
   // Pagination
   const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE) || 1
@@ -104,7 +111,7 @@ function PerformanceContent() {
 
         {/* Filters */}
         <div className="mb-16">
-          <div className="mx-auto grid max-w-2xl grid-cols-1 gap-6 sm:grid-cols-2">
+          <div className="mx-auto grid max-w-4xl grid-cols-1 gap-6 sm:grid-cols-3">
             <div className="space-y-3">
               <label className="text-primary ml-1 flex items-center gap-2 text-[10px] font-black tracking-[0.2em] uppercase">
                 <Wrench size={14} /> 작업분류
@@ -134,6 +141,24 @@ function PerformanceContent() {
               >
                 <option value="">전체 대상지</option>
                 {siteTypes.map((t) => (
+                  <option key={t} value={t}>
+                    {t}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="space-y-3">
+              <label className="text-primary ml-1 flex items-center gap-2 text-[10px] font-black tracking-[0.2em] uppercase">
+                <Building2 size={14} /> 발주처 유형
+              </label>
+              <select
+                className="text-deep focus:ring-primary w-full rounded-2xl border-2 border-black/5 bg-surface/30 px-6 py-4 font-bold shadow-sm transition-all outline-none focus:bg-white focus:ring-2"
+                value={clientType || ''}
+                onChange={(e) => { setClientType(e.target.value || undefined); setPage(1) }}
+              >
+                <option value="">전체 발주처</option>
+                {clientTypes.map((t) => (
                   <option key={t} value={t}>
                     {t}
                   </option>
