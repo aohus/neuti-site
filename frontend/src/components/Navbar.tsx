@@ -12,7 +12,6 @@ const links = [
   { name: '회사소개', href: '/about' },
   { name: '주요사업', href: '/business' },
   { name: '시공 사례', href: '/performance' },
-  { name: '시공/견적문의', href: '/qna' }
 ]
 
 export default function Navbar() {
@@ -49,12 +48,18 @@ export default function Navbar() {
             })}
           </nav>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3">
+            <Link
+              href="/contract"
+              className="flex items-center rounded-full border-2 border-green-700 px-5 py-2 text-sm font-black text-green-700 transition-all hover:bg-green-50 active:scale-95"
+            >
+              수의계약
+            </Link>
             <Link
               href="/request"
-              className="bg-deep shadow-deep/10 flex items-center rounded-full px-6 py-2.5 text-sm font-black text-white shadow-xl transition-all hover:bg-black active:scale-95"
+              className="bg-deep shadow-deep/10 flex items-center rounded-full px-5 py-2.5 text-sm font-black text-white shadow-xl transition-all hover:bg-black active:scale-95"
             >
-              수목진단의뢰
+              견적·상담문의
             </Link>
 
             {isAdmin && (
@@ -94,11 +99,18 @@ export default function Navbar() {
               </Link>
             ))}
             <Link
+              href="/contract"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="block rounded-2xl border-2 border-green-600 px-6 py-4 text-center text-lg font-bold text-green-700"
+            >
+              수의계약
+            </Link>
+            <Link
               href="/request"
               onClick={() => setIsMobileMenuOpen(false)}
               className="block rounded-2xl bg-green-600 px-6 py-4 text-center text-lg font-bold text-white shadow-lg"
             >
-              수목진단의뢰
+              견적·상담문의
             </Link>
             {isAdmin && (
               <button

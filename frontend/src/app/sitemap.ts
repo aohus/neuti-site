@@ -15,6 +15,7 @@ const staticPages: {
   { path: "/qna", changeFrequency: "weekly", priority: 0.7 },
   { path: "/notice", changeFrequency: "weekly", priority: 0.5 },
   { path: "/request", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/contract", changeFrequency: "monthly", priority: 0.9 },
 ];
 
 async function getPerformanceIds(): Promise<{ id: number; created_at: string }[]> {

@@ -21,7 +21,7 @@ export default function Home() {
       {/* 4. CTA */}
       <FinalCTA
         buttons={[
-          { label: '시공/견적 문의', href: '/qna/write', variant: 'primary' },
+          { label: '수의계약 견적 요청', href: '/contract', variant: 'primary' },
           { label: '수목 진단 의뢰', href: '/request', variant: 'secondary' },
         ]}
       />

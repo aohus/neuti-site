@@ -45,13 +45,22 @@ export default function MainCarousel() {
             공공기관과 아파트의 녹지 공간을 건강하게 관리합니다.
           </p>
 
-          <Link
-            href="/request"
-            className="group inline-flex items-center bg-green-600 text-white px-8 py-4 md:px-10 md:py-5 font-black rounded-full hover:bg-green-700 transition-all shadow-2xl active:scale-95 text-base md:text-lg"
-          >
-            수목진단의뢰
-            <ArrowRight className="ml-2 w-5 h-5 md:w-6 md:h-6 group-hover:translate-x-2 transition-transform" />
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+            <Link
+              href="/request"
+              className="group inline-flex items-center justify-center bg-green-600 text-white px-8 py-4 md:px-10 md:py-5 font-black rounded-full hover:bg-green-700 transition-all shadow-2xl active:scale-95 text-base md:text-lg"
+            >
+              견적·상담 문의
+              <ArrowRight className="ml-2 w-5 h-5 md:w-6 md:h-6 group-hover:translate-x-2 transition-transform" />
+            </Link>
+            <Link
+              href="/contract"
+              className="group inline-flex items-center justify-center bg-white/10 border border-white/30 text-white px-8 py-4 md:px-10 md:py-5 font-black rounded-full hover:bg-white/20 transition-all shadow-2xl active:scale-95 text-base md:text-lg backdrop-blur-sm"
+            >
+              수의계약 안내
+              <ArrowRight className="ml-2 w-5 h-5 md:w-6 md:h-6 group-hover:translate-x-2 transition-transform" />
+            </Link>
+          </div>
         </motion.div>
       </Container>
     </section>
