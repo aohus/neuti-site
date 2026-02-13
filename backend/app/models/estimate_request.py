@@ -16,4 +16,5 @@ class EstimateRequest(Base):
     budget_range = Column(String, nullable=True)     # 예산 규모
     details = Column(Text, nullable=True)            # 상세 요청사항
     image_url = Column(String, nullable=True)        # 참고 사진
+    status = Column(String, nullable=False, default="new", server_default="new")  # new, in_progress, completed
     created_at = Column(DateTime(timezone=True), server_default=func.now())

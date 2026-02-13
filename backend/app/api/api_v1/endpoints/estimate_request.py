@@ -10,7 +10,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.api import deps
 from app.core.config import settings
 from app.db.session import get_db
-from app.schemas.estimate_request import EstimateRequestCreate, EstimateRequestResponse
+from app.schemas.estimate_request import (
+    EstimateRequestCreate,
+    EstimateRequestResponse,
+    EstimateRequestStatusUpdate,
+)
 from app.services.estimate_request_service import estimate_request_service
 from app.utils.email import send_estimate_notification
 
@@ -69,9 +73,40 @@ async def read_estimate_requests(
     db: AsyncSession = Depends(get_db),
     skip: int = 0,
     limit: int = 100,
+    status: str | None = None,
     current_admin: str = Depends(deps.get_current_admin),
 ) -> Any:
     """
     견적 요청 목록 조회 (관리자 전용).
     """
-    return await estimate_request_service.get_requests(db, skip=skip, limit=limit)
+    return await estimate_request_service.get_requests(
+        db, skip=skip, limit=limit, status=status
+    )
+
+
+@router.patch("/{request_id}/status", response_model=EstimateRequestResponse)
+async def update_estimate_status(
+    request_id: int,
+    status_in: EstimateRequestStatusUpdate,
+    db: AsyncSession = Depends(get_db),
+    current_admin: str = Depends(deps.get_current_admin),
+) -> Any:
+    """
+    견적 요청 상태 변경 (관리자 전용).
+    """
+    return await estimate_request_service.update_status(
+        db, request_id=request_id, status=status_in.status
+    )
+
+
+@router.delete("/{request_id}")
+async def delete_estimate_request(
+    request_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_admin: str = Depends(deps.get_current_admin),
+) -> Any:
+    """
+    견적 요청 삭제 (관리자 전용).
+    """
+    await estimate_request_service.delete_request(db, request_id=request_id)
+    return {"ok": True}

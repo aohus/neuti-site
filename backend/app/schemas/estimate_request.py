@@ -45,9 +45,14 @@ class EstimateRequestCreate(EstimateRequestBase):
         )
 
 
+class EstimateRequestStatusUpdate(BaseModel):
+    status: str  # new, in_progress, completed
+
+
 class EstimateRequestResponse(EstimateRequestBase):
     id: int
     image_url: str | None = None
+    status: str = "new"
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)

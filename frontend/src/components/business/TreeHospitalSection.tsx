@@ -10,22 +10,22 @@ const features = [
   {
     title: '수목 진단·처방',
     desc: '병해충, 생육 이상 등 원인 분석',
-    icon: <Search className="h-6 w-6" />
+    icon: <Search className="h-5 w-5" />
   },
   {
     title: '수목 치료·방제',
     desc: '예방·치료를 위한 약제 처리 및 관리',
-    icon: <ShieldCheck className="h-6 w-6" />
+    icon: <ShieldCheck className="h-5 w-5" />
   },
   {
     title: '생육환경 개선',
     desc: '토양 개량, 통풍 및 관수 시스템 개선',
-    icon: <Activity className="h-6 w-6" />
+    icon: <Activity className="h-5 w-5" />
   },
   {
     title: '위험수목 진단',
     desc: '구조적 위험성을 과학적으로 분석',
-    icon: <AlertTriangle className="h-6 w-6" />
+    icon: <AlertTriangle className="h-5 w-5" />
   }
 ]
 
@@ -57,51 +57,59 @@ export default function TreeHospitalSection() {
               </p>
             </motion.div>
 
-            <div className="grid gap-6 sm:grid-cols-2">
+            <div className="space-y-0 divide-y divide-gray-100">
               {features.map((feature, idx) => (
                 <motion.div
                   key={feature.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: idx * 0.1 }}
-                  className="bg-surface hover:border-accent/20 group rounded-[2.5rem] border border-black/5 p-8 transition-all hover:shadow-xl"
+                  transition={{ delay: idx * 0.08 }}
+                  className="flex items-start gap-4 py-5 group"
                 >
-                  <div className="bg-deep group-hover:bg-accent mb-6 flex h-12 w-12 items-center justify-center rounded-2xl text-white transition-colors">
+                  <div className="text-primary mt-1 shrink-0">
                     {feature.icon}
                   </div>
-                  <h5 className="text-deep mb-2 text-lg font-black">
-                    {feature.title}
-                  </h5>
-                  <p className="text-sm leading-relaxed font-bold text-gray-400">
-                    {feature.desc}
-                  </p>
+                  <div>
+                    <h5 className="text-deep text-lg font-black group-hover:text-primary transition-colors">
+                      {feature.title}
+                    </h5>
+                    <p className="text-[15px] text-gray-400 font-bold mt-1">
+                      {feature.desc}
+                    </p>
+                  </div>
                 </motion.div>
               ))}
             </div>
           </div>
 
-          {/* Visual Content */}
+          {/* Visual Content — asymmetric 3-photo grid */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="border-surface relative aspect-[4/5] overflow-hidden rounded-[3.5rem] border-[12px] shadow-2xl lg:w-1/2"
+            className="lg:w-1/2 grid grid-cols-12 grid-rows-[auto_auto] gap-3"
           >
-            <img
-              src="/images/home/carousel_2.jpg"
-              alt="Tree Hospital Service"
-              className="h-full w-full object-cover"
-            />
-            <div className="from-deep/60 absolute inset-0 bg-gradient-to-t via-transparent to-transparent opacity-60" />
-            <div className="absolute right-12 bottom-12 left-12 text-white">
-              <p className="mb-4 text-xs font-black tracking-widest uppercase italic opacity-80">
-                Professional Diagnosis
-              </p>
-              <p className="text-2xl leading-tight font-black drop-shadow-lg">
-                "나무는 우리 삶의 동반자입니다. <br /> 전문가의 손길로 생명을
-                지킵니다."
-              </p>
+            <div className="col-span-6 row-span-1 relative aspect-[3/4] overflow-hidden rounded-3xl shadow-xl">
+              <img
+                src="/images/business/tree-hospital-1.jpg"
+                alt="나무병원 진단 현장"
+                className="h-full w-full object-cover"
+              />
+            </div>
+            <div className="col-span-6 row-span-1 relative aspect-[4/5] overflow-hidden rounded-3xl shadow-xl mt-16">
+              <img
+                src="/images/business/tree-hospital-2.jpg"
+                alt="나무병원 치료 현장"
+                className="h-full w-full object-cover"
+              />
+            </div>
+            <div className="col-span-11 col-start-2 row-span-1 relative aspect-[16/9] overflow-hidden rounded-3xl shadow-xl -mt-6">
+              <img
+                src="/images/business/tree-hospital-3.jpg"
+                alt="나무병원 시공 현장"
+                className="h-full w-full object-cover"
+              />
             </div>
           </motion.div>
         </div>
