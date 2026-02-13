@@ -39,6 +39,7 @@
     color: var(--foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    @apply pb-16 lg:pb-0;
   }
 
   h1, h2, h3, h4 {

@@ -1,4 +1,5 @@
 import Navbar from './Navbar'
+import MobileBottomCTA from './common/MobileBottomCTA'
 import Container from './common/Container'
 import Link from 'next/link'
 
@@ -7,6 +8,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <div className="flex min-h-screen flex-col">
       <Navbar />
       <main className="flex-grow">{children}</main>
+      <MobileBottomCTA />
       <footer className="bg-surface border-t border-black/5 py-20">
         <Container>
           <div className="grid grid-cols-1 gap-12 md:grid-cols-4 md:gap-8">

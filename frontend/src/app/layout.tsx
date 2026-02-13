@@ -52,11 +52,44 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    name: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    url: "https://xn--910b90bw7nhubu9w9vr.com",
+    telephone: "031-752-6000",
+    email: "coopneuti@naver.com",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "태평로 104",
+      addressLocality: "성남시 수정구",
+      addressRegion: "경기도",
+      addressCountry: "KR",
+    },
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "조경·수목관리 서비스",
+      itemListElement: [
+        { "@type": "Offer", itemOffered: { "@type": "Service", name: "조경식재" } },
+        { "@type": "Offer", itemOffered: { "@type": "Service", name: "녹지관리" } },
+        { "@type": "Offer", itemOffered: { "@type": "Service", name: "소나무 전정" } },
+        { "@type": "Offer", itemOffered: { "@type": "Service", name: "병충해 방제" } },
+        { "@type": "Offer", itemOffered: { "@type": "Service", name: "위험목 제거" } },
+        { "@type": "Offer", itemOffered: { "@type": "Service", name: "수목 진단·치료" } },
+      ],
+    },
+  };
+
   return (
     <html lang="ko">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <AuthProvider>
           <Layout>{children}</Layout>
         </AuthProvider>
