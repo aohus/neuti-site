@@ -1,5 +1,17 @@
+import type { Metadata } from 'next'
 import Container from '@/components/common/Container'
 import DiagnosisForm from '@/components/diagnosis/DiagnosisForm'
+
+export const metadata: Metadata = {
+  title: '수목 진단 의뢰',
+  description:
+    '1종 나무병원 전문 수목 진단 의뢰. 수목 진단·처방·치료·방제. 온라인 접수 및 HWP 양식 다운로드. 느티나무병원 협동조합 031-752-6000.',
+  openGraph: {
+    title: '수목 진단 의뢰 | 느티나무병원 협동조합',
+    description:
+      '산림청 등록 1종 나무병원의 전문 수목 진단. 온라인 간편 접수.',
+  },
+}
 
 export default function RequestPage() {
   return (
