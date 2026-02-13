@@ -29,7 +29,7 @@ services:
       - "traefik.enable=true"
       
       # Backend API Router
-      - "traefik.http.routers.neuti-backend.rule=(Host(`XN--910B90BW7NHUBU9W9VR.COM`) || Host(`XN--910B90BW7NHUBU9W9VR.NET`)) && (PathPrefix(`/backend-api`) || PathPrefix(`/uploads`))"
+      - "traefik.http.routers.neuti-backend.rule=(Host(`XN--910B90BW7NHUBU9W9VR.COM`) || Host(`XN--910B90BW7NHUBU9W9VR.NET`)) || Host(`www.XN--910B90BW7NHUBU9W9VR.COM`) || Host(`www.XN--910B90BW7NHUBU9W9VR.NET`) && (PathPrefix(`/backend-api`) || PathPrefix(`/uploads`))"
       - "traefik.http.routers.neuti-backend.entrypoints=websecure"
       - "traefik.http.routers.neuti-backend.tls.certresolver=letsencrypt"
       - "traefik.http.routers.neuti-backend.priority=10"
