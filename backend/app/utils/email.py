@@ -37,3 +37,30 @@ async def send_diagnosis_notification(email_to: str, data: dict):
     </ul>
     """
     await fm.send_message(message)
+
+
+async def send_estimate_notification(email_to: str, data: dict):
+    message = MessageSchema(
+        subject=f"{settings.PROJECT_NAME} - 새로운 견적 요청 접수",
+        recipients=[email_to],
+        template_body=None,
+        subtype=MessageType.html
+    )
+
+    fm = FastMail(conf)
+    message.body = f"""
+    <h3>새로운 수의계약 견적 요청이 접수되었습니다.</h3>
+    <table style="border-collapse:collapse; margin-top:16px;">
+        <tr><td style="padding:6px 12px; font-weight:bold; color:#666;">기관유형</td><td style="padding:6px 12px;">{data.get('org_type', '')}</td></tr>
+        <tr><td style="padding:6px 12px; font-weight:bold; color:#666;">기관명</td><td style="padding:6px 12px;">{data.get('org_name', '')}</td></tr>
+        <tr><td style="padding:6px 12px; font-weight:bold; color:#666;">담당자</td><td style="padding:6px 12px;">{data.get('contact_name', '')}</td></tr>
+        <tr><td style="padding:6px 12px; font-weight:bold; color:#666;">연락처</td><td style="padding:6px 12px;">{data.get('contact_phone', '')}</td></tr>
+        <tr><td style="padding:6px 12px; font-weight:bold; color:#666;">이메일</td><td style="padding:6px 12px;">{data.get('contact_email', '-')}</td></tr>
+        <tr><td style="padding:6px 12px; font-weight:bold; color:#666;">작업유형</td><td style="padding:6px 12px;">{data.get('work_type', '')}</td></tr>
+        <tr><td style="padding:6px 12px; font-weight:bold; color:#666;">작업위치</td><td style="padding:6px 12px;">{data.get('work_location', '')}</td></tr>
+        <tr><td style="padding:6px 12px; font-weight:bold; color:#666;">희망시기</td><td style="padding:6px 12px;">{data.get('desired_date', '-')}</td></tr>
+        <tr><td style="padding:6px 12px; font-weight:bold; color:#666;">예산규모</td><td style="padding:6px 12px;">{data.get('budget_range', '-')}</td></tr>
+    </table>
+    {"<div style='margin-top:16px; padding:12px; background:#f5f5f5; border-radius:8px;'><strong>상세 요청사항:</strong><br/>" + data.get('details', '') + "</div>" if data.get('details') else ""}
+    """
+    await fm.send_message(message)

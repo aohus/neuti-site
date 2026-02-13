@@ -1,9 +1,10 @@
+import logging
 import os
 from typing import Any, List
 from uuid import uuid4
 
 import aiofiles
-from fastapi import APIRouter, Depends, File, UploadFile
+from fastapi import APIRouter, BackgroundTasks, Depends, File, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api import deps
@@ -11,6 +12,9 @@ from app.core.config import settings
 from app.db.session import get_db
 from app.schemas.estimate_request import EstimateRequestCreate, EstimateRequestResponse
 from app.services.estimate_request_service import estimate_request_service
+from app.utils.email import send_estimate_notification
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -22,6 +26,7 @@ async def create_estimate_request(
     db: AsyncSession = Depends(get_db),
     request_in: EstimateRequestCreate = Depends(EstimateRequestCreate.as_form),
     image: UploadFile | None = File(None),
+    background_tasks: BackgroundTasks,
 ) -> Any:
     """
     수의계약 간편 견적 요청 등록 (누구나 접수 가능).
@@ -40,9 +45,22 @@ async def create_estimate_request(
             await f.write(content)
         image_url = f"/uploads/{file_name}"
 
-    return await estimate_request_service.create_request(
+    result = await estimate_request_service.create_request(
         db, obj_in=request_in, image_url=image_url
     )
+
+    # TODO: 네이버 SMTP 설정 완료 후 주석 해제
+    # try:
+    #     email_data = request_in.model_dump()
+    #     background_tasks.add_task(
+    #         send_estimate_notification,
+    #         settings.MAIL_USERNAME,
+    #         email_data,
+    #     )
+    # except Exception:
+    #     logger.warning("Failed to queue estimate email notification", exc_info=True)
+
+    return result
 
 
 @router.get("", response_model=List[EstimateRequestResponse])

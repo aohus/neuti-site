@@ -23,7 +23,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   느티나무병원 협동조합 <br />
                   본점: 성남시 수정구 태평로 104 | 031-752-6000 <br />
                 </p>
-                <p>© 2026 느티나무병원 협동조합. All rights reserved.</p>
+                <p>
+                © 2026 느티나무병원 협동조합. All rights reserved.
+                <span className="mx-2 text-gray-300">|</span>
+                <Link href="/login" className="text-gray-300 hover:text-gray-500 transition-colors">
+                  관리자
+                </Link>
+              </p>
               </div>
             </div>
 

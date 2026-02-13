@@ -63,12 +63,20 @@ export default function Navbar() {
             </Link>
 
             {isAdmin && (
-              <button
-                onClick={logout}
-                className="px-4 py-2 text-xs font-bold text-gray-400 transition-colors hover:text-red-600"
-              >
-                로그아웃
-              </button>
+              <>
+                <Link
+                  href="/admin/estimates"
+                  className="px-4 py-2 text-xs font-bold text-green-700 bg-green-50 rounded-full transition-colors hover:bg-green-100"
+                >
+                  문의 관리
+                </Link>
+                <button
+                  onClick={logout}
+                  className="px-4 py-2 text-xs font-bold text-gray-400 transition-colors hover:text-red-600"
+                >
+                  로그아웃
+                </button>
+              </>
             )}
           </div>
         </div>
@@ -113,15 +121,24 @@ export default function Navbar() {
               견적·상담문의
             </Link>
             {isAdmin && (
-              <button
-                onClick={() => {
-                  logout()
-                  setIsMobileMenuOpen(false)
-                }}
-                className="w-full rounded-2xl bg-red-50 px-6 py-4 text-lg font-bold text-red-600"
-              >
-                로그아웃
-              </button>
+              <>
+                <Link
+                  href="/admin/estimates"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block rounded-2xl bg-green-50 px-6 py-4 text-center text-lg font-bold text-green-700"
+                >
+                  문의 관리
+                </Link>
+                <button
+                  onClick={() => {
+                    logout()
+                    setIsMobileMenuOpen(false)
+                  }}
+                  className="w-full rounded-2xl bg-red-50 px-6 py-4 text-lg font-bold text-red-600"
+                >
+                  로그아웃
+                </button>
+              </>
             )}
           </div>
         </div>

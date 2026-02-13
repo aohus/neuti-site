@@ -23,12 +23,12 @@ class Settings(BaseSettings):
         return f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
 
     # Email
-    MAIL_USERNAME: str = "info@neuti.co.kr"
+    MAIL_USERNAME: str = "coopneuti@naver.com"
     MAIL_PASSWORD: str = ""
-    MAIL_FROM: str = "info@neuti.co.kr"
+    MAIL_FROM: str = "coopneuti@naver.com"
     MAIL_PORT: int = 587
     MAIL_SERVER: str = "smtp.gmail.com"
-    MAIL_FROM_NAME: str = "Neuti Tree Hospital"
+    MAIL_FROM_NAME: str = "느티나무홈페이지"
     MAIL_STARTTLS: bool = True
     MAIL_SSL_TLS: bool = False
     USE_CREDENTIALS: bool = True

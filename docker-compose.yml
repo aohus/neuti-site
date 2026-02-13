@@ -13,12 +13,9 @@ services:
     volumes:
       - ./backend:/app
       - /app/.venv
+    env_file:
+      - ./backend/.env
     environment:
-      - POSTGRES_SERVER=db
-      - POSTGRES_PORT=5432
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=app
       - PYTHONPATH=/app
     depends_on:
       db:
@@ -38,12 +35,9 @@ services:
     volumes:
       - ./backend:/app
       - /app/.venv
+    env_file:
+      - ./backend/.env
     environment:
-      - POSTGRES_SERVER=db
-      - POSTGRES_PORT=5432
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=app
       - PYTHONPATH=/app
     depends_on:
       backend:
