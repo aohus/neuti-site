@@ -68,7 +68,7 @@ services:
       - "traefik.enable=true"
 
       # Frontend Router
-      - "traefik.http.routers.neuti-frontend.rule=Host(`XN--910B90BW7NHUBU9W9VR.COM`) || Host(`XN--910B90BW7NHUBU9W9VR.NET`)"
+      - "traefik.http.routers.neuti-frontend.rule=Host(`XN--910B90BW7NHUBU9W9VR.COM`) || Host(`XN--910B90BW7NHUBU9W9VR.NET`) || Host(`www.XN--910B90BW7NHUBU9W9VR.COM`) || Host(`www.XN--910B90BW7NHUBU9W9VR.NET`)" 
       - "traefik.http.routers.neuti-frontend.entrypoints=websecure"
       - "traefik.http.routers.neuti-frontend.tls.certresolver=letsencrypt"
       - "traefik.http.routers.neuti-frontend.priority=1"
