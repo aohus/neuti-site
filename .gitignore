@@ -186,6 +186,6 @@ media/
 .ai/
 
 # ai agent configs
-# conductor/
+conductor/
 .claude/
 CLAUDE.md
