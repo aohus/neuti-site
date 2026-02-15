@@ -1,8 +1,0 @@
-{
-  "track_id": "home_server_deploy_20260205",
-  "type": "chore",
-  "status": "new",
-  "created_at": "2026-02-05T15:30:00Z",
-  "updated_at": "2026-02-05T15:30:00Z",
-  "description": "홈서버에 배포 (Ubuntu/Linux, Docker Compose, Nginx Reverse Proxy, SSL 적용)"
-}

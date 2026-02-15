@@ -1,8 +1,0 @@
-{
-  "track_id": "diagnosis_request_20260131",
-  "type": "feature",
-  "status": "new",
-  "created_at": "2026-01-31T21:30:00Z",
-  "updated_at": "2026-01-31T21:30:00Z",
-  "description": "수목진단의뢰 페이지 구현"
-}
