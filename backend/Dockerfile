@@ -39,8 +39,9 @@ COPY --from=builder /app/.venv /app/.venv
 COPY alembic.ini ./
 COPY alembic ./alembic
 COPY app ./app
+COPY data ./data
 
-RUN mkdir -p uploads data
+RUN mkdir -p uploads
 
 EXPOSE 8000
 

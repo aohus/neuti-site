@@ -1,8 +1,6 @@
 services:
   neuti-backend:
-    build:
-      context: ./backend
-      target: runtime
+    image: localhost:5000/neuti-backend:latest
     container_name: neuti-backend
     command: >
       sh -c "alembic upgrade head &&
@@ -16,7 +14,6 @@ services:
       - PYTHONPATH=/app
     volumes:
       - ./backend/uploads:/app/uploads
-      - ./backend/data:/app/data
     restart: always
     expose:
       - "8000"
@@ -57,9 +54,7 @@ services:
       - proxy-network
 
   neuti-frontend:
-    build:
-      context: ./frontend
-      target: runner
+    image: localhost:5000/neuti-frontend:latest
     container_name: neuti-frontend
     environment:
       - NEXT_PUBLIC_API_URL=/backend-api

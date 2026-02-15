@@ -1,0 +1,140 @@
+# Required GitHub Secrets:
+# - HOMESERVER_TS_IP: Tailscale IP (100.x.x.x)
+# - TS_OAUTH_CLIENT_ID: Tailscale OAuth client ID
+# - TS_OAUTH_SECRET: Tailscale OAuth secret
+# - USERNAME: SSH username on homeserver
+# - SSH_PRIVATE_KEY: SSH private key for deployment
+#
+# Homeserver prerequisites:
+# - Docker registry running on port 5000 (docker run -d -p 5000:5000 --restart always --name registry registry:2)
+# - ~/neuti-site/.env with production environment variables
+# - Tailscale ACL tag:ci configured
+
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: production
+  cancel-in-progress: false
+
+env:
+  REGISTRY: ${{ secrets.HOMESERVER_TS_IP }}:5000
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Registry traffic is encrypted via Tailscale VPN (100.x.x.x network)
+      - name: Tailscale
+        uses: tailscale/github-action@v4
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+          ping: ${{ secrets.HOMESERVER_TS_IP }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          buildkitd-config-inline: |
+            [registry."${{ secrets.HOMESERVER_TS_IP }}:5000"]
+              http = true
+              insecure = true
+
+      - name: Build & push backend
+        uses: docker/build-push-action@v6
+        with:
+          context: ./backend
+          target: runtime
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/neuti-backend:${{ github.sha }}
+            ${{ env.REGISTRY }}/neuti-backend:latest
+          cache-from: type=gha,scope=backend
+          cache-to: type=gha,scope=backend,mode=max
+
+      - name: Build & push frontend
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend
+          target: runner
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/neuti-frontend:${{ github.sha }}
+            ${{ env.REGISTRY }}/neuti-frontend:latest
+          cache-from: type=gha,scope=frontend
+          cache-to: type=gha,scope=frontend,mode=max
+
+      - name: Copy compose file to homeserver
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOMESERVER_TS_IP }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: docker-compose.prod.yml
+          target: ~/neuti-site
+
+      - name: Deploy services
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.HOMESERVER_TS_IP }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            set -e
+            cd ~/neuti-site
+
+            # Validate .env
+            if [ ! -f .env ]; then
+              echo "ERROR: .env file not found in ~/neuti-site"
+              exit 1
+            fi
+            for var in POSTGRES_PASSWORD SECRET_KEY ADMIN_PASSWORD; do
+              if ! grep -q "^${var}=" .env; then
+                echo "ERROR: Required variable $var not found in .env"
+                exit 1
+              fi
+            done
+
+            mkdir -p backend/uploads
+
+            # Tag current images for rollback
+            docker tag localhost:5000/neuti-backend:latest localhost:5000/neuti-backend:previous 2>/dev/null || true
+            docker tag localhost:5000/neuti-frontend:latest localhost:5000/neuti-frontend:previous 2>/dev/null || true
+
+            # Pull and restart
+            docker compose -f docker-compose.prod.yml pull neuti-backend neuti-frontend
+            docker compose -f docker-compose.prod.yml up -d
+
+            # Wait for health checks (backend start_period=30s)
+            TIMEOUT=60
+            ELAPSED=0
+            echo "Waiting for services to become healthy..."
+            while [ $ELAPSED -lt $TIMEOUT ]; do
+              sleep 10
+              ELAPSED=$((ELAPSED + 10))
+
+              BACKEND_HEALTH=$(docker inspect --format='{{.State.Health.Status}}' neuti-backend 2>/dev/null || echo "starting")
+              FRONTEND_HEALTH=$(docker inspect --format='{{.State.Health.Status}}' neuti-frontend 2>/dev/null || echo "starting")
+
+              echo "  [${ELAPSED}s] backend=${BACKEND_HEALTH} frontend=${FRONTEND_HEALTH}"
+
+              if [ "$BACKEND_HEALTH" = "healthy" ] && [ "$FRONTEND_HEALTH" = "healthy" ]; then
+                echo "All services healthy!"
+                docker compose -f docker-compose.prod.yml ps
+                docker image prune -f
+                exit 0
+              fi
+            done
+
+            echo "ERROR: Services not healthy within ${TIMEOUT}s"
+            docker compose -f docker-compose.prod.yml logs --tail=30
+            exit 1
