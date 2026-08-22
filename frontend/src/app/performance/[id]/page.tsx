@@ -20,6 +20,7 @@ import Link from 'next/link'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import remarkBreaks from 'remark-breaks'
+import { normalizeMarkdown } from '@/lib/markdown'
 
 export default function PerformanceDetailPage() {
   const { id } = useParams()
@@ -146,7 +147,7 @@ export default function PerformanceDetailPage() {
         }
 
         // Final Markdown Text Rendering
-        const markdown = block.value.replace(/\n/g, '\n')
+        const markdown = normalizeMarkdown(block.value)
 
         return (
           <div
@@ -267,7 +268,7 @@ export default function PerformanceDetailPage() {
       return (
         <div className="prose-magazine my-12 px-4 md:px-0">
           <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>
-            {contentStr.replace(/\n/g, '\n')}
+            {normalizeMarkdown(contentStr)}
           </ReactMarkdown>
         </div>
       )
