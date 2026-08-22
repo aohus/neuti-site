@@ -1,61 +1,75 @@
 'use client'
 
 import Image from 'next/image'
+import { motion } from 'framer-motion'
 import Container from '../common/Container'
+import { clientLogos, getOtherClientNames } from '@/data/clients'
 
-// 임시 7개 (CI 추가 전까지 중복 배치)
-const clients = [
-  { name: '경기도', src: '/images/clients/gyeonggi.jpg' },
-  { name: '공수처', src: '/images/clients/gongsuchco.jpg' },
-  { name: '성남도시개발공사', src: '/images/clients/seongnam_dev.jpg' },
-  { name: '성남시', src: '/images/clients/seongnam_city.png' },
-  { name: '정부청사관리본부', src: '/images/clients/gov-complex.png' },
-  { name: '경기도2', src: '/images/clients/gyeonggi.jpg' },
-  { name: '공수처2', src: '/images/clients/gongsuchco.jpg' },
-]
+const otherClients = getOtherClientNames()
 
+/**
+ * 함께 일한 발주처.
+ *
+ * 규모가 큰 기관만 골라 보여주지 않는다. 학교·행정복지센터까지 계약한 곳을
+ * 모두 적는 편이, 방문자가 자기 상황과 비슷한 사례를 발견할 확률이 높다.
+ * 목록은 `contract-projects.ts` 원장에서 파생되므로 실적을 추가하면 따라온다.
+ */
 export default function ClientLogos() {
   return (
-    <section className="py-24 md:py-32 bg-white border-b border-gray-100">
+    <section
+      data-section="clients"
+      className="border-b border-gray-100 bg-white py-20 md:py-28"
+    >
       <Container>
-        <div className="text-center mb-14 md:mb-20">
-          <h2 className="text-xs font-bold text-green-600 tracking-widest uppercase mb-3">Our Clients</h2>
-          <p className="text-[2rem] md:text-[3rem] font-black text-gray-900 tracking-tighter mb-4">주요 계약 기관</p>
-          <p className="text-sm md:text-base text-gray-500 font-medium max-w-lg mx-auto">
-            정부기관, 공기업과의 다양한 프로젝트 경험으로 검증된 기술력과 <br />신뢰성을 바탕으로 성장해가고 있습니다.
+        <div className="mb-14 text-center md:mb-16">
+          <p className="mb-3 text-xs font-black tracking-widest text-green-600 uppercase">
+            Our Clients
+          </p>
+          <h2 className="text-[2rem] font-black tracking-tighter text-gray-900 md:text-[3rem]">
+            발주처
+          </h2>
+          <p className="mx-auto mt-4 max-w-lg text-sm font-medium text-gray-500 md:text-base">
+            관공서와 공공기관부터 동 행정복지센터, 학교, 아파트까지
+            <br className="hidden md:block" />
+            규모를 가리지 않고 현장을 맡아왔습니다.
           </p>
         </div>
 
-        <div className="max-w-3xl mx-auto space-y-6 md:space-y-10">
-          {/* 1줄: 4개 (모바일 2+2) */}
-          <div className="flex flex-wrap justify-center gap-6 md:gap-14">
-            {clients.slice(0, 4).map((client) => (
-              <div key={client.name} className="flex items-center justify-center">
-                <Image
-                  src={client.src}
-                  alt={client.name}
-                  width={200}
-                  height={70}
-                  className="h-8 md:h-14 w-auto object-contain"
-                />
-              </div>
-            ))}
-          </div>
-          {/* 2줄: 3개 (가운데 정렬) */}
-          <div className="flex flex-wrap justify-center gap-6 md:gap-14">
-            {clients.slice(4, 7).map((client) => (
-              <div key={client.name} className="flex items-center justify-center">
-                <Image
-                  src={client.src}
-                  alt={client.name}
-                  width={200}
-                  height={70}
-                  className="h-8 md:h-14 w-auto object-contain"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mx-auto flex max-w-3xl flex-wrap items-center justify-center gap-8 md:gap-14"
+        >
+          {clientLogos.map((client) => (
+            <Image
+              key={client.name}
+              src={client.src}
+              alt={client.name}
+              width={200}
+              height={70}
+              className="h-8 w-auto object-contain md:h-12"
+            />
+          ))}
+        </motion.div>
+
+        <motion.ul
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+          className="mx-auto mt-12 flex max-w-4xl flex-wrap justify-center gap-2"
+        >
+          {otherClients.map((name) => (
+            <li
+              key={name}
+              className="rounded-full border border-gray-200 bg-white px-3.5 py-1.5 text-xs font-bold text-gray-500 md:text-sm"
+            >
+              {name}
+            </li>
+          ))}
+        </motion.ul>
       </Container>
     </section>
   )

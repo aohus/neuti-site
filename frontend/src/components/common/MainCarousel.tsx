@@ -9,7 +9,10 @@ import Container from './Container'
 
 export default function MainCarousel() {
   return (
-    <section className="relative h-[calc(100vh-160px)] min-h-[400px] md:min-h-[540px] w-full overflow-hidden bg-black">
+    <section
+      data-section="hero"
+      className="relative h-[calc(100vh-160px)] min-h-[400px] md:min-h-[540px] w-full overflow-hidden bg-black"
+    >
       {/* Background Image — 1번 사진 고정 */}
       <div className="absolute inset-0">
         <Image
@@ -41,8 +44,8 @@ export default function MainCarousel() {
           </h1>
 
           <p className="text-gray-200 text-base md:text-lg lg:text-2xl mb-8 md:mb-12 opacity-90 leading-relaxed font-medium max-w-2xl">
-            전문 나무의사의 과학적 진단과 풍부한 시공 실적으로<br className="hidden md:block" />
-            공공기관과 아파트의 녹지 공간을 건강하게 관리합니다.
+            나무의사의 진단·치료부터 조경수·계절꽃 식재와 화단 조성까지<br className="hidden md:block" />
+            공공기관과 아파트의 녹지 공간을 가꾸고 관리합니다.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">

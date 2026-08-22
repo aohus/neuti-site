@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 const SITE_NAME = "느티나무병원 협동조합";
 const SITE_DESCRIPTION =
-  "산림청 등록 1종 나무병원 · 조경식재 · 녹지관리 · 수목진단 전문. 수의계약 견적 즉일 발급. 031-752-6000";
+  "산림청 등록 1종 나무병원 · 수목진단·치료 · 조경수/관목 식재 · 계절꽃 화단 조성 · 녹지관리 전문. 수의계약 견적 문의. 031-752-6000";
 
 export const metadata: Metadata = {
   title: {

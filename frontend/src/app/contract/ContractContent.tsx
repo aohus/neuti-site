@@ -11,6 +11,7 @@ import {
   VISIBLE_PROJECT_COUNT,
 } from '@/data/contract-projects'
 import type { ContractCategory } from '@/data/contract-projects'
+import { clientLogos, getOtherClientNames } from '@/data/clients'
 import {
   Phone,
   Mail,
@@ -73,30 +74,11 @@ const qualifications = [
   },
 ]
 
-/* ─── Clients ─── */
-const clients = [
-  { name: '경기도', src: '/images/clients/gyeonggi.jpg' },
-  { name: '공수처', src: '/images/clients/gongsuchco.jpg' },
-  { name: '성남도시개발공사', src: '/images/clients/seongnam_dev.jpg' },
-  { name: '성남시', src: '/images/clients/seongnam_city.png' },
-  { name: '정부청사관리본부', src: '/images/clients/gov-complex.png' },
-]
-
-/* 로고가 없는 발주처는 텍스트로 병기 */
-const otherClients = [
-  '서울동부지방검찰청',
-  '서울강남구청',
-  '성남교육지원청',
-  '성남시 중원구청',
-  '성남시 분당구청',
-  '성남시장례문화사업소',
-]
-
 /* ─── Process Steps ─── */
 const steps = [
   { icon: ClipboardList, label: '견적 요청', desc: '전화 또는 온라인' },
-  { icon: MapPin, label: '현장 확인', desc: '필요시 방문 조사' },
-  { icon: FileCheck, label: '견적서 발급', desc: '즉일~1영업일' },
+  { icon: MapPin, label: '현장 답사', desc: '대상지 실측·상태 확인' },
+  { icon: FileCheck, label: '견적서 발급', desc: '답사 결과 반영' },
   { icon: Handshake, label: '계약 체결', desc: '수의계약 진행' },
   { icon: HardHat, label: '시공', desc: '전문 인력 투입' },
   { icon: BookCheck, label: '완료 보고', desc: '실적증명서 발급' },
@@ -205,7 +187,7 @@ export default function ContractContent() {
               조경·수목관리 수의계약
             </h1>
             <p className="text-lg md:text-xl text-green-100 max-w-2xl mx-auto leading-relaxed font-medium">
-              견적서 즉일 발급 · 자격증빙 즉시 제공 · 실적증명 바로 확인
+              현장 답사 후 견적서 발급 · 자격증빙 즉시 제공 · 실적증명 바로 확인
             </p>
           </FadeIn>
           <FadeIn delay={0.2}>
@@ -322,7 +304,7 @@ export default function ContractContent() {
             </p>
           </FadeIn>
           <div className="flex flex-wrap justify-center items-center gap-8 md:gap-14 max-w-3xl mx-auto">
-            {clients.map((c, i) => (
+            {clientLogos.map((c, i) => (
               <FadeIn key={c.name} delay={i * 0.05}>
                 <Image
                   src={c.src}
@@ -336,7 +318,7 @@ export default function ContractContent() {
           </div>
           <FadeIn delay={0.3}>
             <ul className="mt-12 flex flex-wrap justify-center gap-2 max-w-3xl mx-auto">
-              {otherClients.map((name) => (
+              {getOtherClientNames().map((name) => (
                 <li
                   key={name}
                   className="rounded-full border border-gray-200 bg-white px-4 py-2 text-xs md:text-sm font-bold text-gray-500"
@@ -387,7 +369,7 @@ export default function ContractContent() {
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(255,255,255,0.06),transparent_60%)]" />
               <div className="relative z-10">
                 <h2 className="text-2xl md:text-4xl font-black tracking-tight mb-4 leading-tight">
-                  견적서 즉일 발급<br className="md:hidden" /> · 자격증빙 함께 제공
+                  견적서에 자격증빙<br className="md:hidden" /> · 실적증명서를 함께 드립니다
                 </h2>
                 <p className="text-green-200 font-bold mb-10 text-base md:text-lg max-w-xl mx-auto leading-relaxed">
                   견적 요청 시 실적증명서·자격증빙을 함께 보내드립니다.

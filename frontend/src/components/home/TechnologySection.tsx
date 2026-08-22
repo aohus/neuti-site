@@ -394,7 +394,7 @@ export default function TechnologySection() {
   }
 
   return (
-    <section id="services" className="py-16 md:py-24 bg-white overflow-hidden scroll-mt-20">
+    <section id="services" data-section="technology" className="py-16 md:py-24 bg-white overflow-hidden scroll-mt-20">
       <Container>
         <div className="text-center max-w-4xl mx-auto mb-16">
           <h2 className="text-xs font-bold text-green-600 tracking-widest uppercase mb-4">Evidence of Excellence</h2>
