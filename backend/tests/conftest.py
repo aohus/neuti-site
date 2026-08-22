@@ -39,6 +39,12 @@ def isolate_upload_dir(tmp_path_factory, monkeypatch):
 
     tmp_path 대신 tmp_path_factory 를 쓰는 이유: tmp_path 하위에 만들면
     같은 tmp_path 로 "디렉터리가 비었는지" 검사하는 테스트가 깨진다.
+
+    주의 — 격리되는 건 '쓰기'뿐이다. app/main.py 의
+    StaticFiles(directory=settings.UPLOAD_DIR) 는 import 시점에 디렉터리를
+    한 번 고정하므로, 테스트에서 GET /uploads/<file> 로 정적 파일을 읽으면
+    여기서 만든 임시 디렉터리가 아니라 진짜 backend/uploads/ 를 본다.
+    정적 서빙을 검증하는 테스트를 새로 쓸 땐 이 비대칭을 감안할 것.
     """
     upload_dir = tmp_path_factory.mktemp("uploads")
     monkeypatch.setattr(settings, "UPLOAD_DIR", upload_dir)

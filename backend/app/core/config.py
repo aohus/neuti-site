@@ -1,6 +1,11 @@
 from pathlib import Path
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+# backend/ — 이 파일은 backend/app/core/config.py 다.
+# 운영 컨테이너에서도 `COPY app ./app` + `WORKDIR /app` 이라 /app 으로 맞는다.
+BASE_DIR = Path(__file__).resolve().parents[2]
 
 
 class Settings(BaseSettings):
@@ -35,8 +40,19 @@ class Settings(BaseSettings):
     VALIDATE_CERTS: bool = True
 
     # Storage
-    UPLOAD_DIR: Path = Path("uploads")
-    PERFORMANCE_DATA_DIR: Path = Path("data/performances")
+    UPLOAD_DIR: Path = BASE_DIR / "uploads"
+    PERFORMANCE_DATA_DIR: Path = BASE_DIR / "data" / "performances"
+
+    @field_validator("UPLOAD_DIR", "PERFORMANCE_DATA_DIR")
+    @classmethod
+    def _resolve_against_base_dir(cls, value: Path) -> Path:
+        """상대경로로 들어온 값을 backend/ 기준 절대경로로 바꾼다.
+
+        .env 와 compose 가 `UPLOAD_DIR=uploads` 처럼 상대경로를 넘기는데,
+        이걸 CWD 기준으로 두면 backend/ 밖에서 실행할 때 app.main import 가
+        StaticFiles 의 디렉터리 검사에서 죽고, 업로드도 엉뚱한 곳에 쌓인다.
+        """
+        return value if value.is_absolute() else BASE_DIR / value
 
     # Runtime
     SQL_ECHO: bool = False
