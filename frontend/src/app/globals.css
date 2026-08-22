@@ -39,7 +39,9 @@
     color: var(--foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
-    @apply pb-16 lg:pb-0;
+    /* MobileBottomCTA(고정 하단바) 실제 높이가 pb-16(64px)보다 조금 커서
+       페이지 최하단이 가려졌다. 안전 여백까지 포함해 pb-20 으로 잡는다. */
+    @apply pb-20 lg:pb-0;
   }
 
   h1, h2, h3, h4 {
@@ -50,6 +52,32 @@
   p {
     @apply text-gray-600 font-medium;
     word-break: keep-all;
+  }
+}
+
+/*
+ * 모바일에서는 등장 애니메이션을 건너뛴다.
+ *
+ * framer-motion 의 whileInView 는 SSR HTML 에 style="opacity:0" 을 인라인으로
+ * 박아 보낸다. 그래서 JS 하이드레이션 + IntersectionObserver 가 돌기 전까지
+ * 섹션이 빈 화면으로 보인다 — 회선이 느린 모바일일수록 이 공백이 길다.
+ * 인라인 스타일을 이기려면 !important 가 필요하다.
+ *
+ * 데스크탑(md 이상)에는 적용하지 않으므로 기존 연출은 그대로 유지된다.
+ * 새 섹션에 같은 처리를 원하면 motion 요소에 data-reveal 을 붙이면 된다.
+ */
+@media (max-width: 767px) {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* 브라우저·OS 설정으로 모션을 줄이길 원하는 사용자는 전 구간에서 제외한다. */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
 
