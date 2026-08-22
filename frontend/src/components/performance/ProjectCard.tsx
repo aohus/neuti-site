@@ -24,9 +24,12 @@ export default function ProjectCard({ project }: { project: Project }) {
       {/* Content */}
       <div className="p-8">
         <p className="text-[11px] font-black text-primary mb-3 uppercase tracking-[0.2em]">{project.client}</p>
-        <h3 className="text-xl font-black text-deep mb-4 line-clamp-2 group-hover:text-primary transition-colors leading-snug">
+        <h3 className="text-xl font-black text-deep mb-2 line-clamp-2 group-hover:text-primary transition-colors leading-snug">
           {project.title}
         </h3>
+        <p className="text-sm font-bold text-gray-400 mb-4 line-clamp-2 leading-snug min-h-[1.25rem]">
+          {project.subtitle}
+        </p>
         <div className="flex items-center justify-between mt-auto">
           {project.year && (
             <p className="text-[12px] font-bold text-gray-300 uppercase tracking-tighter">{project.year} YEAR</p>

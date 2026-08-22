@@ -61,6 +61,7 @@ function PerformanceContent() {
       .map((p) => ({
         id: p.id,
         title: p.title,
+        subtitle: p.subtitle,
         client: p.client || '느티나무병원 협동조합',
         category: p.job_main_category || '시공사례',
         image: p.thumbnail_url || '/images/hero-bg.jpg',

@@ -342,10 +342,19 @@ export default function PerformanceDetailPage() {
                 시공 사례 목록으로
               </span>
             </Link>
-            <h1 className="mb-10 text-4xl leading-tight font-black tracking-tighter text-white drop-shadow-2xl md:text-7xl">
+            <h1 className="mb-5 text-4xl leading-tight font-black tracking-tighter text-white drop-shadow-2xl md:text-6xl">
               {performance.title}
             </h1>
-            <div className="flex flex-wrap items-center gap-10 text-white/90">
+            {performance.subtitle && (
+              <p className="mb-10 max-w-3xl text-lg leading-snug font-bold text-white/80 drop-shadow-lg md:text-2xl">
+                {performance.subtitle}
+              </p>
+            )}
+            <div
+              className={`flex flex-wrap items-center gap-10 text-white/90 ${
+                performance.subtitle ? '' : 'mt-10'
+              }`}
+            >
               <div className="flex items-center gap-4">
                 <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-green-600 shadow-lg">
                   <User size={28} className="text-white" />

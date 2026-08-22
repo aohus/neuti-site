@@ -13,6 +13,7 @@ interface PerformanceFormProps {
 export default function PerformanceForm({ onClose, onSuccess }: PerformanceFormProps) {
   // Metadata States
   const [title, setTitle] = useState('')
+  const [subtitle, setSubtitle] = useState('')
   const [client, setClient] = useState('')
   const [category, setCategory] = useState('나무병원')
   const [year, setYear] = useState<number>(new Date().getFullYear())
@@ -124,6 +125,7 @@ export default function PerformanceForm({ onClose, onSuccess }: PerformanceFormP
     try {
       const data: PerformanceCreate = {
         title,
+        subtitle: subtitle || null,
         client,
         category,
         year,
@@ -191,13 +193,24 @@ export default function PerformanceForm({ onClose, onSuccess }: PerformanceFormP
                 <label className="block text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-3">Project Title</label>
                 <input
                   type="text"
-                  placeholder="공사 제목을 입력하세요"
+                  placeholder="주제목 (예: 정부과천청사 소나무 전정)"
                   className="w-full px-8 py-5 rounded-[2rem] border-4 border-gray-50 focus:border-green-500 bg-gray-50 focus:bg-white outline-none font-black text-2xl transition-all shadow-sm focus:shadow-md"
                   value={title}
                   onChange={e => setTitle(e.target.value)}
                 />
               </div>
-              
+
+              <div>
+                <label className="block text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-3">Subtitle</label>
+                <input
+                  type="text"
+                  placeholder="부제목 (예: 고소작업차를 이용한 대형 소나무 수형 관리)"
+                  className="w-full px-8 py-4 rounded-[2rem] border-4 border-gray-50 focus:border-green-500 bg-gray-50 focus:bg-white outline-none font-bold text-lg transition-all shadow-sm focus:shadow-md"
+                  value={subtitle}
+                  onChange={e => setSubtitle(e.target.value)}
+                />
+              </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-xs font-black text-gray-400 uppercase tracking-[0.2em] mb-3">Client</label>

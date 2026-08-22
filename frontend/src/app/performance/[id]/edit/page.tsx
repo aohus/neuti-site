@@ -318,12 +318,22 @@ export default function EditPerformancePage() {
 
         {/* Title */}
         <div>
-          <label className="block text-sm font-medium mb-1">제목</label>
+          <label className="block text-sm font-medium mb-1">주제목</label>
           <input
             {...register('title', { required: '제목은 필수입니다.' })}
             className="w-full p-2 border rounded"
           />
           {errors.title && <span className="text-red-500 text-sm">{errors.title.message}</span>}
+        </div>
+
+        {/* Subtitle */}
+        <div>
+          <label className="block text-sm font-medium mb-1">부제목</label>
+          <input
+            {...register('subtitle')}
+            placeholder="목록 카드와 상세 상단에 주제목 아래로 표시됩니다"
+            className="w-full p-2 border rounded"
+          />
         </div>
 
         {/* Category & Year */}

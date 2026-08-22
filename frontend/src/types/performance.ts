@@ -6,6 +6,7 @@ export interface ContentBlock {
 export interface Performance {
   id: number
   title: string
+  subtitle?: string | null
   content: string // JSON stringified ContentBlock[]
   category?: string | null
   thumbnail_url?: string | null
@@ -22,6 +23,7 @@ export interface Performance {
 
 export interface PerformanceCreate {
   title: string
+  subtitle?: string | null
   content: string
   category?: string | null
   thumbnail_url?: string | null
