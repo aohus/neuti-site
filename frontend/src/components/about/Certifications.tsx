@@ -37,6 +37,7 @@ export default function Certifications() {
       {certs.map((cert, index) => (
         <motion.div
           key={cert.title}
+          data-reveal
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}

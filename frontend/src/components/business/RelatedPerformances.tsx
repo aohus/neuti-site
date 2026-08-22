@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { ArrowRight, Plus } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { Performance } from '@/types/performance'
 import { performanceApi } from '@/lib/performanceApi'
 
@@ -39,7 +39,7 @@ export default function RelatedPerformances({
   if (!isLoading && performances.length === 0) return null
 
   return (
-    <div className="mt-32 border-t border-white/10 pt-20">
+    <div className="mt-16 border-t border-white/10 pt-10 md:mt-32 md:pt-20">
       <div className="mb-12 flex items-end justify-between">
         <div>
           <h5
@@ -72,6 +72,7 @@ export default function RelatedPerformances({
           : performances.map((perf, idx) => (
               <motion.div
                 key={perf.id}
+                data-reveal
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -83,9 +84,12 @@ export default function RelatedPerformances({
                 >
                   <div className="relative aspect-video overflow-hidden rounded-2xl border-4 border-white/5 shadow-lg transition-all group-hover:border-green-500/50">
                     {perf.thumbnail_url ? (
+                      // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={perf.thumbnail_url}
                         alt={perf.title}
+                        loading="lazy"
+                        decoding="async"
                         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                       />
                     ) : (

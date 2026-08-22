@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Container from '@/components/common/Container'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { PenTool, Trees, Truck, Home } from 'lucide-react'
 import RelatedPerformances from './RelatedPerformances'
@@ -31,12 +32,13 @@ const features = [
 
 export default function LandscapingSection() {
   return (
-    <section className="py-40 bg-white" id="landscaping">
+    <section className="py-14 sm:py-20 md:py-40 bg-white" id="landscaping">
       <Container>
         <div className="flex flex-col lg:flex-row-reverse gap-20 items-center">
           {/* Text Content */}
           <div className="lg:w-1/2 space-y-12">
             <motion.div
+              data-reveal
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
@@ -57,6 +59,7 @@ export default function LandscapingSection() {
               {features.map((feature, idx) => (
                 <motion.div
                   key={feature.title}
+                  data-reveal
                   initial={{ opacity: 0, x: 20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
@@ -81,30 +84,37 @@ export default function LandscapingSection() {
 
           {/* Visual Content — asymmetric 3-photo grid */}
           <motion.div
+            data-reveal
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             className="lg:w-1/2 grid grid-cols-12 grid-rows-[auto_auto] gap-3"
           >
             <div className="col-span-5 row-span-1 relative aspect-[3/4] overflow-hidden rounded-3xl shadow-xl mt-12">
-              <img
+              <Image
                 src="/images/business/landscaping-1.jpg"
                 alt="조경식재 시공 현장"
-                className="w-full h-full object-cover"
+                fill
+                sizes="(min-width: 1024px) 25vw, 50vw"
+                className="object-cover"
               />
             </div>
             <div className="col-span-7 row-span-1 relative aspect-[3/4] overflow-hidden rounded-3xl shadow-xl">
-              <img
+              <Image
                 src="/images/business/landscaping-2.jpg"
                 alt="조경식재 완성 모습"
-                className="w-full h-full object-cover"
+                fill
+                sizes="(min-width: 1024px) 25vw, 50vw"
+                className="object-cover"
               />
             </div>
             <div className="col-span-8 row-span-1 relative aspect-[16/9] overflow-hidden rounded-3xl shadow-xl -mt-6">
-              <img
+              <Image
                 src="/images/business/landscaping-3.jpg"
                 alt="조경식재 시공 현장"
-                className="w-full h-full object-cover"
+                fill
+                sizes="(min-width: 1024px) 25vw, 50vw"
+                className="object-cover"
               />
             </div>
           </motion.div>
