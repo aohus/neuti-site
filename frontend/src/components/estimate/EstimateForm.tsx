@@ -91,7 +91,7 @@ export default function EstimateForm() {
           </svg>
         </div>
         <h3 className="text-2xl font-bold text-green-800 mb-4">견적 요청이 접수되었습니다</h3>
-        <p className="text-green-700 mb-2 font-medium">1영업일 이내 견적서를 보내드리겠습니다.</p>
+        <p className="text-green-700 mb-2 font-medium">담당자가 확인 후 현장 일정을 잡아 연락드리겠습니다.</p>
         <p className="text-green-600 mb-8 text-sm">실적증명서·자격증빙도 함께 발송됩니다.</p>
         <button
           onClick={() => {
@@ -212,7 +212,7 @@ export default function EstimateForm() {
       {/* 안내 문구 */}
       <div className="bg-green-50 rounded-2xl p-5 space-y-2">
         <p className="text-sm font-bold text-green-800 flex items-center gap-2">
-          <span className="text-green-600">&#10003;</span> 견적서 발급: 접수 후 1영업일 이내
+          <span className="text-green-600">&#10003;</span> 견적서 발급: 현장 확인 후
         </p>
         <p className="text-sm font-bold text-green-800 flex items-center gap-2">
           <span className="text-green-600">&#10003;</span> 실적증명서·자격증빙 견적서와 함께 발송

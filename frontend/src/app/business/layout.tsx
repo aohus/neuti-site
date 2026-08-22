@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "주요 사업",
   description:
-    "나무병원(수목 진단·치료·방제) 및 조경식재(설계·시공·유지관리) 전문. 수의계약 가능, 견적 즉일 발급. 느티나무병원 협동조합.",
+    "나무병원(수목 진단·치료·방제) 및 조경식재(설계·시공·유지관리) 전문. 수의계약 가능, 현장 확인 후 견적 발급. 느티나무병원 협동조합.",
   openGraph: {
     title: "주요 사업 | 느티나무병원 협동조합",
     description:

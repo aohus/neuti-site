@@ -66,7 +66,7 @@ function RequestTabs() {
                 <ul className="text-sm text-green-800 space-y-4 font-bold leading-relaxed">
                   <li className="flex gap-3">
                     <span className="text-green-600 shrink-0">&#10003;</span>
-                    견적서 즉일~1영업일 발급
+                    현장 확인 후 견적서 발급
                   </li>
                   <li className="flex gap-3">
                     <span className="text-green-600 shrink-0">&#10003;</span>
