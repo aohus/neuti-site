@@ -104,7 +104,24 @@ jobs:
 
           ssh_cmd="ssh -i $key_file -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
-          $ssh_cmd "$SSH_USER@$SSH_HOST" 'mkdir -p ~/workspace/neuti-site/backend/uploads'
+          # uploads/ 에는 배포 유저가 아닌 root 소유 파일·디렉터리가 섞인다:
+          # bind mount 경로를 docker 데몬(root)이 만들거나, 컨테이너가 root 로
+          # 파일을 쓰거나, 과거에 docker cp 로 이미지를 넣었을 때 그렇게 된다.
+          # 배포 유저는 root 소유 디렉터리 안에 임시 파일을 만들 수 없어서
+          # rsync 가 mkstemp: Permission denied (13) → exit 23 으로 죽는다.
+          # 그래서 rsync 전에 소유권을 배포 유저로 되돌린다. 백엔드 컨테이너는
+          # root 로 돌기 때문에 소유권이 바뀌어도 앱의 업로드 쓰기에는 영향 없다.
+          $ssh_cmd "$SSH_USER@$SSH_HOST" '
+            set -e
+            uploads="$HOME/workspace/neuti-site/backend/uploads"
+            mkdir -p "$uploads"
+            if [ -n "$(find "$uploads" ! -user "$(id -u)" -print -quit)" ]; then
+              echo "uploads/ 에 다른 소유자의 파일이 있어 소유권을 정규화합니다"
+              docker run --rm -v "$uploads:/uploads" busybox \
+                chown -R "$(id -u):$(id -g)" /uploads \
+                || { echo "ERROR: uploads 소유권 정규화 실패 (docker 실행 불가?)"; exit 1; }
+            fi
+          '
 
           rsync -az --stats -e "$ssh_cmd" \
             backend/uploads/ \
