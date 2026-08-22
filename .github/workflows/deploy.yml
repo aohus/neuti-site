@@ -89,6 +89,7 @@ jobs:
       #
       # --delete 는 절대 쓰지 말 것: 같은 디렉터리에 관리자 UI 로 업로드된
       # 파일(uuid.jpg)이 함께 있고, 그건 git 에 없으므로 지워진다.
+      # 대신 rsync 뒤에서 '저장소에 없는 하위 디렉터리'만 골라 정리한다.
       - name: Sync uploads to homeserver
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -126,6 +127,30 @@ jobs:
           rsync -az --stats -e "$ssh_cmd" \
             backend/uploads/ \
             "$SSH_USER@$SSH_HOST:workspace/neuti-site/backend/uploads/"
+
+          # 저장소에서 사라진 시공사례 이미지 폴더를 서버에서도 정리한다.
+          # 삭제 대상은 uploads/ 바로 아래 '디렉터리'뿐이다. 관리자 UI 업로드분은
+          # upload_image() 가 uploads/ 최상위에 uuid.jpg 로 저장하는 '파일'이라
+          # 이 로직에 절대 걸리지 않는다 (그래서 rsync --delete 를 쓰지 않는다).
+          # comm 은 양쪽 입력이 '같은 기준'으로 정렬돼야 한다. 러너와 홈서버의
+          # 로케일이 다르면 한글 정렬 순서가 어긋나 멀쩡한 폴더를 지울 수 있으므로
+          # 양쪽 모두 LC_ALL=C (바이트 순) 로 고정한다.
+          expected_dirs="$(find backend/uploads -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | LC_ALL=C sort)"
+          printf '%s\n' "$expected_dirs" \
+            | $ssh_cmd "$SSH_USER@$SSH_HOST" '
+              set -e
+              uploads="$HOME/workspace/neuti-site/backend/uploads"
+              expected="$(mktemp)"
+              trap '\''rm -f "$expected"'\'' EXIT
+              LC_ALL=C sort > "$expected"
+              find "$uploads" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | LC_ALL=C sort \
+                | comm -23 - "$expected" \
+                | while IFS= read -r stale; do
+                    [ -n "$stale" ] || continue
+                    echo "삭제(저장소에 없는 업로드 폴더): $stale"
+                    rm -rf "${uploads:?}/${stale:?}"
+                  done
+            '
 
       - name: Deploy services
         uses: appleboy/ssh-action@v1
