@@ -12,15 +12,15 @@ Create Date: 2026-08-22 00:00:00.000000
 한 번 백필해 둔다. 백필되지 않은 행(관리자 UI 등록분)은 NULL 로 남아
 동기화·정리 대상에서 영구히 제외된다.
 """
+
 from typing import Sequence, Union
 
-from alembic import op
 import sqlalchemy as sa
-
+from alembic import op
 
 # revision identifiers, used by Alembic.
-revision: str = 'e5f6g7h8i9j0'
-down_revision: Union[str, Sequence[str], None] = 'd4e5f6g7h8i9'
+revision: str = "e5f6g7h8i9j0"
+down_revision: Union[str, Sequence[str], None] = "d4e5f6g7h8i9"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -38,7 +38,7 @@ LEGACY_TITLE_TO_SOURCE_FILE: dict[str, str] = {
     "[상원초등학교] 아이들의 꿈이 자라는 숲, 수목 이식 및 식재 전략 컨설팅": "상원초등학교_작업",
     "수정, 중원구 공원 계절꽃 식재 및 유지관리": "수정,_중원구_공원_계절꽃_식재_및_유지관리",
     "시청사 및 시청공원 잔디깎이": "시청사_및_시청공원_잔디깎이",
-    "아트센트 수목 치료": "아트센트_수목_치료",
+    "아트센터 수목 치료": "아트센터_수목_치료",
     "평택보성아파트 수목 정밀 진단 및 수세 회복 시공 사례": "평택보성아파트_관리",
     "도시의 표정을 바꾸는 생명의 색채, 하대원동 계절꽃 식재 프로젝트": "하대원동_계절꽃식재",
     "하대원동 소나무 고사목 제거 및 수목 방제: 도심 속 녹지의 생명력을 복원하다": "하대원동_소나무_고사목제거",
@@ -47,28 +47,22 @@ LEGACY_TITLE_TO_SOURCE_FILE: dict[str, str] = {
 
 def upgrade() -> None:
     """Add subtitle / source_file columns and backfill source_file."""
-    op.add_column('performance', sa.Column('subtitle', sa.String(), nullable=True))
-    op.add_column('performance', sa.Column('source_file', sa.String(), nullable=True))
-    op.create_index(
-        op.f('ix_performance_source_file'), 'performance', ['source_file'], unique=False
-    )
+    op.add_column("performance", sa.Column("subtitle", sa.String(), nullable=True))
+    op.add_column("performance", sa.Column("source_file", sa.String(), nullable=True))
+    op.create_index(op.f("ix_performance_source_file"), "performance", ["source_file"], unique=False)
 
     performance = sa.table(
-        'performance',
-        sa.column('title', sa.String),
-        sa.column('source_file', sa.String),
+        "performance",
+        sa.column("title", sa.String),
+        sa.column("source_file", sa.String),
     )
     conn = op.get_bind()
     for legacy_title, source_file in LEGACY_TITLE_TO_SOURCE_FILE.items():
-        conn.execute(
-            performance.update()
-            .where(performance.c.title == legacy_title)
-            .values(source_file=source_file)
-        )
+        conn.execute(performance.update().where(performance.c.title == legacy_title).values(source_file=source_file))
 
 
 def downgrade() -> None:
     """Remove subtitle / source_file columns."""
-    op.drop_index(op.f('ix_performance_source_file'), table_name='performance')
-    op.drop_column('performance', 'source_file')
-    op.drop_column('performance', 'subtitle')
+    op.drop_index(op.f("ix_performance_source_file"), table_name="performance")
+    op.drop_column("performance", "source_file")
+    op.drop_column("performance", "subtitle")
