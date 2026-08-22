@@ -182,8 +182,16 @@ export default function PerformanceDetailPage() {
                   />
                 ),
                 blockquote: ({ node, children, ...props }) => {
-                  const firstChild = node?.children[0] as any
-                  const firstText = firstChild?.children[0]?.value || ''
+                  // hast 의 blockquote 자식에는 줄바꿈 텍스트 노드가 섞여 들어온다.
+                  // (텍스트 노드에는 children 이 없으므로) 첫 엘리먼트만 골라야 한다.
+                  const firstElement = node?.children?.find(
+                    (child: any) => child.type === 'element'
+                  ) as any
+                  const firstTextNode = firstElement?.children?.[0] as any
+                  const firstText =
+                    typeof firstTextNode?.value === 'string'
+                      ? firstTextNode.value
+                      : ''
                   const match = firstText.match(
                     /^\!\!(INFO|TIP|WARNING|SUCCESS)\]\s*(.*)/i
                   )
@@ -193,8 +201,8 @@ export default function PerformanceDetailPage() {
                     const title =
                       match[2] || (type === 'SUCCESS' ? '시공 결과' : type)
 
-                    if (firstChild?.children[0]) {
-                      firstChild.children[0].value = firstText.replace(
+                    if (firstTextNode) {
+                      firstTextNode.value = firstText.replace(
                         /^\!.*?\\\]\s*/,
                         ''
                       )
