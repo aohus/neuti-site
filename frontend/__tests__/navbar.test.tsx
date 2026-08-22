@@ -24,10 +24,7 @@ describe('Navbar', () => {
       { name: '홈', href: '/' },
       { name: '회사소개', href: '/about' },
       { name: '주요사업', href: '/business' },
-      { name: '주요실적', href: '/performance' },
-      { name: '공지사항', href: '/notice' },
-      { name: '수목진단의뢰', href: '/request' },
-      { name: '시공/견적문의', href: '/qna' },
+      { name: '시공 사례', href: '/performance' },
     ]
 
     links.forEach((link) => {
@@ -35,5 +32,35 @@ describe('Navbar', () => {
       expect(element).toBeInTheDocument()
       expect(element.closest('a')).toHaveAttribute('href', link.href)
     })
+  })
+
+  it('renders call-to-action links', () => {
+    render(
+      <AuthProvider>
+        <Navbar />
+      </AuthProvider>
+    )
+
+    const ctas = [
+      { name: '수의계약', href: '/contract' },
+      { name: '견적·상담문의', href: '/request' },
+    ]
+
+    ctas.forEach((cta) => {
+      const element = screen.getByText(cta.name)
+      expect(element).toBeInTheDocument()
+      expect(element.closest('a')).toHaveAttribute('href', cta.href)
+    })
+  })
+
+  it('hides admin-only links when not authenticated', () => {
+    render(
+      <AuthProvider>
+        <Navbar />
+      </AuthProvider>
+    )
+
+    expect(screen.queryByText('문의 관리')).not.toBeInTheDocument()
+    expect(screen.queryByText('로그아웃')).not.toBeInTheDocument()
   })
 })

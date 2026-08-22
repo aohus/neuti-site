@@ -78,9 +78,10 @@ describe('EditPerformancePage', () => {
     const submitButton = screen.getByText('저장');
     fireEvent.click(submitButton);
 
+    // 부분 수정이므로 백엔드의 PATCH /performance/{id} 를 호출한다
     await waitFor(() => {
         expect(global.fetch).toHaveBeenCalledWith('/backend-api/performance/1', expect.objectContaining({
-            method: 'PUT',
+            method: 'PATCH',
             body: expect.stringContaining('Updated Title'),
         }));
     });
