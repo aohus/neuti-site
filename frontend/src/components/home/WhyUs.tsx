@@ -40,16 +40,16 @@ export const strengths = [
 
 export default function WhyUs() {
   return (
-    <section data-section="why-us" className="bg-gray-50/60 py-20 md:py-28">
+    <section data-section="why-us" className="bg-gray-50/60 py-12 sm:py-16 md:py-28">
       <Container>
-        <div className="mx-auto mb-14 max-w-2xl text-center">
+        <div className="mx-auto mb-8 max-w-2xl text-center sm:mb-10 md:mb-14">
           <p className="mb-3 text-xs font-black tracking-[0.2em] text-green-600 uppercase">
             Our Way
           </p>
-          <h2 className="text-[2rem] font-black tracking-tighter text-gray-900 md:text-[2.75rem]">
+          <h2 className="text-[1.75rem] font-black tracking-tighter text-gray-900 md:text-[2.75rem]">
             우리가 일하는 방식
           </h2>
-          <p className="mt-4 leading-relaxed font-bold text-gray-500">
+          <p className="mt-3 text-sm leading-relaxed font-bold text-gray-500 md:mt-4 md:text-base">
             나무 한 그루부터 계절 화단 하나까지,
             <br className="hidden md:block" />
             심는 일보다 살리는 일을 먼저 생각합니다.
@@ -60,11 +60,12 @@ export default function WhyUs() {
           {strengths.map((item, idx) => (
             <motion.div
               key={item.title}
+              data-reveal
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.06 }}
-              className="rounded-3xl border-2 border-gray-100 bg-white p-7 transition-all hover:border-green-200 hover:shadow-xl md:p-9"
+              className="rounded-3xl border-2 border-gray-100 bg-white p-5 transition-all hover:border-green-200 hover:shadow-xl sm:p-7 md:p-9"
             >
               <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-green-50 text-green-600">
                 <item.icon className="h-6 w-6" />

@@ -25,31 +25,34 @@ const defaultButtons: CTAButton[] = [
 
 export default function FinalCTA({ buttons = defaultButtons }: FinalCTAProps) {
   return (
-    <section data-section="cta" className="py-16 md:py-32 bg-green-700 text-white text-center relative overflow-hidden">
+    <section data-section="cta" className="py-14 sm:py-16 md:py-32 bg-green-700 text-white text-center relative overflow-hidden">
       {/* Background Decorative Circles */}
       <div className="absolute top-0 left-0 w-64 md:w-96 h-64 md:h-96 bg-white/5 rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl" />
       <div className="absolute bottom-0 right-0 w-64 md:w-96 h-64 md:h-96 bg-green-900/50 rounded-full translate-x-1/2 translate-y-1/2 blur-3xl" />
 
       <Container className="relative z-10">
         <motion.h2
+          data-reveal
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="text-3xl md:text-4xl lg:text-6xl font-extrabold mb-6 md:mb-10 leading-tight tracking-tighter"
         >
-          도심 속 녹지 공간은<br/>우리 삶의 쉼터이자 삶터입니다
+          도심 속 녹지 공간은<br className="hidden sm:block" />우리 삶의 쉼터이자 삶터입니다
         </motion.h2>
         <motion.p
+          data-reveal
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2 }}
-          className="text-base md:text-xl lg:text-2xl text-green-100 mb-10 md:mb-16 font-light opacity-90 max-w-3xl mx-auto leading-relaxed"
+          className="text-base md:text-xl lg:text-2xl text-green-100 mb-8 md:mb-16 font-light opacity-90 max-w-3xl mx-auto leading-relaxed"
         >
           건강하고 아름다운 마을 환경을 가꾸는 일, <br className="hidden md:block" />
           사회적 가치를 실현하는 나무병원이 정성을 다해 함께하겠습니다.
         </motion.p>
         <motion.div
+          data-reveal
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
@@ -75,6 +78,7 @@ export default function FinalCTA({ buttons = defaultButtons }: FinalCTAProps) {
         {/* 전화 채널 — 모바일은 하단 고정 바(MobileBottomCTA)가 담당하지만
             데스크톱에는 푸터 외에 전화번호가 없어 여기서 노출한다. */}
         <motion.div
+          data-reveal
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
