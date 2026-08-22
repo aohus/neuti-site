@@ -1,9 +1,16 @@
 'use client'
 
+import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import Container from '@/components/common/Container'
+import {
+  contractProjects,
+  getTotalProjectCount,
+  VISIBLE_PROJECT_COUNT,
+} from '@/data/contract-projects'
+import type { ContractCategory } from '@/data/contract-projects'
 import {
   Phone,
   Mail,
@@ -23,75 +30,28 @@ import {
   HardHat,
   BookCheck,
   ChevronRight,
-  Download,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react'
 
 
-/* ─── Service Cards with representative projects ─── */
-/* filterKey = 시공사례 DB의 job_main_category 값 */
-const services = [
-  {
-    key: '꽃식재', icon: Trees, label: '계절꽃 식재',
-    filterKey: '꽃식재',
-    projects: [
-      { name: '정자역광장 대형화분/걸이화분 식재', client: '정자1동 행정복지센터', year: '2025' },
-      { name: '수정, 중원구 공원 계절꽃 식재 및 유지관리', client: '성남시청', year: '2025' },
-      { name: '하대원동 봄/여름/가을 계절꽃식재', client: '태평4동행정복지센터', year: '2025' },
-      { name: '마을정원 조성사업', client: '태평4동행정복지센터', year: '2024' },
-    ],
-  },
-  {
-    key: '경관녹지', icon: Leaf, label: '녹지관리',
-    filterKey: '경관녹지',
-    projects: [
-      { name: '녹지대 관리공사 전정', client: '중원구청', year: '2025' },
-      { name: '동부검찰청 제초예초', client: '서울동부지방검찰청', year: '2025' },
-      { name: '금곡공원 식재', client: '성남시도시개발공사', year: '2025' },
-      { name: '성남시청 녹지관리', client: '성남시청', year: '2023' },
-    ],
-  },
-  {
-    key: '소나무전정', icon: TreePine, label: '소나무 전정',
-    filterKey: '소나무전정',
-    projects: [
-      { name: '동부검찰청 소나무전정', client: '서울동부지방검찰청', year: '2025' },
-      { name: '과천정부청사 소나무전정/향나무전정', client: '행정안전부', year: '2024' },
-      { name: '금곡공원 수목전정', client: '성남시도시개발공사', year: '2024' },
-    ],
-  },
-  {
-    key: '병해충방제', icon: Bug, label: '병해충 방제',
-    filterKey: '병해충방제',
-    projects: [
-      { name: '공원 돌발해충 방제공사', client: '성남시청', year: '2025' },
-      { name: '금곡공원 방제', client: '성남시도시개발공사', year: '2025' },
-      { name: '늘푸른초등학교 방제', client: '늘푸른초등학교', year: '2025' },
-      { name: '단대/양지공원 방제공사', client: '성남시청', year: '2024' },
-      { name: '대원공원 병해충방제', client: '성남시청', year: '2022' },
+/* ─── Service Cards ─── */
+/* key = 시공사례 DB의 job_main_category 값이자 contract-projects 의 카테고리 키.
+   두 값을 일치시켜야 "시공 사례 보기" 필터가 빈 목록이 되지 않는다. */
+type Service = {
+  key: ContractCategory
+  icon: typeof Trees
+  label: string
+}
 
-    ],
-  },
-  {
-    key: '위험목제거', icon: AlertTriangle, label: '위험목 제거',
-    filterKey: '위험목제거',
-    projects: [
-      { name: '녹지대 관리공사 고사목제거', client: '중원구청', year: '2025' },
-      { name: '경기도나무은행 고사목제거', client: '경기도', year: '2024' },
-      { name: '과천정부청사 고사목제거', client: '행정안전부', year: '2024' },
-    ],
-  },
-  {
-    key: '수목진단치료', icon: Sprout, label: '수목 진단·치료',
-    filterKey: '수목진단치료',
-    projects: [
-      { name: '상원초등학교 대형목 이식', client: '상원초등학교', year: '2024' },
-      { name: '단대/양지공원 예찰·효과분석', client: '성남시청', year: '2024' },
-      { name: '신구대학교 식물원 예찰', client: '신구대학교', year: '2024' },
-      { name: '평택보성아파트 수목 진단 및 수세 회복', client: '평택보성아파트', year: '2023' },
-    ],
-  },
+const services: Service[] = [
+  { key: '꽃식재', icon: Trees, label: '계절꽃 식재' },
+  { key: '녹지관리', icon: Leaf, label: '녹지관리' },
+  { key: '소나무전정', icon: TreePine, label: '수목·소나무 전정' },
+  { key: '병해충방제', icon: Bug, label: '병해충 방제' },
+  { key: '위험목제거', icon: AlertTriangle, label: '위험목 제거' },
+  { key: '수목진단치료', icon: Sprout, label: '수목 진단·치료' },
 ]
-
 /* ─── Qualifications ─── */
 const qualifications = [
   {
@@ -120,6 +80,16 @@ const clients = [
   { name: '성남도시개발공사', src: '/images/clients/seongnam_dev.jpg' },
   { name: '성남시', src: '/images/clients/seongnam_city.png' },
   { name: '정부청사관리본부', src: '/images/clients/gov-complex.png' },
+]
+
+/* 로고가 없는 발주처는 텍스트로 병기 */
+const otherClients = [
+  '서울동부지방검찰청',
+  '서울강남구청',
+  '성남교육지원청',
+  '성남시 중원구청',
+  '성남시 분당구청',
+  '성남시장례문화사업소',
 ]
 
 /* ─── Process Steps ─── */
@@ -155,7 +125,72 @@ function FadeIn({
   )
 }
 
+/* ─── 카테고리별 실적 목록 ───
+   접힌 상태에서는 상위 VISIBLE_PROJECT_COUNT 건만 노출해 카드 높이를 일정하게
+   유지하고, 나머지는 카드 안에서 펼친다. */
+function ProjectList({
+  category,
+  label,
+}: {
+  category: ContractCategory
+  label: string
+}) {
+  const [isExpanded, setIsExpanded] = useState(false)
+
+  // category 가 리터럴 유니온이라 조회는 전수 보장된다. 폴백은 두지 않는다.
+  const projects = contractProjects[category]
+  const hiddenCount = projects.length - VISIBLE_PROJECT_COUNT
+  const visible = isExpanded ? projects : projects.slice(0, VISIBLE_PROJECT_COUNT)
+
+  return (
+    <div className="mb-4 flex-1">
+      <ul className="space-y-2">
+        {visible.map((p) => (
+          <li
+            key={`${p.name}-${p.year}`}
+            className="text-sm text-gray-500 flex items-start gap-2"
+          >
+            <span className="text-green-500 mt-1 shrink-0">&#8226;</span>
+            <span>
+              <span className="font-bold text-gray-700">{p.name}</span>
+              <span className="text-gray-400 text-xs ml-1">
+                ({p.client}, {p.year})
+              </span>
+            </span>
+          </li>
+        ))}
+      </ul>
+
+      {hiddenCount > 0 && (
+        <button
+          type="button"
+          onClick={() => setIsExpanded((prev) => !prev)}
+          aria-expanded={isExpanded}
+          aria-label={
+            isExpanded
+              ? `${label} 실적 접기`
+              : `${label} 실적 ${hiddenCount}건 더보기`
+          }
+          className="mt-3 flex items-center gap-1 text-xs font-bold text-green-600 hover:text-green-700 transition-colors"
+        >
+          {isExpanded ? (
+            <>
+              접기 <ChevronUp className="w-3 h-3" />
+            </>
+          ) : (
+            <>
+              +{hiddenCount}건 더보기 <ChevronDown className="w-3 h-3" />
+            </>
+          )}
+        </button>
+      )}
+    </div>
+  )
+}
+
 export default function ContractContent() {
+  const totalProjectCount = getTotalProjectCount()
+
   return (
     <div className="bg-white pb-20">
       {/* ── Hero ── */}
@@ -210,6 +245,9 @@ export default function ContractContent() {
             <h2 className="text-3xl md:text-4xl font-black text-gray-900 tracking-tight">
               수의계약 가능 서비스
             </h2>
+            <p className="mt-4 text-gray-500 font-bold">
+              2022~2026년 수행 실적 {totalProjectCount}건 전체 수록
+            </p>
           </FadeIn>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 max-w-5xl mx-auto">
             {services.map((svc, i) => (
@@ -223,19 +261,9 @@ export default function ContractContent() {
                       {svc.label}
                     </p>
                   </div>
-                  <ul className="space-y-2 mb-4 flex-1">
-                    {svc.projects.map((p) => (
-                      <li key={p.name + p.year} className="text-sm text-gray-500 flex items-start gap-2">
-                        <span className="text-green-500 mt-1 shrink-0">&#8226;</span>
-                        <span>
-                          <span className="font-bold text-gray-700">{p.name}</span>
-                          <span className="text-gray-400 text-xs ml-1">({p.client}, {p.year})</span>
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
+                  <ProjectList category={svc.key} label={svc.label} />
                   <Link
-                    href={`/performance?job_main=${encodeURIComponent(svc.filterKey)}`}
+                    href={`/performance?job_main=${encodeURIComponent(svc.key)}`}
                     className="text-xs font-bold text-gray-400 hover:text-green-600 flex items-center gap-1 transition-colors"
                   >
                     시공 사례 보기 <ChevronRight className="w-3 h-3" />
@@ -306,6 +334,18 @@ export default function ContractContent() {
               </FadeIn>
             ))}
           </div>
+          <FadeIn delay={0.3}>
+            <ul className="mt-12 flex flex-wrap justify-center gap-2 max-w-3xl mx-auto">
+              {otherClients.map((name) => (
+                <li
+                  key={name}
+                  className="rounded-full border border-gray-200 bg-white px-4 py-2 text-xs md:text-sm font-bold text-gray-500"
+                >
+                  {name}
+                </li>
+              ))}
+            </ul>
+          </FadeIn>
         </Container>
       </section>
 
