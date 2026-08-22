@@ -184,6 +184,7 @@ logs/
 .vscode/
 media/
 .ai/
+naver_blog/
 
 # ai agent configs
 .claude/
