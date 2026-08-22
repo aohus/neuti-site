@@ -54,8 +54,8 @@ export const contractProjects = {
     { name: '금곡공원 수목 종합관리', client: '성남도시개발공사', year: '2026' },
     { name: '황새울체육공원 수목 종합관리', client: '성남도시개발공사', year: '2026' },
     { name: '어린이공원 등 조경수목 보식공사', client: '성남시 분당구청', year: '2026' },
-    { name: '늘푸른초등학교 교내 화단조성·수목관리·방제', client: '성남교육지원청', year: '2026' },
-    { name: '왕남초등학교 화단조성·예초·제초', client: '성남교육지원청', year: '2026' },
+    { name: '늘푸른초등학교 교내 화단조성·수목관리·방제', client: '늘푸른초등학교', year: '2026' },
+    { name: '왕남초등학교 화단조성·예초·제초', client: '왕남초등학교', year: '2026' },
     { name: '정부과천청사 옥상미관 관리', client: '정부과천청사관리소', year: '2026' },
     { name: '성남시장례문화사업소 조경수목 정비', client: '성남시장례문화사업소', year: '2026' },
     { name: '녹지대 관리공사(도촌동·갈현동) 전정·제초·방제', client: '성남시 중원구청', year: '2025' },
@@ -64,7 +64,7 @@ export const contractProjects = {
     { name: '황새울체육공원 수목 종합관리', client: '성남도시개발공사', year: '2025' },
     { name: '금광2동 유휴부지 녹지대 조성', client: '성남시 금광2동', year: '2025' },
     { name: '과천청사(공수처) 리모델링 조경', client: '고위공직자범죄수사처', year: '2025' },
-    { name: '늘푸른초등학교 수목관리 및 예제초', client: '성남교육지원청', year: '2025' },
+    { name: '늘푸른초등학교 수목관리 및 예제초', client: '늘푸른초등학교', year: '2025' },
     { name: '과천청사 눈주목 식재', client: '정부과천청사관리소', year: '2025' },
     { name: '녹지대 관리공사', client: '성남시 중원구청', year: '2024' },
     { name: '성남시청 녹지관리공사', client: '성남시청', year: '2023' },
@@ -81,8 +81,8 @@ export const contractProjects = {
   병해충방제: [
     { name: '순환로 등 가로수·조경수 병해충 방제공사', client: '성남시 중원구청', year: '2026' },
     { name: '동부검찰청 병해충 방제공사', client: '서울동부지방검찰청', year: '2026' },
-    { name: '수도여고 수목 방제', client: '성남교육지원청', year: '2026' },
-    { name: '정자초등학교 수목 방제', client: '성남교육지원청', year: '2026' },
+    { name: '수도여자고등학교 수목 방제', client: '수도여자고등학교', year: '2026' },
+    { name: '정자초등학교 수목 방제', client: '정자초등학교', year: '2026' },
     { name: '성남사회복지관 수목 방제', client: '성남사회복지관', year: '2026' },
     { name: '수정·중원구 산림 돌발해충 방제', client: '성남시청', year: '2025' },
     { name: '동부검찰청 병해충 방제(2·3차)', client: '서울동부지방검찰청', year: '2025' },
@@ -113,8 +113,10 @@ export type ContractCategory = keyof typeof contractProjects
 
 /** 전체 실적 건수. 섹션 안내 문구가 실제 수록 건수와 어긋나지 않도록 파생시킨다. */
 export function getTotalProjectCount(): number {
-  return Object.values(contractProjects).reduce(
-    (sum, list) => sum + list.length,
-    0
-  )
+  return getAllProjects().length
+}
+
+/** 카테고리 구분 없이 펼친 전체 실적. */
+function getAllProjects(): ContractProject[] {
+  return Object.values(contractProjects).flat()
 }
