@@ -73,3 +73,24 @@ describe('RecentPortfolio', () => {
     expect(link).toHaveAttribute('href', '/performance')
   })
 })
+
+/**
+ * 회귀 방지 — `/uploads/*` 는 next/image 최적화를 거치면 안 된다.
+ *
+ * uploads 는 프론트 컨테이너의 public/ 에 없고 next.config 의 rewrite 로
+ * 백엔드에서 프록시된다. 그런데 이미지 최적화기는 로컬 경로를 처리할 때
+ * 이 rewrite 를 타지 않아서, 운영에서 /_next/image 가 400
+ * ("The requested resource isn't a valid image") 을 내고 썸네일이 전부 깨졌다.
+ * public/ 이미지(기술력 섹션 등)는 정상이라 uploads 만의 문제다.
+ */
+describe('RecentPortfolio 썸네일 경로', () => {
+  beforeEach(() => jest.clearAllMocks())
+
+  it('업로드 썸네일을 /_next/image 로 감싸지 않고 원본 경로로 내보낸다', async () => {
+    mockGet.mockResolvedValue([makePerformance(7)])
+    render(<RecentPortfolio />)
+
+    const img = await screen.findByAltText('시공사례 7')
+    expect(img.getAttribute('src')).toBe('/uploads/7.jpg')
+  })
+})

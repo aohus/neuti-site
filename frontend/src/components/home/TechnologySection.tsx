@@ -293,12 +293,15 @@ const FilteredPerformanceCards = ({ tabTitle }: { tabTitle: string }) => {
           >
             {p.thumbnail_url && (
               <div className="relative aspect-[16/9] overflow-hidden bg-gray-100">
-                <Image
+                {/* uploads 는 next/image 최적화를 태우면 운영에서 400 이 난다.
+                    RecentPortfolio 의 같은 주석 참고. */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
                   src={p.thumbnail_url}
                   alt={p.title}
-                  fill
-                  sizes="(min-width: 1024px) 330px, (min-width: 768px) 33vw, 100vw"
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                  decoding="async"
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
             )}
