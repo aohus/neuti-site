@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
@@ -59,6 +60,7 @@ export default function RecentPortfolio() {
           {items.map((item, idx) => (
             <motion.div
               key={item.id}
+              data-reveal
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -70,13 +72,12 @@ export default function RecentPortfolio() {
               >
                 {item.thumbnail_url && (
                   <div className="relative aspect-[16/10] overflow-hidden bg-gray-100">
-                    {/* next/image 미사용 — 업로드 이미지는 커밋 전 압축해 들어온다 */}
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
+                    <Image
                       src={item.thumbnail_url}
                       alt={item.title}
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      loading="lazy"
+                      fill
+                      sizes="(min-width: 1280px) 390px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                     {item.job_main_category && (
                       <span className="absolute top-3 left-3 rounded-full bg-green-600 px-3 py-1 text-[10px] font-black tracking-wider text-white">

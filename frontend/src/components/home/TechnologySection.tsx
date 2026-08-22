@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Maximize2, X, ChevronLeft, ChevronRight, ArrowRight, Pencil } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
 import Container from '../common/Container'
 import { technologyItems as staticItems, TechnologyItem, TechnologyImage } from '@/data/home-content'
@@ -76,8 +77,12 @@ const Lightbox = ({
       className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center p-4 md:p-10"
       onClick={onClose}
     >
-      <button onClick={onClose} className="absolute top-6 right-6 text-white/70 hover:text-white z-[110] p-2 bg-white/10 rounded-full transition-colors">
-        <X size={32} />
+      <button
+        onClick={onClose}
+        aria-label="이미지 닫기"
+        className="absolute top-4 right-4 md:top-6 md:right-6 text-white/70 hover:text-white z-[110] p-2 bg-white/10 rounded-full transition-colors"
+      >
+        <X className="w-6 h-6 md:w-8 md:h-8" />
       </button>
 
       <div className="relative w-full h-full flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
@@ -90,12 +95,14 @@ const Lightbox = ({
             transition={{ duration: 0.2 }}
             className="relative w-full h-full flex items-center justify-center"
           >
-            <img
+            <Image
               src={images[currentIndex].src}
               alt={images[currentIndex].alt}
-              className="max-w-full max-h-full object-contain shadow-2xl"
+              fill
+              sizes="100vw"
+              className="object-contain shadow-2xl"
             />
-            <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-black/50 backdrop-blur-md px-6 py-2 rounded-full text-white text-sm font-black border border-white/20 tracking-wider">
+            <div className="absolute top-4 md:top-6 left-1/2 -translate-x-1/2 max-w-[calc(100vw-6rem)] truncate bg-black/50 backdrop-blur-md px-4 py-1.5 md:px-6 md:py-2 rounded-full text-white text-xs md:text-sm font-black border border-white/20 tracking-wider">
               {images[currentIndex].tag} <span className="mx-2 opacity-30">|</span> {currentIndex + 1} / {images.length}
             </div>
           </motion.div>
@@ -103,11 +110,19 @@ const Lightbox = ({
 
         {images.length > 1 && (
           <>
-            <button onClick={prev} className="absolute left-0 p-4 text-white/30 hover:text-white transition-all">
-              <ChevronLeft size={64} strokeWidth={1} />
+            <button
+              onClick={prev}
+              aria-label="이전 이미지"
+              className="absolute left-0 p-2 md:p-4 text-white/50 md:text-white/30 hover:text-white transition-all"
+            >
+              <ChevronLeft className="w-8 h-8 md:w-16 md:h-16" strokeWidth={1} />
             </button>
-            <button onClick={next} className="absolute right-0 p-4 text-white/30 hover:text-white transition-all">
-              <ChevronRight size={64} strokeWidth={1} />
+            <button
+              onClick={next}
+              aria-label="다음 이미지"
+              className="absolute right-0 p-2 md:p-4 text-white/50 md:text-white/30 hover:text-white transition-all"
+            >
+              <ChevronRight className="w-8 h-8 md:w-16 md:h-16" strokeWidth={1} />
             </button>
           </>
         )}
@@ -144,11 +159,12 @@ const BeforeAfterLayout = ({
                   className="relative aspect-[16/9] rounded-2xl overflow-hidden cursor-zoom-in group bg-gray-100"
                   onClick={() => onImageClick(idx)}
                 >
-                  <img
+                  <Image
                     src={img.src}
                     alt={img.alt}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    loading="lazy"
+                    fill
+                    sizes="(min-width: 1024px) 500px, (min-width: 768px) 50vw, 100vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute bottom-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
                     <div className="p-2 bg-white/20 backdrop-blur-md rounded-full text-white">
@@ -173,7 +189,7 @@ const BeforeAfterLayout = ({
 
       {/* Extra images in smaller grid */}
       {extraImages.length > 0 && (
-        <div className={`grid grid-cols-2 ${extraImages.length >= 3 ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-3`}>
+        <div className={`mt-4 md:mt-0 grid grid-cols-1 sm:grid-cols-2 ${extraImages.length >= 3 ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-3`}>
           {extraImages.map((img) => {
             const idx = images.indexOf(img)
             return (
@@ -182,11 +198,12 @@ const BeforeAfterLayout = ({
                   className="relative aspect-[16/9] rounded-xl overflow-hidden cursor-zoom-in group bg-gray-100"
                   onClick={() => onImageClick(idx)}
                 >
-                  <img
+                  <Image
                     src={img.src}
                     alt={img.alt}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    loading="lazy"
+                    fill
+                    sizes="(min-width: 1024px) 335px, (min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
                 <p className="text-center mt-3 text-sm font-black text-gray-400">
@@ -211,18 +228,19 @@ const PhotoGridLayout = ({
 }) => {
   const images = item.images
   return (
-    <div className={`grid grid-cols-2 ${images.length >= 3 ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-4 md:gap-6`}>
+    <div className={`grid grid-cols-1 sm:grid-cols-2 ${images.length >= 3 ? 'md:grid-cols-3' : 'md:grid-cols-2'} gap-4 md:gap-6`}>
       {images.map((img, idx) => (
         <div key={idx}>
           <div
             className="relative aspect-[16/9] rounded-2xl overflow-hidden cursor-zoom-in group bg-gray-100"
             onClick={() => onImageClick(idx)}
           >
-            <img
+            <Image
               src={img.src}
               alt={img.alt}
-              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              loading="lazy"
+              fill
+              sizes="(min-width: 1024px) 325px, (min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw"
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
             />
             <div className="absolute bottom-4 right-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
               <div className="p-2 bg-white/20 backdrop-blur-md rounded-full text-white">
@@ -274,12 +292,13 @@ const FilteredPerformanceCards = ({ tabTitle }: { tabTitle: string }) => {
             className="group rounded-xl overflow-hidden border border-gray-100 bg-white hover:shadow-lg transition-all"
           >
             {p.thumbnail_url && (
-              <div className="aspect-[16/9] overflow-hidden bg-gray-100">
-                <img
+              <div className="relative aspect-[16/9] overflow-hidden bg-gray-100">
+                <Image
                   src={p.thumbnail_url}
                   alt={p.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  loading="lazy"
+                  fill
+                  sizes="(min-width: 1024px) 330px, (min-width: 768px) 33vw, 100vw"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
             )}
@@ -396,16 +415,17 @@ export default function TechnologySection() {
   return (
     <section id="services" data-section="technology" className="py-16 md:py-24 bg-white overflow-hidden scroll-mt-20">
       <Container>
-        <div className="text-center max-w-4xl mx-auto mb-16">
-          <h2 className="text-xs font-bold text-green-600 tracking-widest uppercase mb-4">Evidence of Excellence</h2>
-          <p className="text-[2rem] md:text-[3rem] font-black text-gray-900 mb-12 tracking-tighter">결과로 증명하는 기술력</p>
+        <div className="text-center max-w-4xl mx-auto mb-10 md:mb-16">
+          <h2 className="text-xs font-bold text-green-600 tracking-widest uppercase mb-3 md:mb-4">Evidence of Excellence</h2>
+          <p className="text-[1.75rem] md:text-[3rem] font-black text-gray-900 mb-8 md:mb-12 tracking-tighter">결과로 증명하는 기술력</p>
 
           <div className="flex flex-wrap justify-center gap-1.5 md:gap-3 px-2 md:px-4">
             {items.map((item) => (
               <button
                 key={item.id}
+                type="button"
                 onClick={() => setActiveTabId(item.id)}
-                onMouseEnter={() => setActiveTabId(item.id)}
+                aria-pressed={activeTabId === item.id}
                 className={`px-3 py-2 md:px-6 md:py-3 rounded-full text-[11px] md:text-sm font-black transition-all duration-300 shadow-sm ${
                   activeTabId === item.id
                     ? 'bg-green-600 text-white shadow-xl scale-105 ring-2 ring-green-600 ring-offset-2'
@@ -433,8 +453,13 @@ export default function TechnologySection() {
           )}
 
           <AnimatePresence mode="wait">
+            {/* data-reveal 은 모바일에서 opacity/transform 을 강제 고정한다.
+                여기선 첫 페인트 깜빡임뿐 아니라 탭 전환 크로스페이드까지
+                사라져 '즉시 전환'이 된다. 5MB급 사진이 붙는 영역이라
+                연출보다 즉시 표시를 택한 것이고, 데스크탑은 그대로 둔다. */}
             <motion.div
               key={activeItem.id}
+              data-reveal
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}

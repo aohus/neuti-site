@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ArrowRight, TreePine } from 'lucide-react'
 import Container from './Container'
+import heroImage from '../../../public/images/hero/hero_1.jpg'
 
 export default function MainCarousel() {
   return (
@@ -15,11 +16,14 @@ export default function MainCarousel() {
     >
       {/* Background Image — 1번 사진 고정 */}
       <div className="absolute inset-0">
+        {/* 정적 import 를 쓰면 Next 가 빌드 시 blurDataURL 을 만들어준다.
+            5MB 원본이 내려오기 전까지 검은 화면 대신 흐린 미리보기가 보인다. */}
         <Image
-          src="/images/hero/hero_1.jpg"
+          src={heroImage}
           alt="느티나무병원 협동조합"
           fill
           sizes="100vw"
+          placeholder="blur"
           className="object-cover opacity-75"
           priority
         />
@@ -33,9 +37,9 @@ export default function MainCarousel() {
           transition={{ duration: 0.8 }}
           className="max-w-3xl"
         >
-          <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full mb-8 border border-white/10">
+          <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md px-3 py-1.5 md:px-4 md:py-2 rounded-full mb-5 md:mb-8 border border-white/10">
             <TreePine className="text-green-400 w-4 h-4" />
-            <span className="text-green-50 text-sm font-bold tracking-wide">산림청 지정 1종 나무병원</span>
+            <span className="text-green-50 text-xs md:text-sm font-bold tracking-wide">산림청 지정 1종 나무병원</span>
           </div>
 
           <h1 className="text-white text-3xl md:text-5xl lg:text-7xl font-black mb-4 md:mb-8 leading-[1.2] tracking-tighter">
