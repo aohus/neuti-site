@@ -1,5 +1,5 @@
 from typing import Any, List, Optional
-from sqlalchemy import select, desc
+from sqlalchemy import select, desc, nullslast
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.repositories.base import CRUDBase
 from app.models.performance import Performance
@@ -39,8 +39,18 @@ class CRUDPerformance(CRUDBase[Performance, PerformanceCreate, PerformanceUpdate
                 | (self.model.site_location.ilike(f"%{q}%"))
             )
 
+        # 시공일 최신순. `created_at`(DB 행 삽입 시각)으로 정렬하면 안 된다 —
+        # md 기반 시공사례는 sync_all_performances() 가 **파일명 순서**로 INSERT 하므로
+        # created_at 이 시공 시점이 아니라 파일명 정렬 순서를 반영한다.
+        # (`2026_` 접두사 파일이 가장 먼저 INSERT 되어 최신 글이 꼴찌로 밀렸다)
+        # 시공일이 없는 행(관리자 UI 등록분)은 뒤로 밀고 삽입 순서로 보조 정렬한다.
         result = await db.execute(
-            query.offset(skip).limit(limit).order_by(desc(self.model.created_at))
+            query.offset(skip)
+            .limit(limit)
+            .order_by(
+                nullslast(desc(self.model.construction_date)),
+                desc(self.model.created_at),
+            )
         )
         return result.scalars().all()
 
