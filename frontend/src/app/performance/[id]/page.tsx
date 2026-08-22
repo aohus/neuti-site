@@ -393,7 +393,11 @@ export default function PerformanceDetailPage() {
       {/* Main Content Area */}
       <div className="mx-auto max-w-7xl px-6 pt-20 sm:px-8 lg:px-10">
         <div className="mb-16 grid gap-12 lg:grid-cols-4">
-          <div className="lg:col-span-3">
+          {/* min-w-0 필수 — 그리드 아이템의 기본값 min-width:auto 는 내용의
+              min-content 너비 밑으로 줄어들길 거부한다. 본문에 min-w-[28rem]
+              테이블이 있어서, 이게 없으면 감싼 overflow-x-auto 가 무력해지고
+              모바일에서 페이지 전체가 가로로 밀린다(375px 화면에서 504px). */}
+          <div className="min-w-0 lg:col-span-3">
             {isAdmin && (
               <div className="mb-8 flex justify-end gap-3">
                 <Link
