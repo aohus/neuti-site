@@ -25,7 +25,7 @@ function RequestTabs() {
   }, [searchParams])
 
   return (
-    <div className="pt-32 pb-20 md:pt-40 md:pb-32 bg-white">
+    <div className="page-py bg-white">
       <Container>
         <div className="text-center mb-12">
           <span className="text-label">Request</span>
@@ -163,7 +163,7 @@ export default function RequestContent() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-white pt-32 pb-20 md:pt-40 md:pb-32">
+        <div className="min-h-screen bg-white page-py">
           <div className="py-24 text-center">
             <div className="border-green-600 mb-6 inline-block h-10 w-10 animate-spin rounded-full border-t-2 border-b-2" />
           </div>

@@ -11,10 +11,11 @@ export default function HistoryTimeline() {
       {/* Central Line */}
       <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gray-100 hidden md:block" />
 
-      <div className="space-y-16">
+      <div className="space-y-10 md:space-y-16">
         {(historyData as HistoryItem[]).map((item, index) => (
           <motion.div
             key={item.year + item.title}
+            data-reveal
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}

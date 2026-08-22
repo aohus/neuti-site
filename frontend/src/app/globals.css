@@ -90,13 +90,29 @@
   animation: scroll-x 20s linear infinite;
 }
 
-/* UI Utilities */
+/*
+ * 세로 여백 유틸리티.
+ *
+ * 모바일 화면은 세로가 짧은데 데스크탑용 여백(py-24, pt-40 …)을 그대로 쓰면
+ * 한 화면이 거의 빈 공간으로 채워진다. 아래 유틸은 모바일에서만 값을 줄이고
+ * md: 이상은 기존 값을 그대로 둔다. 새 페이지도 이 유틸을 쓸 것.
+ */
 .section-py {
-  @apply py-16 md:py-24;
+  @apply py-12 sm:py-16 md:py-24;
 }
 
 .section-py-lg {
-  @apply py-20 md:py-32;
+  @apply py-14 sm:py-20 md:py-32;
+}
+
+/* 고정 헤더(h-16 / md:h-20) 아래에서 시작하는 페이지 최상단 래퍼 */
+.page-py {
+  @apply pt-24 pb-12 md:pt-40 md:pb-32;
+}
+
+/* 페이지 상단 히어로 */
+.hero-py {
+  @apply pt-24 pb-12 md:pt-40 md:pb-24;
 }
 
 /* 포인트 컬러 조화로운 배분 */

@@ -12,7 +12,7 @@ export default function BusinessPage() {
     <motion.div 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="bg-white pb-20 space-y-20"
+      className="bg-white pb-12 space-y-12 md:pb-20 md:space-y-20"
     >
       <BusinessHero />
       
@@ -20,7 +20,7 @@ export default function BusinessPage() {
       
       <LandscapingSection />
       
-      <div className="pt-20">
+      <div className="pt-10 md:pt-20">
         <FinalCTA />
       </div>
     </motion.div>

@@ -44,7 +44,7 @@ export default function RecentPortfolio() {
   if (items.length === 0) return null
 
   return (
-    <section data-section="recent-portfolio" className="bg-gray-50/50 py-16 md:py-24">
+    <section data-section="recent-portfolio" className="bg-gray-50/50 section-py">
       <Container>
         <div className="mb-10 text-center md:mb-14">
           <p className="mb-4 text-xs font-black tracking-widest text-green-600 uppercase">

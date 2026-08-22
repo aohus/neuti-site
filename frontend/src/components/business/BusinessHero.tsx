@@ -6,7 +6,7 @@ import { motion } from 'framer-motion'
 
 export default function BusinessHero() {
   return (
-    <section className="bg-surface relative overflow-hidden pt-40 pb-24">
+    <section className="bg-surface relative overflow-hidden hero-py">
       <Container>
         <div className="relative mx-auto max-w-4xl text-center">
           <motion.span

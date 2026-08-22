@@ -58,9 +58,9 @@ export default function NoticeListPage() {
   ]
 
   return (
-    <div className="pt-32 pb-20 md:pt-40 md:pb-32 bg-white">
+    <div className="page-py bg-white">
       <Container>
-        <div className="flex justify-between items-end mb-16">
+        <div className="flex justify-between items-end mb-8 md:mb-16">
           <div>
             <span className="text-label">Notice</span>
             <p className="mt-2 text-3xl font-black text-deep tracking-tight sm:text-4xl">공지사항</p>

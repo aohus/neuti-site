@@ -42,7 +42,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="max-w-md mx-auto py-24 px-4">
+    <div className="max-w-md mx-auto py-12 px-4 md:py-24">
       <div className="bg-white p-8 rounded-3xl shadow-xl border border-gray-100">
         <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">관리자 로그인</h2>
         

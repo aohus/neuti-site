@@ -84,9 +84,9 @@ function PerformanceContent() {
   }, [filteredItems, currentPage])
 
   return (
-    <div className="min-h-screen bg-white pt-32 pb-20 md:pt-40 md:pb-32">
+    <div className="min-h-screen bg-white page-py">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-16 text-center">
+        <div className="mb-8 text-center md:mb-16">
           <div className="flex flex-col items-center">
             <span className="text-label">Portfolio</span>
             <p className="text-deep mt-2 text-3xl font-black tracking-tight sm:text-4xl">
@@ -111,7 +111,7 @@ function PerformanceContent() {
         </div>
 
         {/* Filters */}
-        <div className="mb-16">
+        <div className="mb-8 md:mb-16">
           <div className="mx-auto grid max-w-4xl grid-cols-1 gap-6 sm:grid-cols-3">
             <div className="space-y-3">
               <label className="text-primary ml-1 flex items-center gap-2 text-[10px] font-black tracking-[0.2em] uppercase">
@@ -180,7 +180,7 @@ function PerformanceContent() {
           <ProjectGrid projects={paginatedItems as any} />
         )}
 
-        <div className="mt-16">
+        <div className="mt-10 md:mt-16">
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
@@ -205,7 +205,7 @@ function PerformanceContent() {
 export default function PerformancePage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-white pt-32 pb-20 md:pt-40 md:pb-32">
+      <div className="min-h-screen bg-white page-py">
         <div className="py-24 text-center">
           <div className="border-green-600 mb-6 inline-block h-10 w-10 animate-spin rounded-full border-t-2 border-b-2" />
         </div>

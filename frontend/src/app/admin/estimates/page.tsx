@@ -124,7 +124,7 @@ export default function AdminEstimatesPage() {
   if (!isAdmin) return null
 
   return (
-    <div className="pt-32 pb-20 md:pt-40 md:pb-32 bg-white min-h-screen">
+    <div className="page-py bg-white min-h-screen">
       <Container>
         <div className="mb-8">
           <span className="text-label">Admin</span>

@@ -96,6 +96,7 @@ function FadeIn({
 }) {
   return (
     <motion.div
+      data-reveal
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -174,9 +175,9 @@ export default function ContractContent() {
   const totalProjectCount = getTotalProjectCount()
 
   return (
-    <div className="bg-white pb-20">
+    <div className="bg-white pb-12 md:pb-20">
       {/* ── Hero ── */}
-      <section className="relative overflow-hidden bg-green-900 pt-40 pb-20 md:pb-28 text-white">
+      <section className="relative overflow-hidden bg-green-900 pt-24 pb-12 md:pt-40 md:pb-28 text-white">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,255,255,0.05),transparent_60%)]" />
         <Container className="relative z-10 text-center">
           <FadeIn>
@@ -218,7 +219,7 @@ export default function ContractContent() {
       </section>
 
       {/* ── Services ── */}
-      <section className="py-20 md:py-28">
+      <section className="py-12 sm:py-16 md:py-28">
         <Container>
           <FadeIn className="text-center mb-14">
             <p className="text-xs font-black tracking-[0.2em] text-green-600 uppercase mb-3">
@@ -258,7 +259,7 @@ export default function ContractContent() {
       </section>
 
       {/* ── Qualifications ── */}
-      <section className="py-20 md:py-28 bg-gray-50 rounded-[3rem] mx-4 md:mx-10">
+      <section className="py-12 sm:py-16 md:py-28 bg-gray-50 rounded-[3rem] mx-4 md:mx-10">
         <Container>
           <FadeIn className="text-center mb-14">
             <p className="text-xs font-black tracking-[0.2em] text-green-600 uppercase mb-3">
@@ -290,7 +291,7 @@ export default function ContractContent() {
       </section>
 
       {/* ── Clients ── */}
-      <section className="py-20 md:py-28">
+      <section className="py-12 sm:py-16 md:py-28">
         <Container>
           <FadeIn className="text-center mb-14">
             <p className="text-xs font-black tracking-[0.2em] text-green-600 uppercase mb-3">
@@ -332,7 +333,7 @@ export default function ContractContent() {
       </section>
 
       {/* ── Process ── */}
-      <section className="py-20 md:py-28 bg-gray-50 rounded-[3rem] mx-4 md:mx-10">
+      <section className="py-12 sm:py-16 md:py-28 bg-gray-50 rounded-[3rem] mx-4 md:mx-10">
         <Container>
           <FadeIn className="text-center mb-14">
             <p className="text-xs font-black tracking-[0.2em] text-green-600 uppercase mb-3">
@@ -362,7 +363,7 @@ export default function ContractContent() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="py-20 md:py-28">
+      <section className="py-12 sm:py-16 md:py-28">
         <Container>
           <FadeIn>
             <div className="bg-green-800 rounded-[2.5rem] p-10 md:p-16 text-center text-white relative overflow-hidden">

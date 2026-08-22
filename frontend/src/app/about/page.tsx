@@ -9,9 +9,9 @@ import { ChevronLeft, Calendar, User } from 'lucide-react'
 
 export default function AboutPage() {
   return (
-    <div className="pb-20">
+    <div className="pb-12 md:pb-20">
       {/* Hero Section */}
-      <section className="bg-surface relative overflow-hidden pt-40 pb-24">
+      <section className="bg-surface relative overflow-hidden hero-py">
         <Container>
           <div className="relative mx-auto max-w-4xl text-center">
             <span className="text-label">About Us</span>
@@ -63,11 +63,11 @@ export default function AboutPage() {
 
       {/* Mission & Vision */}
       <section
-        className="bg-surface mx-4 rounded-[3rem] py-24 md:mx-10"
+        className="bg-surface mx-4 rounded-[3rem] py-12 sm:py-16 md:mx-10 md:py-24"
         id="vision"
       >
         <Container>
-          <div className="mb-16 text-center">
+          <div className="mb-8 text-center sm:mb-12 md:mb-16">
             <span className="text-label">Philosophy</span>
             <p className="text-deep text-3xl font-black tracking-tight md:text-4xl">
               미션과 비전
@@ -100,7 +100,7 @@ export default function AboutPage() {
             </div>
           </div>
 
-          <div className="mx-auto mt-12 grid max-w-5xl gap-12 border-t border-black/5 pt-16 sm:grid-cols-3">
+          <div className="mx-auto mt-8 grid max-w-5xl gap-8 border-t border-black/5 pt-10 sm:grid-cols-3 sm:gap-12 md:mt-12 md:pt-16">
             {[
               { title: '기술력 기반', desc: '맞춤형 수목관리' },
               { title: '고객 중심', desc: '신뢰와 정성 서비스' },
@@ -123,7 +123,7 @@ export default function AboutPage() {
       {/* History Section */}
       <section className="section-py" id="history">
         <Container>
-          <div className="mb-20 text-center">
+          <div className="mb-10 text-center sm:mb-14 md:mb-20">
             <span className="text-label">Milestones</span>
             <p className="text-3xl font-black tracking-tight text-gray-900 md:text-4xl">
               느티나무병원 협동조합의 발자취
@@ -139,7 +139,7 @@ export default function AboutPage() {
         id="certifications"
       >
         <Container>
-          <div className="mb-20 text-center">
+          <div className="mb-10 text-center sm:mb-14 md:mb-20">
             <span className="text-label">Authority</span>
             <p className="text-center text-3xl font-black tracking-tight text-gray-900 md:text-4xl">
               신뢰할 수 있는 전문 기술력
@@ -152,7 +152,7 @@ export default function AboutPage() {
       {/* Location Section */}
       <section className="section-py" id="location">
         <Container>
-          <div className="mb-20 text-center">
+          <div className="mb-10 text-center sm:mb-14 md:mb-20">
             <span className="text-label">Find Us</span>
             <p className="text-3xl font-black tracking-tight text-gray-900 md:text-4xl">
               오시는 길

@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Container from '@/components/common/Container'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { ShieldCheck, Search, Activity, AlertTriangle } from 'lucide-react'
 import RelatedPerformances from './RelatedPerformances'
@@ -31,12 +32,13 @@ const features = [
 
 export default function TreeHospitalSection() {
   return (
-    <section className="bg-white py-24 md:py-32" id="tree-hospital">
+    <section className="bg-white py-12 sm:py-16 md:py-32" id="tree-hospital">
       <Container>
         <div className="flex flex-col items-center gap-20 lg:flex-row">
           {/* Text Content */}
           <div className="space-y-12 lg:w-1/2">
             <motion.div
+              data-reveal
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
@@ -61,6 +63,7 @@ export default function TreeHospitalSection() {
               {features.map((feature, idx) => (
                 <motion.div
                   key={feature.title}
+                  data-reveal
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
@@ -85,36 +88,43 @@ export default function TreeHospitalSection() {
 
           {/* Visual Content — asymmetric 3-photo grid */}
           <motion.div
+            data-reveal
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             className="lg:w-1/2 grid grid-cols-12 grid-rows-[auto_auto] gap-3"
           >
             <div className="col-span-6 row-span-1 relative aspect-[3/4] overflow-hidden rounded-3xl shadow-xl">
-              <img
+              <Image
                 src="/images/business/tree-hospital-1.jpg"
                 alt="나무병원 진단 현장"
-                className="h-full w-full object-cover"
+                fill
+                sizes="(min-width: 1024px) 25vw, 50vw"
+                className="object-cover"
               />
             </div>
-            <div className="col-span-6 row-span-1 relative aspect-[4/5] overflow-hidden rounded-3xl shadow-xl mt-16">
-              <img
+            <div className="col-span-6 row-span-1 relative aspect-[4/5] overflow-hidden rounded-3xl shadow-xl mt-8 md:mt-16">
+              <Image
                 src="/images/business/tree-hospital-2.jpg"
                 alt="나무병원 치료 현장"
-                className="h-full w-full object-cover"
+                fill
+                sizes="(min-width: 1024px) 25vw, 50vw"
+                className="object-cover"
               />
             </div>
             <div className="col-span-11 col-start-2 row-span-1 relative aspect-[16/9] overflow-hidden rounded-3xl shadow-xl -mt-6">
-              <img
+              <Image
                 src="/images/business/tree-hospital-3.jpg"
                 alt="나무병원 시공 현장"
-                className="h-full w-full object-cover"
+                fill
+                sizes="(min-width: 1024px) 25vw, 50vw"
+                className="object-cover"
               />
             </div>
           </motion.div>
         </div>
 
-        <div className="mt-20">
+        <div className="mt-10 md:mt-20">
           <RelatedPerformances
             category="나무병원"
             title="나무병원 시공 사례"
