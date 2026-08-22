@@ -1,9 +1,6 @@
-import os
 from typing import Any
-from uuid import uuid4
 
-import aiofiles
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api import deps
@@ -16,6 +13,7 @@ from app.schemas.performance import (
     PerformanceUpdate,
 )
 from app.services.performance_service import performance_service
+from app.utils.upload import save_upload_image
 
 router = APIRouter()
 utils_router = APIRouter()
@@ -54,18 +52,7 @@ async def upload_image(
     """
     이미지 업로드 API. 업로드된 이미지의 URL(경로)을 반환합니다.
     """
-    if not os.path.exists(settings.UPLOAD_DIR):
-        os.makedirs(settings.UPLOAD_DIR)
-
-    file_ext = os.path.splitext(image.filename)[1]
-    file_name = f"{uuid4()}{file_ext}"
-    image_path = settings.UPLOAD_DIR / file_name
-
-    async with aiofiles.open(image_path, mode="wb") as f:
-        content = await image.read()
-        await f.write(content)
-
-    return f"/uploads/{file_name}"
+    return await save_upload_image(image, upload_dir=settings.UPLOAD_DIR)
 
 
 @router.get("", response_model=list[Performance])

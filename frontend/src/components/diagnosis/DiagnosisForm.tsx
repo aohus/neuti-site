@@ -3,8 +3,9 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import axios from 'axios'
+import HoneypotField from '@/components/common/HoneypotField'
 
 const schema = z.object({
   name: z.string().min(1, '이름을 입력해주세요'),
@@ -12,7 +13,9 @@ const schema = z.object({
   email: z.string().email('올바른 이메일 형식이 아닙니다').optional().or(z.literal('')),
   address: z.string().min(1, '주소를 입력해주세요'),
   symptom: z.string().min(1, '증상을 입력해주세요'),
-  image: z.any().optional()
+  image: z.any().optional(),
+  // 봇 차단용 미끼 필드. 사람은 볼 수 없으므로 항상 비어 있어야 한다.
+  website: z.string().optional()
 })
 
 type FormData = z.infer<typeof schema>
@@ -20,6 +23,8 @@ type FormData = z.infer<typeof schema>
 export default function DiagnosisForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
+  // 폼이 화면에 뜬 시각. 제출까지 걸린 시간을 서버가 봇 판별에 쓴다.
+  const mountedAtRef = useRef(Date.now())
 
   const {
     register,
@@ -43,6 +48,8 @@ export default function DiagnosisForm() {
       if (data.image && data.image[0]) {
         formData.append('image', data.image[0])
       }
+      formData.append('website', data.website ?? '')
+      formData.append('elapsed_ms', String(Date.now() - mountedAtRef.current))
 
       const apiUrl = '/backend-api'
       await axios.post(`${apiUrl}/diagnosis/`, formData, {
@@ -74,7 +81,10 @@ export default function DiagnosisForm() {
         <h3 className="text-2xl font-bold text-green-800 mb-4">의뢰가 정상적으로 접수되었습니다.</h3>
         <p className="text-green-700 mb-8 font-medium">내용 확인 후 전문가가 곧 연락드리겠습니다.</p>
         <button
-          onClick={() => setIsSuccess(false)}
+          onClick={() => {
+            mountedAtRef.current = Date.now()
+            setIsSuccess(false)
+          }}
           className="bg-green-600 text-white px-8 py-3 rounded-full font-bold hover:bg-green-700 transition-shadow shadow-md hover:shadow-lg"
         >
           새로운 의뢰 작성하기
@@ -84,7 +94,9 @@ export default function DiagnosisForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="relative space-y-6">
+      <HoneypotField registration={register('website')} />
+
       <div>
         <label className="block text-sm font-bold text-gray-700 mb-2">이름 / 업체명 *</label>
         <input

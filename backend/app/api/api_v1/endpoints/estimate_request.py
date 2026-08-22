@@ -1,9 +1,6 @@
 import logging
-import os
 from typing import Any, List
-from uuid import uuid4
 
-import aiofiles
 from fastapi import APIRouter, BackgroundTasks, Depends, File, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -16,7 +13,9 @@ from app.schemas.estimate_request import (
     EstimateRequestStatusUpdate,
 )
 from app.services.estimate_request_service import estimate_request_service
+from app.utils.antispam import spam_guard
 from app.utils.email import send_estimate_notification
+from app.utils.upload import save_upload_image
 
 logger = logging.getLogger(__name__)
 
@@ -31,23 +30,16 @@ async def create_estimate_request(
     request_in: EstimateRequestCreate = Depends(EstimateRequestCreate.as_form),
     image: UploadFile | None = File(None),
     background_tasks: BackgroundTasks,
+    _spam_check: None = Depends(spam_guard),
 ) -> Any:
     """
     수의계약 간편 견적 요청 등록 (누구나 접수 가능).
     """
     image_url = None
     if image:
-        if not os.path.exists(settings.UPLOAD_DIR):
-            os.makedirs(settings.UPLOAD_DIR)
-
-        file_ext = os.path.splitext(image.filename)[1]
-        file_name = f"estimate_{uuid4()}{file_ext}"
-        full_path = settings.UPLOAD_DIR / file_name
-
-        async with aiofiles.open(full_path, mode="wb") as f:
-            content = await image.read()
-            await f.write(content)
-        image_url = f"/uploads/{file_name}"
+        image_url = await save_upload_image(
+            image, upload_dir=settings.UPLOAD_DIR, prefix="estimate_"
+        )
 
     result = await estimate_request_service.create_request(
         db, obj_in=request_in, image_url=image_url

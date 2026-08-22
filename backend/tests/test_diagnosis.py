@@ -2,6 +2,7 @@ import pytest
 from httpx import AsyncClient, ASGITransport
 from app.main import app
 from unittest.mock import patch
+from tests.conftest import JPEG_BYTES
 
 @pytest.mark.asyncio
 async def test_create_diagnosis_request():
@@ -32,7 +33,7 @@ async def test_create_diagnosis_request_with_file():
         "address": "서울시 강남구",
         "symptom": "잎이 노랗게 변해요"
     }
-    files = {"image": ("test.jpg", b"fake-image-content", "image/jpeg")}
+    files = {"image": ("test.jpg", JPEG_BYTES, "image/jpeg")}
     
     with patch("app.services.diagnosis_service.send_diagnosis_notification") as mock_send:
         async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:

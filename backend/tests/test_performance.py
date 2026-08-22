@@ -2,6 +2,7 @@ import pytest
 from httpx import AsyncClient, ASGITransport
 from app.main import app
 from app.core.config import settings
+from tests.conftest import JPEG_BYTES
 import io
 import json
 
@@ -18,7 +19,7 @@ async def test_performance_flow():
         headers = {"Authorization": f"Bearer {token}"}
 
         # 2. Upload image
-        file_content = b"fake image content"
+        file_content = JPEG_BYTES
         files = {"image": ("test.jpg", io.BytesIO(file_content), "image/jpeg")}
         upload_res = await ac.post("/api/v1/performance/upload-image", files=files, headers=headers)
         assert upload_res.status_code == 200
@@ -182,7 +183,7 @@ async def test_general_upload_image():
         headers = {"Authorization": f"Bearer {token}"}
 
         # 2. Upload image to general endpoint
-        file_content = b"fake image content"
+        file_content = JPEG_BYTES
         files = {"image": ("test.jpg", io.BytesIO(file_content), "image/jpeg")}
         # This path /api/v1/upload/image is mentioned in the plan
         upload_res = await ac.post("/api/v1/upload/image", files=files, headers=headers)

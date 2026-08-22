@@ -10,6 +10,10 @@ from app.db.base import Base
 
 TEST_DATABASE_URL = settings.async_database_url
 
+# 업로드 엔드포인트는 매직바이트로 이미지 여부를 검증한다(app/utils/upload.py).
+# 임의의 바이트열을 쓰면 400 으로 거부되므로 실제 JPEG 시그니처를 쓴다.
+JPEG_BYTES = b"\xff\xd8\xff\xe0\x00\x10JFIF\x00\x01" + b"\x00" * 32
+
 @pytest.fixture(scope="session")
 def event_loop_policy():
     return asyncio.get_event_loop_policy()

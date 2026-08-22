@@ -1,9 +1,6 @@
-import os
 from typing import Any, List
-from uuid import uuid4
 
-import aiofiles
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api import deps
@@ -11,7 +8,8 @@ from app.core.config import settings
 from app.db.session import get_db
 from app.schemas.diagnosis import DiagnosisRequest, DiagnosisRequestCreate
 from app.services.diagnosis_service import diagnosis_service
-from app.utils.email import send_diagnosis_notification
+from app.utils.antispam import spam_guard
+from app.utils.upload import save_upload_image
 
 router = APIRouter()
 
@@ -23,23 +21,16 @@ async def create_diagnosis_request(
     db: AsyncSession = Depends(get_db),
     request_in: DiagnosisRequestCreate = Depends(DiagnosisRequestCreate.as_form),
     image: UploadFile | None = File(None),
+    _spam_check: None = Depends(spam_guard),
 ) -> Any:
     """
     수목 진단 의뢰 등록.
     """
     image_path = None
     if image:
-        if not os.path.exists(settings.UPLOAD_DIR):
-            os.makedirs(settings.UPLOAD_DIR)
-
-        file_ext = os.path.splitext(image.filename)[1]
-        file_name = f"diagnosis_{uuid4()}{file_ext}"
-        full_path = settings.UPLOAD_DIR / file_name
-
-        async with aiofiles.open(full_path, mode="wb") as f:
-            content = await image.read()
-            await f.write(content)
-        image_path = f"/uploads/{file_name}"
+        image_path = await save_upload_image(
+            image, upload_dir=settings.UPLOAD_DIR, prefix="diagnosis_"
+        )
 
     return await diagnosis_service.create_request(db, obj_in=request_in, image_path=image_path)
 

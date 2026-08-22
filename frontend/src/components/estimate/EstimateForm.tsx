@@ -3,8 +3,9 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import axios from 'axios'
+import HoneypotField from '@/components/common/HoneypotField'
 
 const ORG_TYPES = ['시청/구청', '행정복지센터', '공공기관', '학교', '기타 공공', '민간'] as const
 const WORK_TYPES = ['조경식재', '녹지관리', '수목전정', '병충해방제', '위험목제거', '수목진단치료', '기타'] as const
@@ -22,6 +23,8 @@ const schema = z.object({
   budget_range: z.string().optional(),
   details: z.string().optional(),
   image: z.any().optional(),
+  // 봇 차단용 미끼 필드. 사람은 볼 수 없으므로 항상 비어 있어야 한다.
+  website: z.string().optional(),
 })
 
 type FormData = z.infer<typeof schema>
@@ -29,6 +32,8 @@ type FormData = z.infer<typeof schema>
 export default function EstimateForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
+  // 폼이 화면에 뜬 시각. 제출까지 걸린 시간을 서버가 봇 판별에 쓴다.
+  const mountedAtRef = useRef(Date.now())
 
   const {
     register,
@@ -56,6 +61,8 @@ export default function EstimateForm() {
       if (data.image && data.image[0]) {
         formData.append('image', data.image[0])
       }
+      formData.append('website', data.website ?? '')
+      formData.append('elapsed_ms', String(Date.now() - mountedAtRef.current))
 
       await axios.post('/backend-api/estimate/', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
@@ -87,7 +94,10 @@ export default function EstimateForm() {
         <p className="text-green-700 mb-2 font-medium">1영업일 이내 견적서를 보내드리겠습니다.</p>
         <p className="text-green-600 mb-8 text-sm">실적증명서·자격증빙도 함께 발송됩니다.</p>
         <button
-          onClick={() => setIsSuccess(false)}
+          onClick={() => {
+            mountedAtRef.current = Date.now()
+            setIsSuccess(false)
+          }}
           className="bg-green-600 text-white px-8 py-3 rounded-full font-bold hover:bg-green-700 transition-shadow shadow-md hover:shadow-lg"
         >
           새로운 견적 요청
@@ -102,7 +112,9 @@ export default function EstimateForm() {
   const errorClass = 'text-red-500 text-xs mt-1 font-medium'
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="relative space-y-6">
+      <HoneypotField registration={register('website')} />
+
       {/* 기관 정보 */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
