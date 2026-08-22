@@ -216,6 +216,48 @@
 
 
 
+/* 시공사례 본문의 '공사 개요' 표 등 */
+
+.prose-magazine thead {
+
+  @apply bg-surface;
+
+}
+
+
+
+.prose-magazine th {
+
+  @apply border-b border-black/10 px-5 py-3 text-left font-black text-deep;
+
+}
+
+
+
+.prose-magazine td {
+
+  @apply border-b border-black/5 px-5 py-3 align-top;
+
+}
+
+
+
+.prose-magazine tbody tr:first-child td {
+
+  @apply border-t border-black/10;
+
+}
+
+
+
+.prose-magazine td:first-child {
+
+  @apply w-32 font-black whitespace-nowrap text-deep md:w-40;
+
+}
+
+
+
 
 
 

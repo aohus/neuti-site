@@ -247,6 +247,15 @@ export default function PerformanceDetailPage() {
                     {...props}
                   />
                 ),
+                // 넓은 표가 본문 밖으로 넘치지 않도록 가로 스크롤 컨테이너로 감싼다
+                table: ({ node, ...props }) => (
+                  <div className="my-10 -mx-4 overflow-x-auto px-4 md:mx-0 md:px-0">
+                    <table
+                      className="w-full min-w-[28rem] border-collapse text-base md:text-lg"
+                      {...props}
+                    />
+                  </div>
+                ),
                 li: ({ node, children, ...props }) => (
                   <li className="relative pl-6 text-base font-bold text-gray-500 md:pl-8 md:text-lg">
                     <span className="text-accent absolute top-1 left-0 font-black">
