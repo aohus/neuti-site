@@ -22,8 +22,11 @@ export default function BoardTable<T extends { id: number | string }>({
   onRowClick,
   isLoading = false
 }: BoardTableProps<T>) {
+  // 표는 width:100% 를 줘도 min-content 너비 아래로는 줄어들지 않는다. 셀에
+  // whitespace-nowrap 이 걸려 있어 모바일에서 375px 를 넘는데, 감싼 div 가
+  // overflow-hidden 이면 넘친 열이 그대로 잘려 읽을 수 없다. 가로 스크롤로 연다.
   return (
-    <div className="overflow-hidden bg-white border border-gray-200 rounded-2xl shadow-sm">
+    <div className="overflow-x-auto bg-white border border-gray-200 rounded-2xl shadow-sm">
       <table className="w-full divide-y divide-gray-200 table-fixed">
         <thead className="bg-gray-50">
           <tr>
@@ -31,7 +34,7 @@ export default function BoardTable<T extends { id: number | string }>({
               <th
                 key={idx}
                 scope="col"
-                className={`px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider ${column.className || ''}`}
+                className={`px-4 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider md:px-6 ${column.className || ''}`}
               >
                 {column.header}
               </th>
@@ -61,7 +64,7 @@ export default function BoardTable<T extends { id: number | string }>({
                 {columns.map((column, idx) => (
                   <td
                     key={idx}
-                    className={`px-6 py-4 whitespace-nowrap text-sm text-gray-600 ${column.className || ''}`}
+                    className={`px-4 py-4 whitespace-nowrap text-sm text-gray-600 md:px-6 ${column.className || ''}`}
                   >
                     {column.render ? column.render(item) : (item[column.key as keyof T] as React.ReactNode)}
                   </td>
