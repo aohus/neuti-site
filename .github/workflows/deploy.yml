@@ -82,6 +82,34 @@ jobs:
           source: docker-compose.prod.yml
           target: ~/workspace/neuti-site
 
+      # backend/uploads 는 .dockerignore 로 이미지에서 제외되고, 운영에서는 호스트
+      # 디렉터리를 /app/uploads 로 bind mount 한다(docker-compose.prod.yml).
+      # 따라서 git 에 커밋한 시공사례 이미지는 이 단계에서 직접 동기화하지 않으면
+      # 운영에 영원히 도달하지 않는다 (본문은 뜨는데 이미지만 404 나는 원인).
+      #
+      # --delete 는 절대 쓰지 말 것: 같은 디렉터리에 관리자 UI 로 업로드된
+      # 파일(uuid.jpg)이 함께 있고, 그건 git 에 없으므로 지워진다.
+      - name: Sync uploads to homeserver
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_HOST: ${{ secrets.HOMESERVER_TS_IP }}
+          SSH_USER: ${{ secrets.USERNAME }}
+        run: |
+          set -euo pipefail
+
+          key_file="$(mktemp)"
+          trap 'rm -f "$key_file"' EXIT
+          printf '%s\n' "$SSH_PRIVATE_KEY" > "$key_file"
+          chmod 600 "$key_file"
+
+          ssh_cmd="ssh -i $key_file -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+
+          $ssh_cmd "$SSH_USER@$SSH_HOST" 'mkdir -p ~/workspace/neuti-site/backend/uploads'
+
+          rsync -az --stats -e "$ssh_cmd" \
+            backend/uploads/ \
+            "$SSH_USER@$SSH_HOST:workspace/neuti-site/backend/uploads/"
+
       - name: Deploy services
         uses: appleboy/ssh-action@v1
         with:
