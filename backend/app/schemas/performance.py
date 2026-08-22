@@ -5,6 +5,7 @@ from pydantic import BaseModel, ConfigDict
 
 class PerformanceBase(BaseModel):
     title: str
+    subtitle: str | None = None
     content: str
     category: str | None = None
     year: int | None = None
@@ -22,6 +23,7 @@ class PerformanceCreate(PerformanceBase):
 
 class PerformanceUpdate(PerformanceBase):
     title: str | None = None
+    subtitle: str | None = None
     content: str | None = None
     category: str | None = None
     year: int | None = None

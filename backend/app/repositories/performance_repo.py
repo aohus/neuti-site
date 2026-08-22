@@ -50,7 +50,43 @@ class CRUDPerformance(CRUDBase[Performance, PerformanceCreate, PerformanceUpdate
 
     async def get_by_title(self, db: AsyncSession, *, title: str) -> Optional[Performance]:
         result = await db.execute(select(self.model).filter(self.model.title == title))
-        return result.scalar_one_or_none()
+        return result.scalars().first()
+
+    async def create_from_markdown(
+        self, db: AsyncSession, *, data: dict[str, Any]
+    ) -> Performance:
+        """마크다운 동기화 전용 생성.
+
+        `source_file` 처럼 공개 스키마(PerformanceCreate)에 없는 내부 필드까지
+        그대로 반영해야 하므로 모델을 직접 만든다.
+        """
+        db_obj = self.model(**data)
+        db.add(db_obj)
+        await db.commit()
+        await db.refresh(db_obj)
+        return db_obj
+
+    async def get_by_source_file(
+        self, db: AsyncSession, *, source_file: str
+    ) -> Optional[Performance]:
+        """마크다운 파일명(확장자 제외)으로 동기화된 행을 찾습니다."""
+        result = await db.execute(
+            select(self.model).filter(self.model.source_file == source_file)
+        )
+        return result.scalars().first()
+
+    async def get_orphaned_md_records(
+        self, db: AsyncSession, *, known_source_files: list[str]
+    ) -> List[Performance]:
+        """마크다운에서 왔지만 더 이상 원본 파일이 없는 행들을 반환합니다.
+
+        source_file 이 NULL 인 행(관리자 UI 등록분)은 대상에서 제외됩니다.
+        """
+        query = select(self.model).filter(self.model.source_file.isnot(None))
+        if known_source_files:
+            query = query.filter(self.model.source_file.notin_(known_source_files))
+        result = await db.execute(query)
+        return result.scalars().all()
 
 
 performance_repo = CRUDPerformance(Performance)

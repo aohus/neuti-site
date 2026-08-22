@@ -112,18 +112,25 @@ class PerformanceService:
             raise HTTPException(status_code=404, detail="Performance record not found")
 
         title_to_delete = db_obj.title
+        source_file = db_obj.source_file
 
         # Delete MD file if exists
         if settings.PERFORMANCE_DATA_DIR.exists():
-            import frontmatter
-            for md_file in settings.PERFORMANCE_DATA_DIR.glob("*.md"):
-                try:
-                    post = frontmatter.load(md_file)
-                    if post.metadata.get("title") == title_to_delete:
-                        os.remove(md_file)
-                        break
-                except Exception:
-                    pass
+            if source_file:
+                # 동기화된 행은 원본 파일이 확정적이라 제목을 뒤질 필요가 없다.
+                md_path = settings.PERFORMANCE_DATA_DIR / f"{source_file}.md"
+                if md_path.exists():
+                    os.remove(md_path)
+            else:
+                import frontmatter
+                for md_file in settings.PERFORMANCE_DATA_DIR.glob("*.md"):
+                    try:
+                        post = frontmatter.load(md_file)
+                        if post.metadata.get("title") == title_to_delete:
+                            os.remove(md_file)
+                            break
+                    except Exception:
+                        pass
 
         return await performance_repo.remove(db, id=id)
 
