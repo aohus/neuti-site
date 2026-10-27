@@ -88,7 +88,7 @@ describe('/pine-wilt 소나무재선충 현장진단', () => {
       .map((a) => a.getAttribute('href'))
 
     expect(hrefs).toEqual([
-      '/performance?job_main=수목진단치료',
+      '/performance?job_main=병해충방제',
       '/performance?job_main=병해충방제',
       '/performance?job_main=위험목제거'
     ])

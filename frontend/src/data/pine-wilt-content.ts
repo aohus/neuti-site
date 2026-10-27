@@ -269,8 +269,8 @@ export const pineWiltTrackRecord = {
     title: '대모산·구룡산 소나무재선충병 예방나무주사',
     body: '2026년 3월, 강남구청 발주로 대모산·구룡산 일대 소나무류에 예방나무주사를 놓고 시행목마다 표찰을 남겼습니다.',
     treeCount: null,
-    // 시공사례 id 는 DB 가 부여하므로, 대모산 사례가 들어 있는 수목진단치료 목록으로 보낸다.
-    href: '/performance?job_main=수목진단치료',
+    // 시공사례 id 는 DB 가 부여하므로, 대모산 사례가 들어 있는 병해충방제 목록으로 보낸다.
+    href: '/performance?job_main=병해충방제',
     image: {
       src: '/images/pine-wilt/daemosan-injection-tag.jpg',
       alt: '대모산 소나무에 붙은 표찰. 소나무재선충병 예방주사 시행목, 대모산 7소반, 2026년 3월, 에마멕틴벤조에이트 유제 2.15%, 주입량 30ml, 서울특별시 강남구청'

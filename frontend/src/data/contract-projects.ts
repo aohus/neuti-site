@@ -79,6 +79,7 @@ export const contractProjects = {
     { name: '교육청 학교 전정', client: '성남교육지원청', year: '2022' },
   ],
   병해충방제: [
+    { name: '대모산·구룡산 소나무재선충병 예방나무주사', client: '서울강남구청', year: '2026' },
     { name: '순환로 등 가로수·조경수 병해충 방제공사', client: '성남시 중원구청', year: '2026' },
     { name: '동부검찰청 병해충 방제공사', client: '서울동부지방검찰청', year: '2026' },
     { name: '수도여자고등학교 수목 방제', client: '수도여자고등학교', year: '2026' },
@@ -100,7 +101,6 @@ export const contractProjects = {
     { name: '경기도나무은행 고사목 제거', client: '경기도', year: '2024' },
   ],
   수목진단치료: [
-    { name: '대모산·구룡산 소나무재선충병 예방나무주사', client: '서울강남구청', year: '2026' },
     { name: '상원초등학교 대형목 이식', client: '상원초등학교', year: '2024' },
     { name: '단대·양지공원 방제 예찰 및 효과분석', client: '성남시청', year: '2024' },
     { name: '평택보성아파트 수목 진단 및 수세 회복', client: '평택보성아파트', year: '2023' },
