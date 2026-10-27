@@ -14,20 +14,30 @@ interface PreventionSectionProps {
   steps?: PreventionStep[]
 }
 
+function StepPhoto({
+  image,
+  className = ''
+}: {
+  image: NonNullable<PreventionStep['image']>
+  className?: string
+}) {
+  return (
+    <div className={`relative aspect-[4/3] ${className}`}>
+      <Image
+        src={image.src}
+        alt={image.alt}
+        fill
+        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+        className="object-cover"
+      />
+    </div>
+  )
+}
+
 function PhotoStep({ step }: { step: PreventionStep }) {
   return (
     <>
-      {step.image && (
-        <div className="relative aspect-[4/3]">
-          <Image
-            src={step.image.src}
-            alt={step.image.alt}
-            fill
-            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-            className="object-cover"
-          />
-        </div>
-      )}
+      {step.image && <StepPhoto image={step.image} />}
       <div className="flex flex-col gap-2 px-6 pt-6 pb-7">
         <span className="text-primary text-[13px] font-black">
           {step.number}
@@ -41,24 +51,32 @@ function PhotoStep({ step }: { step: PreventionStep }) {
   )
 }
 
-/** 사진이 없는 마지막 단계는 짙은 카드로 두어 기록·보고 단계를 강조한다. */
+/**
+ * 마지막 기록·보고 단계는 짙은 카드로 두어 강조한다.
+ * sm~lg 2열 구간에서는 두 칸을 차지하므로 사진과 글을 가로로 놓는다.
+ */
 function RecordStep({ step }: { step: PreventionStep }) {
   return (
-    <div className="flex h-full flex-col justify-end gap-2.5 px-7 py-8">
-      <span className="text-[13px] font-black text-amber-400">
-        {step.number}
-      </span>
-      <h3 className="text-[19px] font-black text-white">{step.title}</h3>
-      <p className="text-sm leading-[1.7] font-medium text-emerald-100">
-        {step.body}
-      </p>
-      {/* 효과 지속기간·재접종 주기는 나무의사 확인 전까지 비워 둔다. */}
-      {step.note && (
-        <span className="text-[13px] font-bold text-green-300">
-          {step.note}
-        </span>
+    <>
+      {step.image && (
+        <StepPhoto image={step.image} className="sm:w-1/2 lg:w-full" />
       )}
-    </div>
+      <div className="flex grow flex-col justify-end gap-2.5 px-7 pt-6 pb-8">
+        <span className="text-[13px] font-black text-amber-400">
+          {step.number}
+        </span>
+        <h3 className="text-[19px] font-black text-white">{step.title}</h3>
+        <p className="text-sm leading-[1.7] font-medium text-emerald-100">
+          {step.body}
+        </p>
+        {/* 효과 지속기간·재접종 주기는 나무의사 확인 전까지 비워 둔다. */}
+        {step.note && (
+          <span className="text-[13px] font-bold text-green-300">
+            {step.note}
+          </span>
+        )}
+      </div>
+    </>
   )
 }
 
@@ -85,15 +103,15 @@ export default function PreventionSection({
               key={step.number}
               delay={idx * 0.08}
               className={
-                step.image
-                  ? 'flex flex-col overflow-hidden rounded-[28px] bg-white'
-                  : 'bg-deep rounded-[28px] sm:col-span-2 lg:col-span-1'
+                step.highlight
+                  ? 'bg-deep flex flex-col overflow-hidden rounded-[28px] sm:col-span-2 sm:flex-row lg:col-span-1 lg:flex-col'
+                  : 'flex flex-col overflow-hidden rounded-[28px] bg-white'
               }
             >
-              {step.image ? (
-                <PhotoStep step={step} />
-              ) : (
+              {step.highlight ? (
                 <RecordStep step={step} />
+              ) : (
+                <PhotoStep step={step} />
               )}
             </Reveal>
           ))}

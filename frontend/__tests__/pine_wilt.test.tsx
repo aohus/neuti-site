@@ -167,6 +167,19 @@ describe('확정 전 항목(null) 처리', () => {
     ).toBeInTheDocument()
   })
 
+  it('예방나무주사 세 단계 모두 나무주사 현장 사진을 보여준다', () => {
+    const { container } = render(<PreventionSection />)
+
+    const srcs = Array.from(container.querySelectorAll('li img')).map((img) =>
+      img.getAttribute('src')
+    )
+    expect(srcs).toEqual([
+      '/images/pine-wilt/daemosan-dbh-measure.jpg',
+      '/images/pine-wilt/daemosan-injection-gun.jpg',
+      '/images/pine-wilt/daemosan-injection-tag.jpg'
+    ])
+  })
+
   it('실적 카드 본수는 null 이면 숨기고, 값이 있으면 본문 뒤에 붙인다', () => {
     const { featured } = pineWiltTrackRecord
     expect(featured.treeCount).toBeNull()

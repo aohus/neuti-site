@@ -99,6 +99,8 @@ export interface PreventionStep {
   title: string
   body: string
   image?: ImageContent
+  // 짙은 카드로 강조할 단계 (기록·보고)
+  highlight?: boolean
   // 효과 지속기간·재접종 주기. 나무의사 확인 전에는 null 로 두고 줄을 숨긴다.
   note?: string | null
 }
@@ -131,6 +133,11 @@ export const pineWiltPrevention = {
       number: '03',
       title: '시행목을 기록합니다',
       body: '나무마다 약제명·주입량·시행일을 표찰로 남기고, 작업 사진대지로 보고합니다.',
+      image: {
+        src: '/images/pine-wilt/daemosan-injection-tag.jpg',
+        alt: '소나무 줄기에 붙인 예방주사 시행목 표찰. 시행일·약제명·주입량이 적혀 있다'
+      },
+      highlight: true,
       note: null
     }
   ] as PreventionStep[]
