@@ -121,27 +121,24 @@ def _sent_subject(send_message: AsyncMock) -> str:
 
 
 @pytest.mark.asyncio
-async def test_견적_메일_제목은_홈페이지_견적_접수_말머리와_기관명이다(send_message):
-    # Act
-    await send_estimate_notification("admin@example.com", ESTIMATE_DATA)
-
-    # Assert
-    assert _sent_subject(send_message) == "[홈페이지 견적 접수] 성남시청"
-
-
-@pytest.mark.asyncio
-async def test_견적_메일_제목의_기관명에서_줄바꿈을_제거한다(send_message):
-    # Arrange — 줄바꿈이 헤더까지 가면 Bcc 등 헤더를 주입할 수 있다
+async def test_견적_메일_제목은_느티나무병원_홈페이지_새로운_견적접수다(send_message):
+    # Arrange — 제목에 사용자 입력을 넣지 않는다 (헤더 인젝션 여지 없음)
     data = {**ESTIMATE_DATA, "org_name": "성남시청\r\nBcc: victim@example.com"}
 
     # Act
     await send_estimate_notification("admin@example.com", data)
 
     # Assert
-    subject = _sent_subject(send_message)
-    assert "\r" not in subject
-    assert "\n" not in subject
-    assert subject == "[홈페이지 견적 접수] 성남시청 Bcc: victim@example.com"
+    assert _sent_subject(send_message) == "[느티나무병원 홈페이지] 새로운 견적접수"
+
+
+@pytest.mark.asyncio
+async def test_진단_메일_제목은_느티나무병원_홈페이지_진단_의뢰다(send_message):
+    # Act
+    await send_diagnosis_notification("admin@example.com", {"name": "홍길동"})
+
+    # Assert
+    assert _sent_subject(send_message) == "[느티나무병원 홈페이지] 진단 의뢰"
 
 
 @pytest.mark.asyncio

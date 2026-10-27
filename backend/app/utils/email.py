@@ -32,17 +32,14 @@ ESTIMATE_FIELDS = [
     ("예산규모", "budget_range"),
 ]
 
+SUBJECT_PREFIX = "[느티나무병원 홈페이지]"
+
 
 def _field(data: dict, key: str) -> str:
     # 공개 폼 입력이 그대로 들어오므로 HTML로 해석되지 않게 이스케이프한다.
     # model_dump()는 미입력 선택항목을 None으로 주므로 '-'로 바꾼다.
     value = data.get(key)
     return escape(str(value)) if value else "-"
-
-
-def _single_line(value: object) -> str:
-    # 제목 헤더에 들어가는 사용자 입력에서 CR/LF 를 없애 헤더 인젝션을 막는다.
-    return " ".join(str(value or "").split())
 
 
 async def _send(subject: str, email_to: str, body: str) -> None:
@@ -72,7 +69,7 @@ async def send_diagnosis_notification(email_to: str, data: dict) -> None:
         <li>증상: {_field(data, "symptom")}</li>
     </ul>
     """
-    await _send(f"{settings.PROJECT_NAME} - 새로운 수목진단의뢰 접수", email_to, body)
+    await _send(f"{SUBJECT_PREFIX} 진단 의뢰", email_to, body)
 
 
 async def send_estimate_notification(email_to: str, data: dict) -> None:
@@ -96,5 +93,4 @@ async def send_estimate_notification(email_to: str, data: dict) -> None:
         <a href="{admin_url}">관리자 페이지에서 견적 요청 확인하기</a>
     </p>
     """
-    subject = f"[홈페이지 견적 접수] {_single_line(data.get('org_name'))}"
-    await _send(subject, email_to, body)
+    await _send(f"{SUBJECT_PREFIX} 새로운 견적접수", email_to, body)
