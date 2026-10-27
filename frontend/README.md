@@ -15,7 +15,7 @@ docker compose up -d       # frontend:3003 (backend:8003, db:5433)
 
 ```bash
 npm run dev                # http://localhost:3000
-npm run build              # prebuild 로 scripts/sync-images.mjs 실행 후 빌드
+npm run build              # 프로덕션 빌드
 npm start
 npm test                   # jest (frontend/__tests__/)
 npm run lint               # eslint
@@ -54,8 +54,8 @@ src/
 │   └── Editor/           TipTap 기반 에디터
 ├── context/AuthContext.tsx
 ├── hooks/usePerformance.ts
-├── lib/                  markdown.ts, performanceApi.ts, technologyApi.ts
-├── data/                 home-content.ts(정적 폴백), history.json, technology-images.json
+├── lib/                  markdown.ts, performanceApi.ts, seo.ts, technologyApi.ts
+├── data/                 home-content.ts(정적 폴백), history.json
 └── types/
 ```
 
@@ -66,8 +66,7 @@ src/
 
 ## 이미지
 
-- `scripts/sync-images.mjs`가 빌드 전에 `assets/`의 한글 파일명을 영문으로 변환해
-  `public/images/`로 동기화한다
+- 정적 이미지는 `public/images/`에 영문 파일명으로 직접 커밋한다 (빌드 시 동기화 없음)
 - **macOS Unicode NFD 주의**: `readdirSync`로 읽은 한글 파일명은 분해형(NFD)이다.
   비교 전 반드시 `.normalize('NFC')`를 적용할 것
 - 업로드 이미지는 백엔드 `/uploads/*`를 프록시로 서빙한다
