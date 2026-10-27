@@ -190,3 +190,5 @@ naver_blog/
 .claude/
 CLAUDE.md
 .plan/
+# 썸네일 캐시 (backend/app/utils/thumbnail.py)
+backend/thumb-cache/

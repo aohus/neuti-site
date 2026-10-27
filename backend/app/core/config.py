@@ -44,8 +44,10 @@ class Settings(BaseSettings):
     # Storage
     UPLOAD_DIR: Path = BASE_DIR / "uploads"
     PERFORMANCE_DATA_DIR: Path = BASE_DIR / "data" / "performances"
+    # 썸네일 캐시. uploads 안에 두면 배포가 '저장소에 없는 하위 폴더'로 보고 지운다.
+    THUMB_CACHE_DIR: Path = BASE_DIR / "thumb-cache"
 
-    @field_validator("UPLOAD_DIR", "PERFORMANCE_DATA_DIR")
+    @field_validator("UPLOAD_DIR", "PERFORMANCE_DATA_DIR", "THUMB_CACHE_DIR")
     @classmethod
     def _resolve_against_base_dir(cls, value: Path) -> Path:
         """상대경로로 들어온 값을 backend/ 기준 절대경로로 바꾼다.

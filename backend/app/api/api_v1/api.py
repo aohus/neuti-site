@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api.api_v1.endpoints import diagnosis, login, notice, inquiry, performance, technology_item, estimate_request
+from app.api.api_v1.endpoints import diagnosis, login, notice, inquiry, performance, technology_item, estimate_request, thumbnail
 
 api_router = APIRouter()
 api_router.include_router(login.router, tags=["login"])
@@ -10,3 +10,4 @@ api_router.include_router(performance.router, prefix="/performance", tags=["perf
 api_router.include_router(performance.utils_router, prefix="/upload", tags=["upload"])
 api_router.include_router(technology_item.router, prefix="/technology-item", tags=["technology-item"])
 api_router.include_router(estimate_request.router, prefix="/estimate", tags=["estimate"])
+api_router.include_router(thumbnail.router, prefix="/thumb", tags=["thumbnail"])

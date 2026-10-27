@@ -12,3 +12,4 @@ uploads/
 htmlcov
 .DS_Store
 README.md
+thumb-cache/
