@@ -4,6 +4,7 @@ import { normalizeMarkdown } from '@/lib/markdown'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import remarkBreaks from 'remark-breaks'
+import UploadPicture from '@/components/common/UploadPicture'
 
 interface ImageData {
   url: string
@@ -15,6 +16,11 @@ interface BodyProps {
   /** 이미지 alt 의 대체값(캡션이 없을 때) */
   title: string
 }
+
+// 본문 열은 데스크톱에서 max-w-7xl 의 3/4(약 900px), 그 아래에선 화면 폭이다.
+const BODY_IMAGE_SIZES = '(min-width: 1280px) 900px, (min-width: 1024px) 75vw, 100vw'
+const ROW2_IMAGE_SIZES = '(min-width: 1280px) 450px, (min-width: 768px) 50vw, 100vw'
+const ROW3_IMAGE_SIZES = '(min-width: 1280px) 300px, (min-width: 768px) 33vw, 100vw'
 
 // 도메인 없이 상대 경로(/uploads/...)만 반환하여 Proxy 이용
 const toUrl = (url: string): string => {
@@ -43,10 +49,12 @@ function ImageBlock({ value, title }: { value: string; title: string }) {
   const img = toImage(value)
   return (
     <div className="my-16 px-2 text-center md:my-24 md:px-0">
-      <img
+      <UploadPicture
         src={toUrl(img.url)}
         alt={img.alt || title}
+        sizes={BODY_IMAGE_SIZES}
         loading="lazy"
+        decoding="async"
         className="mb-6 w-full rounded-[2rem] border-4 border-white shadow-2xl md:rounded-[3rem] md:border-8"
       />
       {img.alt && (
@@ -79,10 +87,12 @@ function ImageRowBlock({ value, title }: { value: string; title: string }) {
           return (
             <div key={idx} className="group/img relative text-center">
               <div className="relative mb-4 aspect-[4/3] overflow-hidden rounded-[1.5rem] border-2 border-white shadow-xl transition-all duration-500 group-hover/img:shadow-2xl md:rounded-[2.5rem] md:border-4">
-                <img
+                <UploadPicture
                   src={toUrl(img.url)}
                   alt={img.alt || title}
+                  sizes={items.length === 3 ? ROW3_IMAGE_SIZES : ROW2_IMAGE_SIZES}
                   loading="lazy"
+                  decoding="async"
                   className="h-full w-full object-cover transition-transform duration-1000 group-hover/img:scale-110"
                 />
                 {isBeforeAfter && (

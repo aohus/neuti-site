@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import Container from '../common/Container'
 import type { Performance } from '@/types/performance'
+import { thumbUrl, uploadSrcSet } from '@/lib/thumb'
 
 /**
  * 홈 하단의 최신 시공사례.
@@ -53,10 +54,12 @@ export default function RecentPortfolio({ items }: { items: Performance[] }) {
                         next.config 의 rewrite 로 백엔드에서 프록시되는데, 이미지
                         최적화기는 로컬 경로를 처리할 때 그 rewrite 를 타지 않는다.
                         운영에서 /_next/image 가 400 을 내고 썸네일이 전부 깨졌다.
-                        업로드 이미지는 커밋 전 장변 1600px 로 압축해 들어온다. */}
+                        대신 백엔드 썸네일 API 로 줄인 사본을 쓴다(lib/thumb.ts). */}
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src={item.thumbnail_url}
+                      src={thumbUrl(item.thumbnail_url, 960)}
+                      srcSet={uploadSrcSet(item.thumbnail_url)}
+                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                       alt={item.title}
                       loading="lazy"
                       decoding="async"

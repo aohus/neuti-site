@@ -71,7 +71,9 @@ describe('Home 서버 렌더링', () => {
     const hrefs = Array.from(container.querySelectorAll('a')).map((a) => a.getAttribute('href'))
     expect(hrefs).toContain('/performance/3')
     expect(hrefs).toContain('/performance/4')
-    expect(container.querySelector('img[alt="사례 3"]')?.getAttribute('src')).toBe('/uploads/3.jpg')
+    expect(container.querySelector('img[alt="사례 3"]')?.getAttribute('src')).toBe(
+      '/backend-api/thumb/960/3.jpg',
+    )
   })
 
   it('서버에서 받은 기술력 항목을 탭으로 렌더링한다', async () => {

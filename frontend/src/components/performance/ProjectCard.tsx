@@ -1,6 +1,6 @@
 import { Project } from '@/types/project'
-import Image from 'next/image'
 import Link from 'next/link'
+import { thumbUrl, uploadSrcSet } from '@/lib/thumb'
 
 export default function ProjectCard({ project }: { project: Project }) {
   return (
@@ -8,9 +8,14 @@ export default function ProjectCard({ project }: { project: Project }) {
       {/* Image Container */}
       <div className="relative aspect-[4/3] bg-surface overflow-hidden">
         {project.image && (
+          // eslint-disable-next-line @next/next/no-img-element
           <img
-            src={project.image}
+            src={thumbUrl(project.image, 960)}
+            srcSet={uploadSrcSet(project.image)}
+            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
             alt={project.title}
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000"
           />
         )}

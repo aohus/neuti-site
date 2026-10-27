@@ -12,6 +12,7 @@ import { Performance } from '@/types/performance'
 import type { TechnologyItemData } from '@/lib/technologyApi'
 import { useAuth } from '@/context/AuthContext'
 import TechnologyEditModal from './TechnologyEditModal'
+import { thumbUrl, uploadSrcSet } from '@/lib/thumb'
 
 // 홈 탭 title → 시공사례 DB job_main_category 매핑
 const TAB_TO_FILTER: Record<string, string> = {
@@ -297,7 +298,9 @@ const FilteredPerformanceCards = ({ tabTitle }: { tabTitle: string }) => {
                     RecentPortfolio 의 같은 주석 참고. */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={p.thumbnail_url}
+                  src={thumbUrl(p.thumbnail_url, 960)}
+                  srcSet={uploadSrcSet(p.thumbnail_url)}
+                  sizes="(min-width: 768px) 33vw, 100vw"
                   alt={p.title}
                   loading="lazy"
                   decoding="async"

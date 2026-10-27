@@ -17,6 +17,7 @@ import { useAuth } from '@/context/AuthContext'
 import { performanceApi } from '@/lib/performanceApi'
 import type { Performance } from '@/types/performance'
 import { formatKoreanDate } from './formatDate'
+import UploadPicture from '@/components/common/UploadPicture'
 
 interface Props {
   performance: Performance
@@ -74,9 +75,10 @@ function Hero({ performance }: { performance: Performance }) {
   return (
     <div className="relative h-[60vh] w-full overflow-hidden bg-gray-900">
       {performance.thumbnail_url ? (
-        <img
+        <UploadPicture
           src={performance.thumbnail_url}
           alt={performance.title}
+          sizes="100vw"
           fetchPriority="high"
           className="h-full w-full object-cover opacity-70"
         />

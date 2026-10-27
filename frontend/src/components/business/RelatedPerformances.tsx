@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { Performance } from '@/types/performance'
 import { performanceApi } from '@/lib/performanceApi'
+import { thumbUrl, uploadSrcSet } from '@/lib/thumb'
 
 interface RelatedPerformancesProps {
   category: string
@@ -86,7 +87,9 @@ export default function RelatedPerformances({
                     {perf.thumbnail_url ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
-                        src={perf.thumbnail_url}
+                        src={thumbUrl(perf.thumbnail_url, 960)}
+                        srcSet={uploadSrcSet(perf.thumbnail_url)}
+                        sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
                         alt={perf.title}
                         loading="lazy"
                         decoding="async"
