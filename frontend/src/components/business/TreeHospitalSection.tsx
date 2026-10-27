@@ -3,8 +3,9 @@
 import React from 'react'
 import Container from '@/components/common/Container'
 import Image from 'next/image'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { ShieldCheck, Search, Activity, AlertTriangle } from 'lucide-react'
+import { ShieldCheck, Search, Activity, AlertTriangle, TreePine, ArrowRight } from 'lucide-react'
 import RelatedPerformances from './RelatedPerformances'
 
 const features = [
@@ -84,6 +85,38 @@ export default function TreeHospitalSection() {
                 </motion.div>
               ))}
             </div>
+
+            {/* 방제기(9월-3월)에 검색으로 들어온 방문자를 재선충 현장진단 페이지로 보낸다 */}
+            <motion.div
+              data-reveal
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <Link
+                href="/pine-wilt"
+                className="group flex items-center gap-4 rounded-3xl bg-deep px-5 py-5 transition-shadow hover:shadow-xl md:gap-5 md:px-7 md:py-6"
+              >
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-amber-400 text-deep md:h-[52px] md:w-[52px]">
+                  <TreePine className="h-6 w-6 md:h-[26px] md:w-[26px]" aria-hidden />
+                </span>
+                <span className="flex min-w-0 grow flex-col gap-1">
+                  <span className="text-xs font-black tracking-[0.08em] text-amber-400">
+                    방제기 9월-3월 집중 운영
+                  </span>
+                  <span className="text-[17px] font-black text-white md:text-[19px]">
+                    소나무재선충병 현장진단
+                  </span>
+                  <span className="text-[13px] font-bold text-green-100 md:text-sm">
+                    나무의사 현장 1차 진단 · 관할 기관 신고 연계 · 예방나무주사
+                  </span>
+                </span>
+                <ArrowRight
+                  className="h-6 w-6 shrink-0 text-green-200 transition-transform group-hover:translate-x-1"
+                  aria-hidden
+                />
+              </Link>
+            </motion.div>
           </div>
 
           {/* Visual Content — asymmetric 3-photo grid */}
@@ -105,8 +138,8 @@ export default function TreeHospitalSection() {
             </div>
             <div className="col-span-6 row-span-1 relative aspect-[4/5] overflow-hidden rounded-3xl shadow-xl mt-8 md:mt-16">
               <Image
-                src="/images/business/tree-hospital-2.jpg"
-                alt="나무병원 치료 현장"
+                src="/images/business/park-pest-control-2025.jpg"
+                alt="2025년 수정·중원구 공원 산림·돌발해충 방제 현장"
                 fill
                 sizes="(min-width: 1024px) 25vw, 50vw"
                 className="object-cover"
