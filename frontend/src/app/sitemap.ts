@@ -1,8 +1,12 @@
 import type { MetadataRoute } from "next";
+import { getNotices, getPerformanceFeed } from "@/lib/feed";
+import { SITE_URL } from "@/lib/seo";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://xn--910b90bw7nhubu9w9vr.com";
+// 빌드(CI) 시점에는 백엔드에 닿지 않아 시공사례가 빠진 sitemap 이 프리렌더된다. 요청 시점에 만든다.
+export const dynamic = "force-dynamic";
 
-// Static pages with their update frequency and priority
+// 정적 페이지는 실제 수정일을 알 수 없으므로 lastModified 를 넣지 않는다.
+// (매 요청 new Date() 를 넣으면 검색엔진이 lastmod 를 신뢰하지 않게 된다)
 const staticPages: {
   path: string;
   changeFrequency: MetadataRoute.Sitemap[number]["changeFrequency"];
@@ -20,40 +24,26 @@ const staticPages: {
   { path: "/contract", changeFrequency: "monthly", priority: 0.9 },
 ];
 
-async function getPerformanceIds(): Promise<{ id: number; created_at: string }[]> {
-  const backendUrl = process.env.BACKEND_INTERNAL_URL || "http://backend:8000";
-  try {
-    const res = await fetch(`${backendUrl}/api/v1/performance/?limit=500`, {
-      next: { revalidate: 3600 },
-    });
-    if (!res.ok) return [];
-    const data = await res.json();
-    return data.map((p: { id: number; created_at: string }) => ({
-      id: p.id,
-      created_at: p.created_at,
-    }));
-  } catch {
-    return [];
-  }
-}
-
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const entries: MetadataRoute.Sitemap = staticPages.map((page) => ({
-    url: `${SITE_URL}${page.path}`,
-    lastModified: new Date(),
-    changeFrequency: page.changeFrequency,
-    priority: page.priority,
-  }));
+  const [performances, notices] = await Promise.all([getPerformanceFeed(), getNotices()]);
 
-  const performances = await getPerformanceIds();
-  for (const p of performances) {
-    entries.push({
+  return [
+    ...staticPages.map((page) => ({
+      url: `${SITE_URL}${page.path}`,
+      changeFrequency: page.changeFrequency,
+      priority: page.priority,
+    })),
+    ...performances.map((p) => ({
       url: `${SITE_URL}/performance/${p.id}`,
-      lastModified: new Date(p.created_at),
-      changeFrequency: "monthly",
+      lastModified: new Date(p.updated_at ?? p.created_at),
+      changeFrequency: "monthly" as const,
       priority: 0.6,
-    });
-  }
-
-  return entries;
+    })),
+    ...notices.map((n) => ({
+      url: `${SITE_URL}/notice/${n.id}`,
+      lastModified: new Date(n.created_at),
+      changeFrequency: "yearly" as const,
+      priority: 0.3,
+    })),
+  ];
 }
