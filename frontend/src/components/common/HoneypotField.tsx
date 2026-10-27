@@ -1,10 +1,10 @@
 'use client'
 
-import type { UseFormRegisterReturn } from 'react-hook-form'
+import type { ComponentPropsWithRef } from 'react'
 
 interface HoneypotFieldProps {
-  /** react-hook-form 의 register('website') 결과 */
-  registration: UseFormRegisterReturn
+  /** react-hook-form 의 register('website') 결과, 또는 비제어 입력용 { name, ref } */
+  registration: Pick<ComponentPropsWithRef<'input'>, 'name' | 'onChange' | 'onBlur' | 'ref'>
 }
 
 // 사람에게는 보이지 않고 봇에게만 보이는 미끼 필드.

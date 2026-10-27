@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import axios from 'axios'
+import HoneypotField from '@/components/common/HoneypotField'
 
 export default function QnAWritePage() {
   const [title, setTitle] = useState('')
@@ -11,7 +12,10 @@ export default function QnAWritePage() {
   const [password, setPassword] = useState('')
   const [isSecret, setIsSecret] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  
+  // 봇 판별용: 화면 밖 미끼 입력과 폼이 뜬 시각 (견적·진단 폼과 같은 규칙)
+  const honeypotRef = useRef<HTMLInputElement>(null)
+  const mountedAtRef = useRef(Date.now())
+
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -25,7 +29,9 @@ export default function QnAWritePage() {
         author,
         content,
         password: isSecret ? password : null,
-        is_secret: isSecret
+        is_secret: isSecret,
+        website: honeypotRef.current?.value ?? '',
+        elapsed_ms: Date.now() - mountedAtRef.current,
       })
       router.push('/qna')
     } catch (err) {
@@ -40,7 +46,8 @@ export default function QnAWritePage() {
     <div className="max-w-7xl mx-auto pt-24 pb-12 md:pt-40 px-4 sm:px-6 lg:px-8">
       <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center text-gray-900">시공/견적 문의하기</h2>
       
-      <form onSubmit={handleSubmit} className="space-y-8 bg-white p-8 rounded-3xl shadow-xl border border-gray-100">
+      <form onSubmit={handleSubmit} className="relative space-y-8 bg-white p-8 rounded-3xl shadow-xl border border-gray-100">
+        <HoneypotField registration={{ name: 'website', ref: honeypotRef }} />
         <div className="grid md:grid-cols-2 gap-8">
           <div>
             <label className="block text-sm font-bold text-gray-700 mb-2">작성자</label>

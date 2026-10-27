@@ -1,4 +1,4 @@
-"""공개 폼(견적 요청·수목진단 의뢰)의 봇 제출 차단.
+"""공개 폼(견적 요청·수목진단 의뢰·Q&A 문의)의 봇 제출 차단.
 
 2026-02-16 ~ 2026-08-22 사이 견적 폼에 접수된 62건이 전부 봇이었다. 모든 자유
 입력란이 무작위 영숫자였고, 전화번호는 한국 형식이 아닌 10자리였으며, 며칠 간격으로
@@ -26,10 +26,16 @@ def spam_guard(
     website: str | None = Form(None, include_in_schema=False),
     elapsed_ms: int | None = Form(None, include_in_schema=False),
 ) -> None:
+    """multipart 폼(견적·진단)용 의존성. 판정은 check_spam 이 한다."""
+    check_spam(website=website, elapsed_ms=elapsed_ms)
+
+
+def check_spam(*, website: str | None, elapsed_ms: int | None) -> None:
     """허니팟이 채워졌거나 사람이 쓰기엔 너무 빠른 제출을 차단한다.
 
     `website` 는 화면에서 감춰진 필드라 사람은 절대 채울 수 없다.
     `elapsed_ms` 는 폼이 화면에 뜬 뒤 제출까지 걸린 시간이다.
+    JSON 으로 받는 폼(Q&A 문의)은 본문에서 두 값을 꺼내 직접 호출한다.
     """
     if website:
         logger.warning("스팸 차단: 허니팟 필드가 채워짐")

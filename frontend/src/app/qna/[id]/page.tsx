@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
 import { useAuth } from '@/context/AuthContext'
-import axios from 'axios'
+import axios, { type AxiosRequestConfig } from 'axios'
 import { Inquiry } from '@/types/board'
 
 export default function QnADetailPage() {
@@ -12,6 +12,7 @@ export default function QnADetailPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [password, setPassword] = useState('')
   const [isPasswordRequired, setIsPasswordRequired] = useState(false)
+  const [passwordError, setPasswordError] = useState<string | null>(null)
   const [answerContent, setAnswerContent] = useState('')
   const [isAnswering, setIsAnswering] = useState(false)
   
@@ -24,15 +25,25 @@ export default function QnADetailPage() {
     setIsLoading(true)
     try {
       const apiUrl = '/backend-api'
-      const config: any = {}
+      const config: AxiosRequestConfig = {}
       if (token) config.headers = { Authorization: `Bearer ${token}` }
       
-      const response = await axios.get(`${apiUrl}/inquiry/${id}${pw ? `?password=${pw}` : ''}`, config)
+      // 비밀번호는 접근 로그·브라우저 기록에 남지 않도록 본문으로 보낸다
+      const response = pw
+        ? await axios.post(`${apiUrl}/inquiry/${id}/access`, { password: pw }, config)
+        : await axios.get(`${apiUrl}/inquiry/${id}`, config)
       setInquiry(response.data)
       setIsPasswordRequired(false)
-    } catch (err: any) {
-      if (err.response?.status === 401) {
+      setPasswordError(null)
+    } catch (err: unknown) {
+      const response = (err as { response?: { status?: number; data?: { detail?: string } } }).response
+      const status = response?.status
+      if (status === 401) {
         setIsPasswordRequired(true)
+        setPasswordError(pw ? '비밀번호가 일치하지 않습니다.' : null)
+      } else if (status === 429) {
+        setIsPasswordRequired(true)
+        setPasswordError(response?.data?.detail ?? '잠시 후 다시 시도해주세요.')
       } else {
         console.error('Failed to fetch inquiry', err)
         router.push('/qna')
@@ -56,7 +67,7 @@ export default function QnADetailPage() {
         { inquiry_id: Number(id), content: answerContent },
         { headers: { Authorization: `Bearer ${token}` } }
       )
-      fetchInquiry()
+      fetchInquiry(password || undefined)
       setAnswerContent('')
     } catch (err) {
       console.error('Failed to save answer', err)
@@ -90,6 +101,11 @@ export default function QnADetailPage() {
               placeholder="비밀번호"
               required
             />
+            {passwordError && (
+              <p role="alert" className="text-sm text-red-600">
+                {passwordError}
+              </p>
+            )}
             <button
               type="submit"
               className="w-full bg-green-700 text-white py-3 rounded-xl font-bold hover:bg-green-800 transition-all shadow-md"

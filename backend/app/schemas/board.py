@@ -44,6 +44,17 @@ class InquiryBase(BaseModel):
 class InquiryCreate(InquiryBase):
     password: str | None = None
 
+# 공개 작성 폼 요청. 스팸 판정 필드는 저장하지 않고 엔드포인트에서 걸러낸다.
+class InquirySubmit(InquiryCreate):
+    website: str | None = None
+    elapsed_ms: int | None = None
+
+    def to_create(self) -> InquiryCreate:
+        return InquiryCreate(**self.model_dump(exclude={"website", "elapsed_ms"}))
+
+class InquiryAccess(BaseModel):
+    password: str
+
 class InquiryUpdate(InquiryBase):
     title: str | None = None
     content: str | None = None

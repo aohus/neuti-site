@@ -66,7 +66,7 @@ async def test_비밀글_상세는_여전히_비밀번호로_열람된다():
         )
         inquiry_id = created.json()["id"]
         try:
-            res = await ac.get(f"/api/v1/inquiry/{inquiry_id}", params={"password": "pw1234"})
+            res = await ac.post(f"/api/v1/inquiry/{inquiry_id}/access", json={"password": "pw1234"})
             assert res.status_code == 200
             assert res.json()["content"] == "본문"
         finally:

@@ -63,6 +63,6 @@ async def test_read_secret_inquiry_with_password():
         assert read_res_fail.status_code == 401
         
         # 3. Read with correct password
-        read_res_ok = await ac.get(f"/api/v1/inquiry/{inquiry_id}?password=mypassword")
+        read_res_ok = await ac.post(f"/api/v1/inquiry/{inquiry_id}/access", json={"password": "mypassword"})
         assert read_res_ok.status_code == 200
         assert read_res_ok.json()["content"] == inquiry_data["content"]
