@@ -1,15 +1,11 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import Container from '../common/Container'
-import { performanceApi } from '@/lib/performanceApi'
 import type { Performance } from '@/types/performance'
-
-/** 홈에 노출할 최신 시공사례 수. 3열 그리드가 두 줄로 떨어지는 값. */
-export const RECENT_PORTFOLIO_LIMIT = 6
 
 /**
  * 홈 하단의 최신 시공사례.
@@ -18,29 +14,11 @@ export const RECENT_PORTFOLIO_LIMIT = 6
  * 카테고리를 고르지 않은 방문자는 최근 작업을 볼 수 없다. 이 섹션이
  * 카테고리 무관 최신순으로 그 공백을 메운다.
  *
- * 조회에 실패하거나 등록된 사례가 없으면 섹션 자체를 렌더링하지 않는다.
+ * 데이터는 홈 서버 컴포넌트가 받아 props 로 넘긴다(크롤러가 JS 없이도 링크를 본다).
+ * 등록된 사례가 없으면 섹션 자체를 렌더링하지 않는다.
  * 홈 한가운데의 "사례가 없습니다" 빈 상자는 없는 편이 낫다.
  */
-export default function RecentPortfolio() {
-  const [items, setItems] = useState<Performance[]>([])
-
-  useEffect(() => {
-    let isActive = true
-
-    performanceApi
-      .getPerformances(0, RECENT_PORTFOLIO_LIMIT)
-      .then((data) => {
-        if (isActive) setItems(data)
-      })
-      .catch(() => {
-        if (isActive) setItems([])
-      })
-
-    return () => {
-      isActive = false
-    }
-  }, [])
-
+export default function RecentPortfolio({ items }: { items: Performance[] }) {
   if (items.length === 0) return null
 
   return (

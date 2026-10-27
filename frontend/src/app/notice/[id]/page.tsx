@@ -1,56 +1,42 @@
-'use client'
-
-import { useState, useEffect } from 'react'
-import { useRouter, useParams } from 'next/navigation'
+import type { Metadata } from 'next'
 import Link from 'next/link'
-import { useAuth } from '@/context/AuthContext'
-import axios from 'axios'
+import { notFound } from 'next/navigation'
+import { buildMetadata } from '@/lib/seo'
+import { serverFetch } from '@/lib/serverApi'
 import { Notice } from '@/types/board'
+import NoticeAdminActions from '../NoticeAdminActions'
 
-export default function NoticeDetailPage() {
-  const [notice, setNotice] = useState<Notice | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-  
-  const { isAdmin, token } = useAuth()
-  const router = useRouter()
-  const params = useParams()
-  const id = params.id
+const DESCRIPTION_MAX = 150
 
-  const fetchNotice = async () => {
-    setIsLoading(true)
-    try {
-      const apiUrl = '/backend-api'
-      const response = await axios.get(`${apiUrl}/notice/${id}`)
-      setNotice(response.data)
-    } catch (err) {
-      console.error('Failed to fetch notice', err)
-      router.push('/notice')
-    } finally {
-      setIsLoading(false)
-    }
-  }
+type Props = { params: Promise<{ id: string }> }
 
-  const handleDelete = async () => {
-    if (!confirm('정말로 삭제하시겠습니까?')) return
+/** 숫자 id 만 백엔드로 보낸다. 없는 글은 null. 백엔드 장애는 던진다. */
+async function loadNotice(rawId: string): Promise<Notice | null> {
+  if (!/^\d+$/.test(rawId)) return null
+  return serverFetch<Notice>(`/notice/${rawId}`, { revalidate: 60 })
+}
 
-    try {
-      const apiUrl = '/backend-api'
-      await axios.delete(`${apiUrl}/notice/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      router.push('/notice')
-    } catch (err) {
-      console.error('Failed to delete notice', err)
-      alert('삭제에 실패했습니다.')
-    }
-  }
+function excerpt(content: string) {
+  const flat = content.replace(/\s+/g, ' ').trim()
+  return flat.length > DESCRIPTION_MAX ? `${flat.slice(0, DESCRIPTION_MAX - 1)}…` : flat
+}
 
-  useEffect(() => {
-    if (id) fetchNotice()
-  }, [id])
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params
+  const notice = await loadNotice(id)
+  if (!notice) return { title: '공지사항', robots: { index: false } }
+  return buildMetadata({
+    title: notice.title,
+    description: excerpt(notice.content) || '느티나무병원 협동조합 공지사항',
+    path: `/notice/${notice.id}`,
+    ogType: 'article',
+  })
+}
 
-  if (isLoading) return <div className="py-24 text-center">로딩 중...</div>
-  if (!notice) return null
+export default async function NoticeDetailPage({ params }: Props) {
+  const { id } = await params
+  const notice = await loadNotice(id)
+  if (!notice) notFound()
 
   return (
     <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
@@ -61,12 +47,7 @@ export default function NoticeDetailPage() {
             <span>작성일: {new Date(notice.created_at).toLocaleDateString()}</span>
             <span className="ml-4">조회수: {notice.views}</span>
           </div>
-          {isAdmin && (
-            <div className="space-x-4">
-              <Link href={`/notice/edit/${id}`} className="text-blue-600 hover:underline">수정</Link>
-              <button onClick={handleDelete} className="text-red-600 hover:underline">삭제</button>
-            </div>
-          )}
+          <NoticeAdminActions id={notice.id} />
         </div>
       </div>
 

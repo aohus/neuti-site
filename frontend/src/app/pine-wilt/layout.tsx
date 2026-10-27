@@ -1,7 +1,7 @@
-import type { Metadata } from "next";
-import { DEFAULT_OG_IMAGE } from "@/lib/seo";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = buildMetadata({
+  path: "/pine-wilt",
   title: "소나무재선충 현장진단",
   description:
     "소나무가 갑자기 갈변했다면 재선충부터 확인하세요. 산림청 등록 1종 나무병원의 나무의사가 현장에서 시료를 채취해 1차 진단하고, 관할 기관 신고 안내와 예방나무주사까지 이어 드립니다. 느티나무병원 협동조합.",
@@ -12,13 +12,10 @@ export const metadata: Metadata = {
     "예방나무주사",
     "성남 나무병원",
   ],
-  openGraph: {
-    images: [DEFAULT_OG_IMAGE],
-    title: "소나무재선충 현장진단 | 느티나무병원 협동조합",
-    description:
-      "나무의사 현장 1차 진단 · 관할 기관 신고 안내 · 예방나무주사. 현장진단 문의 031-752-6000.",
-  },
-};
+  ogTitle: "소나무재선충 현장진단 | 느티나무병원 협동조합",
+  ogDescription:
+    "나무의사 현장 1차 진단 · 관할 기관 신고 안내 · 예방나무주사. 현장진단 문의 031-752-6000.",
+});
 
 export default function PineWiltLayout({
   children,

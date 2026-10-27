@@ -1,8 +1,8 @@
-import type { Metadata } from 'next'
 import ContractContent from './ContractContent'
-import { DEFAULT_OG_IMAGE } from '@/lib/seo'
+import { buildMetadata } from '@/lib/seo'
 
-export const metadata: Metadata = {
+export const metadata = buildMetadata({
+  path: '/contract',
   title: '조경·수목관리 수의계약',
   description:
     '조경 수의계약 전문. 현장 확인 후 견적서 발급, 실적증명서·자격증빙 즉시 제공. 산림청 등록 1종 나무병원, 조경업 면허 보유. 느티나무병원 협동조합 031-752-6000.',
@@ -20,13 +20,10 @@ export const metadata: Metadata = {
     '경기 조경업체',
     '조경 수의계약 견적',
   ],
-  openGraph: {
-    images: [DEFAULT_OG_IMAGE],
-    title: '조경·수목관리 수의계약 | 느티나무병원 협동조합',
-    description:
-      '현장 확인 후 견적서 발급 · 실적증명서·자격증빙 즉시 제공. 관공서 수의계약 다수 실적.',
-  },
-}
+  ogTitle: '조경·수목관리 수의계약 | 느티나무병원 협동조합',
+  ogDescription:
+    '현장 확인 후 견적서 발급 · 실적증명서·자격증빙 즉시 제공. 관공서 수의계약 다수 실적.',
+})
 
 export default function ContractPage() {
   return <ContractContent />

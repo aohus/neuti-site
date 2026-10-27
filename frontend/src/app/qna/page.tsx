@@ -1,121 +1,32 @@
-'use client'
-
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import BoardTable from '@/components/common/BoardTable'
-import SearchBar from '@/components/common/SearchBar'
-import Pagination from '@/components/common/Pagination'
-import { useAuth } from '@/context/AuthContext'
-import axios from 'axios'
+import { serverFetch } from '@/lib/serverApi'
 import { Inquiry } from '@/types/board'
+import QnAList, { InquiryListItem } from './QnAList'
 
-import Container from '@/components/common/Container'
+// CI 의 docker build 에는 백엔드가 없다. 빌드 시점 프리렌더로 빈 목록이 굳지 않게 한다.
+export const dynamic = 'force-dynamic'
 
-export default function QnAListPage() {
-  const [inquiries, setInquiries] = useState<Inquiry[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [searchQuery, setSearchQuery] = useState('')
-  const [currentPage, setPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
-  
-  const { isAdmin } = useAuth()
-  const router = useRouter()
+const PAGE_SIZE = 10
 
-  const fetchInquiries = async () => {
-    setIsLoading(true)
-    const apiUrl = '/backend-api'
-    try {
-      const response = await axios.get(`${apiUrl}/inquiry/`, {
-        params: {
-          skip: (currentPage - 1) * 10,
-          limit: 10
-        }
-      })
-      setInquiries(response.data)
-      setTotalPages(1) 
-    } catch (err) {
-      console.error('Failed to fetch inquiries', err)
-    } finally {
-      setIsLoading(false)
-    }
+// 백엔드 목록 응답에는 비밀글 본문과 답변이 그대로 들어 있다. 현재 화면이 공개하는
+// 필드(제목·작성자·작성일·답변 여부·비밀글 표시)만 골라 넘긴다.
+function toListItem(i: Inquiry): InquiryListItem {
+  return {
+    id: i.id,
+    title: i.title,
+    author: i.author,
+    is_secret: i.is_secret,
+    created_at: i.created_at,
+    hasAnswer: Boolean(i.answer),
   }
+}
 
-  useEffect(() => {
-    fetchInquiries()
-  }, [currentPage])
-
-  const columns = [
-    { header: 'No', key: 'id', className: 'w-16' },
-    { 
-      header: '제목', 
-      key: 'title', 
-      render: (item: Inquiry) => (
-        <div className="flex items-center gap-2">
-          {item.is_secret && (
-            <svg className="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-            </svg>
-          )}
-          <span className="font-black text-deep">{item.title}</span>
-        </div>
-      ),
-      className: 'font-black text-deep' 
-    },
-    { header: '작성자', key: 'author', className: 'w-32 font-bold text-gray-500' },
-    { 
-      header: '작성일', 
-      key: 'created_at', 
-      render: (item: Inquiry) => new Date(item.created_at).toLocaleDateString(),
-      className: 'w-32 font-bold text-gray-400'
-    },
-    { 
-      header: '상태', 
-      key: 'status', 
-      render: (item: Inquiry) => (
-        <span className={`px-3 py-1 rounded-full text-xs font-black ${item.answer ? 'bg-primary/10 text-primary' : 'bg-gray-100 text-gray-400'}`}>
-          {item.answer ? '답변완료' : '접수완료'}
-        </span>
-      ),
-      className: 'w-24'
-    },
-  ]
-
-  return (
-    <div className="page-py bg-white">
-      <Container>
-        <div className="flex justify-between items-end mb-8 md:mb-16">
-          <div>
-            <span className="text-label">Support</span>
-            <p className="mt-2 text-3xl font-black text-deep tracking-tight sm:text-4xl">시공/견적문의</p>
-          </div>
-          <Link
-            href="/qna/write"
-            className="bg-deep text-white px-8 py-3 rounded-2xl font-black hover:bg-black transition-all shadow-xl shadow-deep/10"
-          >
-            문의하기
-          </Link>
-        </div>
-
-        <div className="mb-8">
-          <SearchBar value={searchQuery} onChange={setSearchQuery} />
-        </div>
-
-        <BoardTable
-          columns={columns}
-          data={inquiries}
-          isLoading={isLoading}
-          onRowClick={(item) => router.push(`/qna/${item.id}`)}
-        />
-
-        <div className="mt-12">
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setPage}
-          />
-        </div>
-      </Container>
-    </div>
-  )
+export default async function QnAListPage() {
+  let inquiries: InquiryListItem[] = []
+  try {
+    const data = await serverFetch<Inquiry[]>(`/inquiry?skip=0&limit=${PAGE_SIZE}`, { revalidate: 60 })
+    inquiries = (data ?? []).map(toListItem)
+  } catch (err) {
+    console.error('Failed to fetch inquiries', err)
+  }
+  return <QnAList inquiries={inquiries} />
 }

@@ -14,6 +14,7 @@ jest.mock('@/components/home/RecentPortfolio', () => {
   Mock.displayName = 'RecentPortfolio'
   return Mock
 })
+jest.mock('@/lib/serverApi', () => ({ serverFetch: jest.fn().mockResolvedValue(null) }))
 jest.mock('next/image', () => ({
   __esModule: true,
   default: ({ alt, src }: { alt: string; src: string }) => (
@@ -29,8 +30,8 @@ jest.mock('next/image', () => ({
  * 섹션이 빠지거나 순서가 뒤집히면 이 흐름이 깨지므로 순서까지 검증한다.
  */
 describe('Home Page', () => {
-  it('고객 여정 순서대로 모든 섹션을 렌더링한다', () => {
-    const { container } = render(<Page />)
+  it('고객 여정 순서대로 모든 섹션을 렌더링한다', async () => {
+    const { container } = render(await Page())
 
     const sections = Array.from(
       container.querySelectorAll('[data-section]')
@@ -50,8 +51,8 @@ describe('Home Page', () => {
    * 홈에서 수의계약 안내로 가는 길은 내비게이션과 Hero 버튼이면 충분하다.
    * 본문 섹션까지 계약 이야기로 채우면 조경·수목관리 회사로 읽히지 않는다.
    */
-  it('본문 섹션은 수의계약 페이지로 유도하지 않는다', () => {
-    const { container } = render(<Page />)
+  it('본문 섹션은 수의계약 페이지로 유도하지 않는다', async () => {
+    const { container } = render(await Page())
 
     const bodyLinks = Array.from(
       container.querySelectorAll(
@@ -61,13 +62,13 @@ describe('Home Page', () => {
     expect(bodyLinks).toHaveLength(0)
   })
 
-  it('h1 은 하나만 두어 문서 구조를 유지한다', () => {
-    render(<Page />)
+  it('h1 은 하나만 두어 문서 구조를 유지한다', async () => {
+    render(await Page())
     expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1)
   })
 
-  it('데스크톱 방문자도 홈에서 바로 전화 견적을 걸 수 있다', () => {
-    render(<Page />)
+  it('데스크톱 방문자도 홈에서 바로 전화 견적을 걸 수 있다', async () => {
+    render(await Page())
     const telLinks = screen
       .getAllByRole('link')
       .filter((el) => el.getAttribute('href')?.startsWith('tel:'))

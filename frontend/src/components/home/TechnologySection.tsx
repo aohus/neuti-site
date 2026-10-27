@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Maximize2, X, ChevronLeft, ChevronRight, ArrowRight, Pencil } from 'lucide-react'
 import Image from 'next/image'
@@ -9,7 +9,7 @@ import Container from '../common/Container'
 import { technologyItems as staticItems, TechnologyItem, TechnologyImage } from '@/data/home-content'
 import { performanceApi } from '@/lib/performanceApi'
 import { Performance } from '@/types/performance'
-import { technologyApi, TechnologyItemData } from '@/lib/technologyApi'
+import type { TechnologyItemData } from '@/lib/technologyApi'
 import { useAuth } from '@/context/AuthContext'
 import TechnologyEditModal from './TechnologyEditModal'
 
@@ -374,29 +374,22 @@ const TabContent = ({
   )
 }
 
-export default function TechnologySection() {
+export default function TechnologySection({
+  initialItems = [],
+}: {
+  /** 서버에서 받은 기술력 항목. 비어 있으면 정적 폴백을 쓴다. */
+  initialItems?: TechnologyItemData[]
+}) {
   const { isAdmin } = useAuth()
-  const [items, setItems] = useState<TechnologyItem[]>(staticItems)
-  const [apiItems, setApiItems] = useState<TechnologyItemData[]>([])
-  const [activeTabId, setActiveTabId] = useState(staticItems[0].id)
+  const [items, setItems] = useState<TechnologyItem[]>(() =>
+    initialItems.length > 0 ? initialItems.map(apiToLocal) : staticItems
+  )
+  const [apiItems, setApiItems] = useState<TechnologyItemData[]>(initialItems)
+  const [activeTabId, setActiveTabId] = useState(() =>
+    initialItems.length > 0 ? initialItems[0].item_key : staticItems[0].id
+  )
   const [lightbox, setLightbox] = useState({ isOpen: false, index: 0 })
   const [editModal, setEditModal] = useState<{ isOpen: boolean; apiItem: TechnologyItemData | null }>({ isOpen: false, apiItem: null })
-
-  const fetchItems = useCallback(async () => {
-    try {
-      const data = await technologyApi.getItems()
-      if (data.length > 0) {
-        setApiItems(data)
-        setItems(data.map(apiToLocal))
-      }
-    } catch {
-      // API failed — keep static fallback
-    }
-  }, [])
-
-  useEffect(() => {
-    fetchItems()
-  }, [fetchItems])
 
   const activeItem = items.find(item => item.id === activeTabId) || items[0]
   const activeApiItem = apiItems.find(a => a.item_key === activeTabId)

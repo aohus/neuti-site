@@ -1,17 +1,14 @@
-import type { Metadata } from "next";
-import { DEFAULT_OG_IMAGE } from "@/lib/seo";
+import { buildMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = buildMetadata({
+  path: "/business",
   title: "주요 사업",
   description:
     "나무병원(수목 진단·치료·방제) 및 조경식재(설계·시공·유지관리) 전문. 수의계약 가능, 현장 확인 후 견적 발급. 느티나무병원 협동조합.",
-  openGraph: {
-    images: [DEFAULT_OG_IMAGE],
-    title: "주요 사업 | 느티나무병원 협동조합",
-    description:
-      "수목 진단·치료, 조경식재, 녹지관리, 병충해 방제. 수의계약 견적 문의 031-752-6000.",
-  },
-};
+  ogTitle: "주요 사업 | 느티나무병원 협동조합",
+  ogDescription:
+    "수목 진단·치료, 조경식재, 녹지관리, 병충해 방제. 수의계약 견적 문의 031-752-6000.",
+});
 
 export default function BusinessLayout({
   children,
