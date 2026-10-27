@@ -32,8 +32,10 @@ RUN adduser --system --uid 1001 nextjs
 COPY --from=builder /app/public ./public
 
 # Set the correct permission for prerender cache
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
+# .next/cache/images 는 compose 에서 named volume 으로 붙는다. 빈 볼륨은 처음 붙을 때
+# 이미지의 디렉터리 소유권을 물려받으므로 nextjs 가 쓸 수 있게 미리 만들어 둔다.
+RUN mkdir -p .next/cache/images
+RUN chown -R nextjs:nodejs .next
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing

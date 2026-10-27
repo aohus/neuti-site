@@ -14,6 +14,8 @@ services:
       - PYTHONPATH=/app
     volumes:
       - ./backend/uploads:/app/uploads
+      # 썸네일 캐시(/api/v1/thumb). uploads 밖에 둬야 배포의 폴더 정리에 지워지지 않는다
+      - thumb_cache_prod:/app/thumb-cache
     restart: always
     expose:
       - "8000"
@@ -59,6 +61,11 @@ services:
     environment:
       - NEXT_PUBLIC_API_URL=/backend-api
       - BACKEND_INTERNAL_URL=http://neuti-backend:8000
+    volumes:
+      # next/image 변환 캐시. 컨테이너를 새로 띄울 때마다 비면 배포 직후 홈 이미지가
+      # CPU 0.5 개로 원본(최대 7MB)을 다시 변환하느라 장당 0.5~1초씩 늦게 뜬다.
+      # images 만 붙인다 — .next/cache 통째면 이전 빌드의 fetch 캐시까지 살아남는다
+      - next_image_cache_prod:/app/.next/cache/images
     restart: always
     expose:
       - "3000"
@@ -131,3 +138,5 @@ networks:
 
 volumes:
   postgres_data_prod:
+  thumb_cache_prod:
+  next_image_cache_prod:
