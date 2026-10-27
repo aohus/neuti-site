@@ -11,7 +11,7 @@ import FinalCTA from '@/components/common/FinalCTA'
 /**
  * 홈 섹션 순서. 바꾸면 `__tests__/index.test.tsx` 가 실패한다.
  *
- * 수의계약 안내는 상단 내비게이션과 Hero 버튼으로 충분하다. 홈 본문까지
+ * 수의계약 안내는 상단 내비게이션과 Hero 서비스 패널로 충분하다. 홈 본문까지
  * 계약 이야기로 채우면 조경·수목관리 회사가 아니라 관공서 영업 페이지처럼 읽힌다.
  */
 export default function Home() {

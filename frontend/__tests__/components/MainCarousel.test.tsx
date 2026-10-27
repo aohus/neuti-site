@@ -27,13 +27,13 @@ describe('MainCarousel', () => {
     ).toBeInTheDocument()
   })
 
-  it('renders both call-to-action links', () => {
-    render(<MainCarousel />)
+  // 히어로 버튼 2개(견적·상담 문의 / 수의계약 안내)는 서비스 패널로 대체됐다.
+  // 패널 항목 자체는 home_service_panel.test.tsx 에서 검증한다.
+  it('renders the service panel inside the hero wrapper', () => {
+    const { container } = render(<MainCarousel />)
 
-    const inquiry = screen.getByRole('link', { name: /견적·상담 문의/ })
-    expect(inquiry).toHaveAttribute('href', '/request')
-
-    const contract = screen.getByRole('link', { name: /수의계약 안내/ })
-    expect(contract).toHaveAttribute('href', '/contract')
+    const hero = container.querySelector('[data-section="hero"]')
+    const panel = screen.getByRole('navigation', { name: '지금 많이 찾는 서비스' })
+    expect(hero).toContainElement(panel)
   })
 })
