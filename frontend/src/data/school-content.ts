@@ -75,6 +75,14 @@ export const treeDoctor = {
 
 export type SchoolFirstIcon = 'calendar' | 'shield' | 'leaf' | 'document'
 
+export type SchoolFirstPhoto = {
+  src: string
+  alt: string
+  caption: string
+  /** 사진 크롭 기준 (object-position) */
+  position?: string
+}
+
 export const schoolFirst = {
   label: 'SCHOOL FIRST',
   title: '학교라서 다르게 일합니다',
@@ -100,18 +108,26 @@ export const schoolFirst = {
       desc: '작업 사진대지와 완료보고를 함께 드려 행정실 정산 업무가 줄어듭니다.'
     }
   ],
+  // 예찰(촬영) → 예찰(점검·기록) → 방제 순서. position 은 4:3 크롭 기준점(object-position)
   photos: [
     {
-      src: '/images/business/tree-hospital-1.jpg',
-      alt: '나무의사가 소나무 밑동을 살피며 수목 상태를 확인하고 있다',
-      caption: '나무의사 현장 예찰'
+      src: '/images/business/diagnosis-apartment.jpg',
+      alt: '한국나무의사협회 조끼를 입은 나무의사가 아파트 단지 수목의 가지에 카메라를 가까이 대고 촬영하고 있다',
+      caption: '나무의사 예찰 — 의심 증상을 가까이서 촬영',
+      position: 'center 80%'
+    },
+    {
+      src: '/images/business/diagnosis-school.jpg',
+      alt: '나무의사가 교정 화단 옆에서 수목 상태를 살피며 기록지에 적고 있다',
+      caption: '나무의사 예찰 — 교정 수목을 둘러보며 상태 기록'
     },
     {
       src: '/images/school/sudo-girls-spray-truck.jpg',
       alt: '수도여고 회랑 옆에 1톤 방제차량을 세우고 작업자가 호스를 끌어 생울타리에 약액을 살포하고 있다',
-      caption: '수도여고 — 1톤 방제차량 거점 작업으로 교정 전역을 하루에'
+      caption: '수도여고 — 1톤 방제차량 거점 작업으로 교정 전역을 하루에',
+      position: '30% center'
     }
-  ]
+  ] as SchoolFirstPhoto[]
 }
 
 /** 학교 회계연도 순서 (3월 시작, 이듬해 2월 종료) */

@@ -62,7 +62,7 @@ export default function SchoolFirstSection() {
           })}
         </div>
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           {schoolFirst.photos.map((photo) => (
             <motion.figure
               key={photo.src}
@@ -72,13 +72,14 @@ export default function SchoolFirstSection() {
               viewport={{ once: true }}
               className="m-0 flex flex-col gap-2.5"
             >
-              <div className="relative aspect-video overflow-hidden rounded-3xl">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-3xl">
                 <Image
                   src={photo.src}
                   alt={photo.alt}
                   fill
-                  sizes="(min-width: 768px) 50vw, 100vw"
+                  sizes="(min-width: 768px) 33vw, 100vw"
                   className="object-cover"
+                  style={{ objectPosition: photo.position }}
                 />
               </div>
               <figcaption className="text-[13px] font-bold text-gray-500">

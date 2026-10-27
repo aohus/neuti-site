@@ -107,7 +107,12 @@ describe('/school 학교 수목관리 페이지', () => {
     const { container } = render(<SchoolPage />)
 
     expect(screen.getByText('학교 여건에 따라 조정됩니다')).toBeInTheDocument()
-    expect(screen.getByText('나무의사 현장 예찰')).toBeInTheDocument()
+    expect(
+      screen.getByText('나무의사 예찰 — 의심 증상을 가까이서 촬영')
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText('나무의사 예찰 — 교정 수목을 둘러보며 상태 기록')
+    ).toBeInTheDocument()
     // 대괄호 자리표시가 화면에 남지 않는다
     expect(container.textContent).not.toMatch(/\[[^\]]*\]/)
   })
