@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Layout from "@/components/Layout";
 import { AuthProvider } from "@/context/AuthContext";
+import { DEFAULT_OG_IMAGE } from "@/lib/seo";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,10 +16,13 @@ const geistMono = Geist_Mono({
 });
 
 const SITE_NAME = "느티나무병원 협동조합";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://xn--910b90bw7nhubu9w9vr.com";
 const SITE_DESCRIPTION =
   "산림청 등록 1종 나무병원 · 수목진단·치료 · 조경수/관목 식재 · 계절꽃 화단 조성 · 녹지관리 전문. 수의계약 견적 문의. 031-752-6000";
 
 export const metadata: Metadata = {
+  // og:image 등 상대 경로 메타 URL 을 절대 URL 로 바꿀 기준.
+  metadataBase: new URL(SITE_URL),
   title: {
     template: `%s | ${SITE_NAME}`,
     default: `${SITE_NAME} | 조경·수목진단 전문 (수의계약 가능)`,
@@ -39,6 +43,7 @@ export const metadata: Metadata = {
     "경기 조경업체",
   ],
   openGraph: {
+    images: [DEFAULT_OG_IMAGE],
     type: "website",
     locale: "ko_KR",
     siteName: SITE_NAME,
@@ -57,7 +62,9 @@ export default function RootLayout({
     "@type": "LocalBusiness",
     name: SITE_NAME,
     description: SITE_DESCRIPTION,
-    url: "https://xn--910b90bw7nhubu9w9vr.com",
+    url: SITE_URL,
+    logo: `${SITE_URL}/brand/logo.svg`,
+    image: `${SITE_URL}${DEFAULT_OG_IMAGE.url}`,
     telephone: "031-752-6000",
     email: "coopneuti@naver.com",
     address: {

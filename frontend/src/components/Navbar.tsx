@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
 import { Menu, X } from 'lucide-react'
 import Container from './common/Container'
+import BrandLogo from './common/BrandLogo'
 
 const links = [
   { name: '홈', href: '/' },
@@ -53,12 +54,13 @@ export default function Navbar() {
       <header className="fixed top-0 left-0 z-[100] w-full border-b border-black/5 bg-white/95 shadow-sm backdrop-blur-md transition-all">
         <Container className="flex h-16 items-center justify-between md:h-20">
           {/* Logo */}
-          <Link href="/" className="group flex min-w-0 items-center">
-            {/* 320px 화면에서 로고 + 햄버거가 빠듯하다. flex-shrink-0 대신 min-w-0 을
-                주고 글자 크기를 한 단계 낮춰 좁은 화면에서도 밀리지 않게 한다. */}
-            <span className="text-deep truncate text-lg font-black tracking-tighter transition-opacity group-hover:opacity-70 sm:text-xl md:text-2xl">
-              느티나무병원 협동조합
-            </span>
+          <Link
+            href="/"
+            aria-label="느티나무병원 협동조합 홈"
+            className="flex min-w-0 items-center transition-opacity hover:opacity-80"
+          >
+            {/* 320px 화면에서 로고(h-9 ≈ 196px) + 햄버거가 들어가도록 모바일은 한 단계 낮춘다. */}
+            <BrandLogo priority className="h-9 md:h-11" />
           </Link>
 
           {/* Desktop Navigation */}

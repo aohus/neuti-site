@@ -5,15 +5,17 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ArrowRight, Phone } from 'lucide-react'
 import Container from '@/components/common/Container'
+import { BrandWatermark } from '@/components/common/BrandLogo'
 import { schoolCta, SCHOOL_PHONE } from '@/data/school-content'
 
 export default function SchoolCTA() {
   return (
     <section
       data-section="school-cta"
-      className="section-py-lg bg-green-700 text-center text-white"
+      className="section-py-lg bg-primary relative overflow-hidden text-center text-white"
     >
-      <Container>
+      <BrandWatermark />
+      <Container className="relative z-10">
         <motion.div
           data-reveal
           initial={{ opacity: 0, y: 20 }}
@@ -35,7 +37,7 @@ export default function SchoolCTA() {
           <div className="flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row">
             <Link
               href={schoolCta.primaryCta.href}
-              className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-9 py-4 text-base font-black text-green-700 shadow-2xl transition-all hover:bg-green-50 active:scale-95 sm:w-auto md:text-[17px]"
+              className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-9 py-4 text-base font-black text-primary shadow-2xl transition-all hover:bg-green-50 active:scale-95 sm:w-auto md:text-[17px]"
             >
               {schoolCta.primaryCta.label}
               <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />

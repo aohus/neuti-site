@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import ContractContent from './ContractContent'
+import { DEFAULT_OG_IMAGE } from '@/lib/seo'
 
 export const metadata: Metadata = {
   title: '조경·수목관리 수의계약',
@@ -20,6 +21,7 @@ export const metadata: Metadata = {
     '조경 수의계약 견적',
   ],
   openGraph: {
+    images: [DEFAULT_OG_IMAGE],
     title: '조경·수목관리 수의계약 | 느티나무병원 협동조합',
     description:
       '현장 확인 후 견적서 발급 · 실적증명서·자격증빙 즉시 제공. 관공서 수의계약 다수 실적.',

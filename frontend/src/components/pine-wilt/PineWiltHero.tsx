@@ -46,7 +46,7 @@ export default function PineWiltHero() {
           <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <Link
               href={DIAGNOSIS_REQUEST_HREF}
-              className="group bg-primary inline-flex items-center justify-center gap-2 rounded-full px-8 py-4 text-base font-black text-white shadow-lg transition-all hover:bg-green-700 active:scale-95 md:py-[18px] md:text-[17px]"
+              className="group bg-primary inline-flex items-center justify-center gap-2 rounded-full px-8 py-4 text-base font-black text-white shadow-lg transition-all hover:bg-deep active:scale-95 md:py-[18px] md:text-[17px]"
             >
               {hero.primaryLabel}
               <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
 import axios from 'axios'
+import BrandLogo from '@/components/common/BrandLogo'
 
 export default function LoginPage() {
   const [username, setUsername] = useState('')
@@ -42,9 +43,10 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="max-w-md mx-auto py-12 px-4 md:py-24">
+    <div className="max-w-md mx-auto px-4 pt-28 pb-12 md:pt-36 md:pb-24">
       <div className="bg-white p-8 rounded-3xl shadow-xl border border-gray-100">
-        <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">관리자 로그인</h2>
+        <BrandLogo variant="stacked" className="mx-auto mb-6 h-28" />
+        <h2 className="text-2xl font-bold text-center text-gray-900 mb-8">관리자 로그인</h2>
         
         {error && (
           <div className="bg-red-50 text-red-600 p-4 rounded-xl text-sm mb-6 border border-red-100">
@@ -78,7 +80,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-green-700 text-white py-4 rounded-xl font-bold text-lg hover:bg-green-800 transition-all shadow-md hover:shadow-lg disabled:bg-gray-400"
+            className="w-full bg-primary text-white py-4 rounded-xl font-bold text-lg hover:bg-deep transition-all shadow-md hover:shadow-lg disabled:bg-gray-400"
           >
             {isLoading ? '로그인 중...' : '로그인'}
           </button>

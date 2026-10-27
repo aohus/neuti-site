@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { DEFAULT_OG_IMAGE } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "소나무재선충 현장진단",
@@ -12,6 +13,7 @@ export const metadata: Metadata = {
     "성남 나무병원",
   ],
   openGraph: {
+    images: [DEFAULT_OG_IMAGE],
     title: "소나무재선충 현장진단 | 느티나무병원 협동조합",
     description:
       "나무의사 현장 1차 진단 · 관할 기관 신고 안내 · 예방나무주사. 현장진단 문의 031-752-6000.",

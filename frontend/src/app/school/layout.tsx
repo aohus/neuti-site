@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { DEFAULT_OG_IMAGE } from '@/lib/seo'
 
 export const metadata: Metadata = {
   title: '학교 수목관리·병해충 방제',
@@ -12,6 +13,7 @@ export const metadata: Metadata = {
     '나무의사 학교'
   ],
   openGraph: {
+    images: [DEFAULT_OG_IMAGE],
     title: '학교 수목관리·병해충 방제 | 느티나무병원 협동조합',
     description:
       '나무의사 예찰·처방부터 방제 시공, 학교 회계연도에 맞춘 연간관리까지. 상담 문의 031-752-6000.'

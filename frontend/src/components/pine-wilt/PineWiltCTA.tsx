@@ -4,6 +4,7 @@ import React from 'react'
 import Link from 'next/link'
 import { ArrowRight, Phone } from 'lucide-react'
 import Container from '@/components/common/Container'
+import { BrandWatermark } from '@/components/common/BrandLogo'
 import {
   DIAGNOSIS_REQUEST_HREF,
   PINE_WILT_PHONE,
@@ -19,9 +20,10 @@ export default function PineWiltCTA() {
   return (
     <section
       data-section="pw-cta"
-      className="section-py-lg bg-green-700 text-center"
+      className="section-py-lg bg-primary relative overflow-hidden text-center"
     >
-      <Container>
+      <BrandWatermark />
+      <Container className="relative z-10">
         <Reveal className="flex flex-col items-center gap-6 md:gap-7">
           <h2 className="text-[28px] leading-[1.3] font-black tracking-[-0.04em] text-white md:text-4xl lg:text-5xl">
             {content.title}
@@ -32,7 +34,7 @@ export default function PineWiltCTA() {
           <div className="flex w-full flex-col justify-center gap-3 sm:w-auto sm:flex-row">
             <Link
               href={DIAGNOSIS_REQUEST_HREF}
-              className="group inline-flex items-center justify-center gap-2 rounded-full bg-white px-9 py-4 text-base font-black text-green-700 shadow-xl transition-all hover:bg-green-50 active:scale-95 md:py-[18px] md:text-[17px]"
+              className="group inline-flex items-center justify-center gap-2 rounded-full bg-white px-9 py-4 text-base font-black text-primary shadow-xl transition-all hover:bg-green-50 active:scale-95 md:py-[18px] md:text-[17px]"
             >
               {content.primaryLabel}
               <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />

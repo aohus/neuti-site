@@ -1,6 +1,7 @@
 import Navbar from './Navbar'
 import MobileBottomCTA from './common/MobileBottomCTA'
 import Container from './common/Container'
+import BrandLogo from './common/BrandLogo'
 import Link from 'next/link'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -13,15 +14,24 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <Container>
           <div className="grid grid-cols-1 gap-8 md:grid-cols-4 md:gap-8">
             <div className="space-y-8 md:col-span-2">
-              <Link href="/" className="inline-block">
-                <span className="text-deep text-xl font-black tracking-tighter">
-                  느티나무병원 협동조합
-                </span>
+              <Link
+                href="/"
+                aria-label="느티나무병원 협동조합 홈"
+                className="inline-block transition-opacity hover:opacity-80"
+              >
+                <BrandLogo className="h-10 md:h-12" />
               </Link>
               <div className="space-y-4 text-sm leading-relaxed font-bold text-gray-400">
                 <p>
-                  느티나무병원 협동조합 <br />
-                  본점: 성남시 수정구 태평로 104 | 031-752-6000 <br />
+                  산림청 등록 1종 나무병원 · 느티나무병원 협동조합 <br />
+                  본점: 성남시 수정구 태평로 104 <br />
+                  <a href="tel:031-752-6000" className="hover:text-deep transition-colors">
+                    031-752-6000
+                  </a>
+                  <span className="mx-2 text-gray-300">|</span>
+                  <a href="mailto:coopneuti@naver.com" className="hover:text-deep transition-colors">
+                    coopneuti@naver.com
+                  </a>
                 </p>
                 <p>
                 © 2026 느티나무병원 협동조합. All rights reserved.

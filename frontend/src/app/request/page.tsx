@@ -1,11 +1,13 @@
 import type { Metadata } from 'next'
 import RequestContent from './RequestContent'
+import { DEFAULT_OG_IMAGE } from '@/lib/seo'
 
 export const metadata: Metadata = {
   title: '견적·상담 문의',
   description:
     '조경 수의계약 간편 견적 요청 및 수목 진단 의뢰. 현장 확인 후 견적서 발급, 실적증명서·자격증빙 함께 제공. 느티나무병원 협동조합 031-752-6000.',
   openGraph: {
+    images: [DEFAULT_OG_IMAGE],
     title: '견적·상담 문의 | 느티나무병원 협동조합',
     description:
       '수의계약 간편 견적 요청 및 수목 진단 의뢰. 현장 확인 후 견적서 발급.',

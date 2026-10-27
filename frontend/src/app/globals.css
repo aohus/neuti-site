@@ -6,7 +6,9 @@
   
   /* Refined Professional Palette */
   --color-brand-deep: #1e3932; /* 딥 포레스트 그린 */
-  --color-brand-primary: #16a34a; /* green-600 (세련된 중간톤 초록색) */
+  /* 공식 로고(public/brand 의 SVG) 초록. Tailwind green-800 과 거의 같은 톤이라
+     green-* 유틸리티와 섞여도 어긋나지 않는다. 로고와 다른 초록을 새로 만들지 말 것. */
+  --color-brand-primary: #006838;
   --color-brand-accent: #84cc16; /* 포인트가 되는 연두색 */
   --color-brand-surface: #f8f9f8; /* 아주 연한 그린톤 백그라운드 */
   --color-brand-muted: #e5e7eb;

@@ -3,6 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import Container from './Container'
+import { BrandWatermark } from './BrandLogo'
 import { motion } from 'framer-motion'
 import { ArrowRight, Phone } from 'lucide-react'
 
@@ -25,18 +26,19 @@ const defaultButtons: CTAButton[] = [
 
 export default function FinalCTA({ buttons = defaultButtons }: FinalCTAProps) {
   return (
-    <section data-section="cta" className="py-14 sm:py-16 md:py-32 bg-green-700 text-white text-center relative overflow-hidden">
-      {/* Background Decorative Circles */}
+    <section data-section="cta" className="py-14 sm:py-16 md:py-32 bg-primary text-white text-center relative overflow-hidden">
+      {/* 사진 없이 브랜드 색만 깔리는 섹션이라 로고 심볼로 정체성을 잡는다. */}
+      <BrandWatermark />
       <div className="absolute top-0 left-0 w-64 md:w-96 h-64 md:h-96 bg-white/5 rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl" />
-      <div className="absolute bottom-0 right-0 w-64 md:w-96 h-64 md:h-96 bg-green-900/50 rounded-full translate-x-1/2 translate-y-1/2 blur-3xl" />
 
       <Container className="relative z-10">
+        {/* h2 는 globals.css 에서 text-deep 이 기본이라 초록 배경 위에서는 흰색을 명시해야 한다. */}
         <motion.h2
           data-reveal
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-3xl md:text-4xl lg:text-6xl font-extrabold mb-6 md:mb-10 leading-tight tracking-tighter"
+          className="text-white text-3xl md:text-4xl lg:text-6xl font-extrabold mb-6 md:mb-10 leading-tight tracking-tighter"
         >
           도심 속 녹지 공간은<br className="hidden sm:block" />우리 삶의 쉼터이자 삶터입니다
         </motion.h2>
@@ -66,7 +68,7 @@ export default function FinalCTA({ buttons = defaultButtons }: FinalCTAProps) {
               className={`group inline-flex items-center px-8 py-4 md:px-14 md:py-5 rounded-full font-extrabold text-base md:text-xl transition-all shadow-2xl active:scale-95 ${
                 btn.variant === 'secondary'
                   ? 'bg-white/10 text-white border border-white/30 hover:bg-white/20 hover:shadow-white/10'
-                  : 'bg-white text-green-700 hover:bg-green-50 hover:shadow-white/20'
+                  : 'bg-white text-primary hover:bg-green-50 hover:shadow-white/20'
               }`}
             >
               {btn.label}
