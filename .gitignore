@@ -189,3 +189,4 @@ naver_blog/
 # ai agent configs
 .claude/
 CLAUDE.md
+.plan/
