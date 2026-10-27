@@ -3,8 +3,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException
 from app.repositories.diagnosis_repo import diagnosis_repo
 from app.schemas.diagnosis import DiagnosisRequestCreate
-from app.utils.email import send_diagnosis_notification
-from app.core.config import settings
 
 
 class DiagnosisService:
@@ -17,13 +15,6 @@ class DiagnosisService:
         db.add(db_obj)
         await db.commit()
         await db.refresh(db_obj)
-
-        # Send notification
-        try:
-            await send_diagnosis_notification(settings.MAIL_USERNAME, obj_in_data)
-        except Exception:
-            # Don't fail the request if email fails
-            pass
 
         return db_obj
 

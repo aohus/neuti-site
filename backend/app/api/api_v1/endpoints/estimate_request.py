@@ -1,4 +1,3 @@
-import logging
 from typing import Any, List
 
 from fastapi import APIRouter, BackgroundTasks, Depends, File, UploadFile
@@ -16,8 +15,6 @@ from app.services.estimate_request_service import estimate_request_service
 from app.utils.antispam import spam_guard
 from app.utils.email import send_estimate_notification
 from app.utils.upload import save_upload_image
-
-logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -45,16 +42,9 @@ async def create_estimate_request(
         db, obj_in=request_in, image_url=image_url
     )
 
-    # TODO: 네이버 SMTP 설정 완료 후 주석 해제
-    # try:
-    #     email_data = request_in.model_dump()
-    #     background_tasks.add_task(
-    #         send_estimate_notification,
-    #         settings.MAIL_USERNAME,
-    #         email_data,
-    #     )
-    # except Exception:
-    #     logger.warning("Failed to queue estimate email notification", exc_info=True)
+    background_tasks.add_task(
+        send_estimate_notification, settings.MAIL_USERNAME, request_in.model_dump()
+    )
 
     return result
 

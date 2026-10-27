@@ -48,7 +48,7 @@ async def test_진단_의뢰_업로드는_저장소_uploads_에_파일을_남기
     files = {"image": ("test.jpg", JPEG_BYTES, "image/jpeg")}
 
     # Act
-    with patch("app.services.diagnosis_service.send_diagnosis_notification"):
+    with patch("app.api.api_v1.endpoints.diagnosis.send_diagnosis_notification"):
         async with AsyncClient(
             transport=ASGITransport(app=app), base_url="http://test"
         ) as ac:

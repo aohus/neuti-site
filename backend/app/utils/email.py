@@ -1,6 +1,11 @@
-from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
+import logging
+from html import escape
+
+from fastapi_mail import ConnectionConfig, FastMail, MessageSchema, MessageType
+
 from app.core.config import settings
-from pydantic import EmailStr
+
+logger = logging.getLogger(__name__)
 
 conf = ConnectionConfig(
     MAIL_USERNAME=settings.MAIL_USERNAME,
@@ -12,55 +17,74 @@ conf = ConnectionConfig(
     MAIL_STARTTLS=settings.MAIL_STARTTLS,
     MAIL_SSL_TLS=settings.MAIL_SSL_TLS,
     USE_CREDENTIALS=settings.USE_CREDENTIALS,
-    VALIDATE_CERTS=settings.VALIDATE_CERTS
+    VALIDATE_CERTS=settings.VALIDATE_CERTS,
 )
 
-async def send_diagnosis_notification(email_to: str, data: dict):
-    message = MessageSchema(
-        subject=f"{settings.PROJECT_NAME} - 새로운 수목진단의뢰 접수",
-        recipients=[email_to],
-        template_body=data,
-        subtype=MessageType.html
-    )
+ESTIMATE_FIELDS = [
+    ("기관유형", "org_type"),
+    ("기관명", "org_name"),
+    ("담당자", "contact_name"),
+    ("연락처", "contact_phone"),
+    ("이메일", "contact_email"),
+    ("작업유형", "work_type"),
+    ("작업위치", "work_location"),
+    ("희망시기", "desired_date"),
+    ("예산규모", "budget_range"),
+]
 
-    fm = FastMail(conf)
-    # Note: templates are not setup yet, using simple body for now
-    message.template_body = None
-    message.body = f"""
+
+def _field(data: dict, key: str) -> str:
+    # 공개 폼 입력이 그대로 들어오므로 HTML로 해석되지 않게 이스케이프한다.
+    # model_dump()는 미입력 선택항목을 None으로 주므로 '-'로 바꾼다.
+    value = data.get(key)
+    return escape(str(value)) if value else "-"
+
+
+async def _send(subject: str, email_to: str, body: str) -> None:
+    # 백그라운드 작업에서 호출되므로 실패해도 접수 응답에는 영향이 없다.
+    # 대신 반드시 로그를 남겨 SMTP 장애를 알아챌 수 있게 한다.
+    try:
+        # 수신 주소 검증(EmailStr)도 여기서 일어나므로 try 안에서 만든다.
+        message = MessageSchema(
+            subject=subject,
+            recipients=[email_to],
+            body=body,
+            subtype=MessageType.html,
+        )
+        await FastMail(conf).send_message(message)
+    except Exception:
+        logger.exception("알림 메일 발송 실패: %s", subject)
+
+
+async def send_diagnosis_notification(email_to: str, data: dict) -> None:
+    body = f"""
     <h3>새로운 수목진단의뢰가 접수되었습니다.</h3>
     <ul>
-        <li>의뢰자: {data.get('name')}</li>
-        <li>연락처: {data.get('contact')}</li>
-        <li>이메일: {data.get('email')}</li>
-        <li>주소: {data.get('address')}</li>
-        <li>증상: {data.get('symptom')}</li>
+        <li>의뢰자: {_field(data, "name")}</li>
+        <li>연락처: {_field(data, "contact")}</li>
+        <li>이메일: {_field(data, "email")}</li>
+        <li>주소: {_field(data, "address")}</li>
+        <li>증상: {_field(data, "symptom")}</li>
     </ul>
     """
-    await fm.send_message(message)
+    await _send(f"{settings.PROJECT_NAME} - 새로운 수목진단의뢰 접수", email_to, body)
 
 
-async def send_estimate_notification(email_to: str, data: dict):
-    message = MessageSchema(
-        subject=f"{settings.PROJECT_NAME} - 새로운 견적 요청 접수",
-        recipients=[email_to],
-        template_body=None,
-        subtype=MessageType.html
+async def send_estimate_notification(email_to: str, data: dict) -> None:
+    rows = "".join(
+        f'<tr><td style="padding:6px 12px; font-weight:bold; color:#666;">{label}</td>'
+        f'<td style="padding:6px 12px;">{_field(data, key)}</td></tr>'
+        for label, key in ESTIMATE_FIELDS
     )
-
-    fm = FastMail(conf)
-    message.body = f"""
+    details = (
+        "<div style='margin-top:16px; padding:12px; background:#f5f5f5; border-radius:8px;'>"
+        f"<strong>상세 요청사항:</strong><br/>{_field(data, 'details')}</div>"
+        if data.get("details")
+        else ""
+    )
+    body = f"""
     <h3>새로운 수의계약 견적 요청이 접수되었습니다.</h3>
-    <table style="border-collapse:collapse; margin-top:16px;">
-        <tr><td style="padding:6px 12px; font-weight:bold; color:#666;">기관유형</td><td style="padding:6px 12px;">{data.get('org_type', '')}</td></tr>
-        <tr><td style="padding:6px 12px; font-weight:bold; color:#666;">기관명</td><td style="padding:6px 12px;">{data.get('org_name', '')}</td></tr>
-        <tr><td style="padding:6px 12px; font-weight:bold; color:#666;">담당자</td><td style="padding:6px 12px;">{data.get('contact_name', '')}</td></tr>
-        <tr><td style="padding:6px 12px; font-weight:bold; color:#666;">연락처</td><td style="padding:6px 12px;">{data.get('contact_phone', '')}</td></tr>
-        <tr><td style="padding:6px 12px; font-weight:bold; color:#666;">이메일</td><td style="padding:6px 12px;">{data.get('contact_email', '-')}</td></tr>
-        <tr><td style="padding:6px 12px; font-weight:bold; color:#666;">작업유형</td><td style="padding:6px 12px;">{data.get('work_type', '')}</td></tr>
-        <tr><td style="padding:6px 12px; font-weight:bold; color:#666;">작업위치</td><td style="padding:6px 12px;">{data.get('work_location', '')}</td></tr>
-        <tr><td style="padding:6px 12px; font-weight:bold; color:#666;">희망시기</td><td style="padding:6px 12px;">{data.get('desired_date', '-')}</td></tr>
-        <tr><td style="padding:6px 12px; font-weight:bold; color:#666;">예산규모</td><td style="padding:6px 12px;">{data.get('budget_range', '-')}</td></tr>
-    </table>
-    {"<div style='margin-top:16px; padding:12px; background:#f5f5f5; border-radius:8px;'><strong>상세 요청사항:</strong><br/>" + data.get('details', '') + "</div>" if data.get('details') else ""}
+    <table style="border-collapse:collapse; margin-top:16px;">{rows}</table>
+    {details}
     """
-    await fm.send_message(message)
+    await _send(f"{settings.PROJECT_NAME} - 새로운 견적 요청 접수", email_to, body)

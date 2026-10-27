@@ -1,6 +1,6 @@
 from typing import Any, List
 
-from fastapi import APIRouter, Depends, File, UploadFile
+from fastapi import APIRouter, BackgroundTasks, Depends, File, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api import deps
@@ -9,6 +9,7 @@ from app.db.session import get_db
 from app.schemas.diagnosis import DiagnosisRequest, DiagnosisRequestCreate
 from app.services.diagnosis_service import diagnosis_service
 from app.utils.antispam import spam_guard
+from app.utils.email import send_diagnosis_notification
 from app.utils.upload import save_upload_image
 
 router = APIRouter()
@@ -21,6 +22,7 @@ async def create_diagnosis_request(
     db: AsyncSession = Depends(get_db),
     request_in: DiagnosisRequestCreate = Depends(DiagnosisRequestCreate.as_form),
     image: UploadFile | None = File(None),
+    background_tasks: BackgroundTasks,
     _spam_check: None = Depends(spam_guard),
 ) -> Any:
     """
@@ -32,7 +34,15 @@ async def create_diagnosis_request(
             image, upload_dir=settings.UPLOAD_DIR, prefix="diagnosis_"
         )
 
-    return await diagnosis_service.create_request(db, obj_in=request_in, image_path=image_path)
+    result = await diagnosis_service.create_request(
+        db, obj_in=request_in, image_path=image_path
+    )
+
+    background_tasks.add_task(
+        send_diagnosis_notification, settings.MAIL_USERNAME, request_in.model_dump()
+    )
+
+    return result
 
 
 @router.get("", response_model=List[DiagnosisRequest])
