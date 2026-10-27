@@ -36,7 +36,7 @@ services:
       - "traefik.enable=true"
 
       # Backend API Router
-      - "traefik.http.routers.neuti-backend.rule=(Host(`XN--910B90BW7NHUBU9W9VR.COM`) || Host(`XN--910B90BW7NHUBU9W9VR.NET`) || Host(`www.XN--910B90BW7NHUBU9W9VR.COM`) || Host(`www.XN--910B90BW7NHUBU9W9VR.NET`)) && (PathPrefix(`/backend-api`) || PathPrefix(`/uploads`))"
+      - "traefik.http.routers.neuti-backend.rule=Host(`XN--910B90BW7NHUBU9W9VR.COM`) && (PathPrefix(`/backend-api`) || PathPrefix(`/uploads`))"
       - "traefik.http.routers.neuti-backend.entrypoints=websecure"
       - "traefik.http.routers.neuti-backend.tls.certresolver=letsencrypt"
       - "traefik.http.routers.neuti-backend.priority=10"
@@ -78,10 +78,22 @@ services:
       - "traefik.enable=true"
 
       # Frontend Router
-      - "traefik.http.routers.neuti-frontend.rule=Host(`XN--910B90BW7NHUBU9W9VR.COM`) || Host(`XN--910B90BW7NHUBU9W9VR.NET`) || Host(`www.XN--910B90BW7NHUBU9W9VR.COM`) || Host(`www.XN--910B90BW7NHUBU9W9VR.NET`)"
+      - "traefik.http.routers.neuti-frontend.rule=Host(`XN--910B90BW7NHUBU9W9VR.COM`)"
       - "traefik.http.routers.neuti-frontend.entrypoints=websecure"
       - "traefik.http.routers.neuti-frontend.tls.certresolver=letsencrypt"
       - "traefik.http.routers.neuti-frontend.priority=1"
+
+      # 대표 도메인 통일 — www·.NET 은 같은 경로의 .COM 으로 301.
+      # 같은 페이지가 여러 호스트로 색인되면 검색 점수가 갈라진다.
+      - "traefik.http.routers.neuti-canonical-host.rule=Host(`XN--910B90BW7NHUBU9W9VR.NET`) || Host(`www.XN--910B90BW7NHUBU9W9VR.COM`) || Host(`www.XN--910B90BW7NHUBU9W9VR.NET`)"
+      - "traefik.http.routers.neuti-canonical-host.entrypoints=websecure"
+      - "traefik.http.routers.neuti-canonical-host.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.neuti-canonical-host.priority=100"
+      - "traefik.http.routers.neuti-canonical-host.service=neuti-frontend"
+      - "traefik.http.routers.neuti-canonical-host.middlewares=neuti-canonical-host"
+      - "traefik.http.middlewares.neuti-canonical-host.redirectregex.regex=^https?://[^/]+/(.*)"
+      - "traefik.http.middlewares.neuti-canonical-host.redirectregex.replacement=https://xn--910b90bw7nhubu9w9vr.com/$${1}"
+      - "traefik.http.middlewares.neuti-canonical-host.redirectregex.permanent=true"
 
       # Service
       - "traefik.http.services.neuti-frontend.loadbalancer.server.port=3000"
