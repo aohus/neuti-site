@@ -7,7 +7,7 @@ from datetime import date, datetime
 from pathlib import Path
 from typing import Any
 
-from sqlalchemy import text
+from sqlalchemy import DateTime, literal, select, text
 from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
 
@@ -77,6 +77,32 @@ def md_stem(md_file: Path) -> str:
     return unicodedata.normalize("NFC", md_file.stem)
 
 
+async def to_db_aware(session: Any, value: datetime | None) -> datetime | None:
+    """naive datetime 을 DB 가 timestamptz 로 해석하는 방식 그대로 aware 값으로 바꿉니다.
+
+    프론트매터의 날짜는 naive 이고, DB 는 이를 서버 세션 타임존으로 해석해 저장한다.
+    파이썬에서 임의로 UTC 로 가정해 비교하면 매번 '변경됨' 으로 보이므로,
+    같은 인코딩 경로(바인드 파라미터)로 DB 에 한 번 왕복시켜 정규화한다.
+    """
+    if value is None or value.tzinfo is not None:
+        return value
+    result = await session.execute(select(literal(value, DateTime(timezone=True))))
+    return result.scalar_one()
+
+
+def changed_fields(db_obj: Any, new_data: dict[str, Any]) -> dict[str, Any]:
+    """DB 행과 실제로 다른 필드만 골라냅니다.
+
+    내용이 같은데도 무조건 UPDATE 하면 updated_at 이 재시작·배포마다 올라가
+    sitemap lastmod / RSS 날짜가 거짓이 된다.
+    """
+    return {
+        key: value
+        for key, value in new_data.items()
+        if getattr(db_obj, key, None) != value
+    }
+
+
 async def sync_single_file(md_file: Path) -> None:
     """단일 마크다운 파일을 파싱하여 DB에 동기화합니다."""
     post_dir_name = md_stem(md_file)
@@ -116,6 +142,10 @@ async def sync_single_file(md_file: Path) -> None:
                 ),
             }
 
+            performance_data["construction_date"] = await to_db_aware(
+                session, performance_data["construction_date"]
+            )
+
             # 1순위는 파일명 매칭. 제목을 바꿔도 같은 행을 계속 갱신하므로 중복이 생기지 않는다.
             db_obj = await performance_repo.get_by_source_file(
                 session, source_file=post_dir_name
@@ -127,8 +157,12 @@ async def sync_single_file(md_file: Path) -> None:
                     db_obj = None  # 다른 파일이 이미 소유한 행이면 건드리지 않는다
 
             if db_obj:
-                logger.info("Updating: %s (%s)", title, md_file.name)
-                await performance_repo.update(session, db_obj=db_obj, obj_in=performance_data)
+                diff = changed_fields(db_obj, performance_data)
+                if diff:
+                    logger.info("Updating: %s (%s)", title, md_file.name)
+                    await performance_repo.update(session, db_obj=db_obj, obj_in=diff)
+                else:
+                    logger.info("Unchanged: %s (%s)", title, md_file.name)
             else:
                 logger.info("Creating: %s (%s)", title, md_file.name)
                 await performance_repo.create_from_markdown(

@@ -21,3 +21,4 @@ class Performance(Base):
     site_location = Column(String, nullable=True) # 대상지
     construction_date = Column(DateTime(timezone=True), nullable=True) # 시공일
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)

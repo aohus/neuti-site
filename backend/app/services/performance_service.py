@@ -7,6 +7,7 @@ from app.core.config import settings
 from app.repositories.performance_repo import performance_repo
 from app.schemas.performance import PerformanceCreate, PerformanceUpdate, PerformanceStats
 from app.utils.markdown import parse_markdown_performance
+from app.utils.text_summary import summarize_content
 
 
 class PerformanceService:
@@ -70,6 +71,22 @@ class PerformanceService:
             client_type=client_type,
             q=q,
         )
+
+    async def get_feed(self, db: AsyncSession, *, limit: int = 500) -> List[dict]:
+        rows = await performance_repo.get_feed_rows(db, limit=limit)
+        return [
+            {
+                "id": r.id,
+                "title": r.title,
+                "subtitle": r.subtitle,
+                "thumbnail_url": r.thumbnail_url,
+                "job_main_category": r.job_main_category,
+                "summary": summarize_content(r.content, fallback=r.subtitle),
+                "created_at": r.created_at,
+                "updated_at": r.updated_at,
+            }
+            for r in rows
+        ]
 
     async def create_from_md(
         self, db: AsyncSession, *, file: UploadFile

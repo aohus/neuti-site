@@ -45,14 +45,28 @@ class CRUDPerformance(CRUDBase[Performance, PerformanceCreate, PerformanceUpdate
         # (`2026_` 접두사 파일이 가장 먼저 INSERT 되어 최신 글이 꼴찌로 밀렸다)
         # 시공일이 없는 행(관리자 UI 등록분)은 뒤로 밀고 삽입 순서로 보조 정렬한다.
         result = await db.execute(
-            query.offset(skip)
-            .limit(limit)
-            .order_by(
-                nullslast(desc(self.model.construction_date)),
-                desc(self.model.created_at),
-            )
+            query.offset(skip).limit(limit).order_by(*self._recent_first())
         )
         return result.scalars().all()
+
+    def _recent_first(self) -> tuple[Any, Any]:
+        return (
+            nullslast(desc(self.model.construction_date)),
+            desc(self.model.created_at),
+        )
+
+    async def get_feed_rows(self, db: AsyncSession, *, limit: int) -> List[Any]:
+        """사이트맵·RSS 용. content 는 요약 생성에만 쓰이고 응답에는 실리지 않는다."""
+        m = self.model
+        result = await db.execute(
+            select(
+                m.id, m.title, m.subtitle, m.thumbnail_url, m.job_main_category,
+                m.content, m.created_at, m.updated_at,
+            )
+            .order_by(*self._recent_first())
+            .limit(limit)
+        )
+        return result.all()
 
     async def get_all(self, db: AsyncSession) -> List[Performance]:
         result = await db.execute(select(self.model))

@@ -1,6 +1,6 @@
 from typing import Any
 
-from fastapi import APIRouter, Depends, File, UploadFile
+from fastapi import APIRouter, Depends, File, Query, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api import deps
@@ -9,6 +9,7 @@ from app.db.session import get_db
 from app.schemas.performance import (
     Performance,
     PerformanceCreate,
+    PerformanceFeedItem,
     PerformanceStats,
     PerformanceUpdate,
 )
@@ -27,6 +28,18 @@ async def get_performance_stats(
     시공 사례 통계 정보를 반환합니다.
     """
     return await performance_service.get_stats(db)
+
+
+@router.get("/feed", response_model=list[PerformanceFeedItem])
+async def read_performance_feed(
+    db: AsyncSession = Depends(get_db),
+    limit: int = Query(500, ge=1, le=1000),
+) -> Any:
+    """
+    사이트맵·RSS 용 경량 목록 (공개). 최신 시공일 순, content 미포함.
+    반드시 `/{id}` 라우트보다 먼저 선언해야 한다.
+    """
+    return await performance_service.get_feed(db, limit=limit)
 
 
 @router.post("/upload-md", response_model=Performance)

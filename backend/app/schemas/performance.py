@@ -39,8 +39,22 @@ class PerformanceUpdate(PerformanceBase):
 class Performance(PerformanceBase):
     id: int
     created_at: datetime
-    
+    updated_at: datetime
+
     model_config = ConfigDict(from_attributes=True)
+
+
+class PerformanceFeedItem(BaseModel):
+    """사이트맵·RSS 용 경량 항목. 무거운 content 는 싣지 않는다."""
+
+    id: int
+    title: str
+    subtitle: str | None = None
+    thumbnail_url: str | None = None
+    job_main_category: str | None = None
+    summary: str | None = None
+    created_at: datetime
+    updated_at: datetime
 
 class PerformanceStats(BaseModel):
     total_count: int
