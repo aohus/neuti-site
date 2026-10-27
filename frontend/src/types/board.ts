@@ -13,6 +13,16 @@ export interface Answer {
   created_at: string
 }
 
+/** GET /inquiry 목록 응답. 비밀글 보호를 위해 본문·답변은 없다. */
+export interface InquirySummary {
+  id: number
+  title: string
+  author: string
+  is_secret: boolean
+  created_at: string
+  has_answer: boolean
+}
+
 export interface Inquiry {
   id: number
   title: string

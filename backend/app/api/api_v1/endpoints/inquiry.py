@@ -1,26 +1,30 @@
 from typing import Any, List
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.session import get_db
-from app.schemas.board import Inquiry, InquiryCreate, InquiryUpdate, Answer, AnswerCreate
+from app.schemas.board import Inquiry, InquiryCreate, InquiryListItem, InquiryUpdate, Answer, AnswerCreate
 from app.api import deps
 from app.services.inquiry_service import inquiry_service
 from app.core.security import verify_password
 
 router = APIRouter()
 
-@router.get("", response_model=List[Inquiry])
-@router.get("/", response_model=List[Inquiry], include_in_schema=False)
+MAX_LIST_LIMIT = 100
+
+
+@router.get("", response_model=List[InquiryListItem])
+@router.get("/", response_model=List[InquiryListItem], include_in_schema=False)
 async def read_inquiries(
     db: AsyncSession = Depends(get_db),
-    skip: int = 0,
-    limit: int = 100,
+    skip: int = Query(0, ge=0),
+    limit: int = Query(MAX_LIST_LIMIT, ge=1, le=MAX_LIST_LIMIT),
 ) -> Any:
     """
-    Retrieve inquiries.
+    문의 목록. 인증 없이 열리므로 본문·답변은 내려주지 않는다(비밀글 보호).
     """
-    return await inquiry_service.get_inquiries(db, skip=skip, limit=limit)
+    inquiries = await inquiry_service.get_inquiries(db, skip=skip, limit=limit)
+    return [InquiryListItem.from_model(i) for i in inquiries]
 
 @router.post("", response_model=Inquiry)
 @router.post("/", response_model=Inquiry, include_in_schema=False)

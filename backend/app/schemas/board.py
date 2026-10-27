@@ -1,3 +1,5 @@
+from typing import Any
+
 from pydantic import BaseModel, ConfigDict
 from datetime import datetime
 
@@ -53,6 +55,27 @@ class Inquiry(InquiryBase):
     created_at: datetime
     answer: Answer | None = None
     model_config = ConfigDict(from_attributes=True)
+
+# 목록용. 비밀글 본문·답변이 익명 사용자에게 새지 않도록 본문 필드를 아예 두지 않는다.
+# 본문은 비밀번호 확인을 거치는 상세 조회(GET /inquiry/{id})로만 내려간다.
+class InquiryListItem(BaseModel):
+    id: int
+    title: str
+    author: str
+    is_secret: bool
+    created_at: datetime
+    has_answer: bool
+
+    @classmethod
+    def from_model(cls, inquiry: Any) -> "InquiryListItem":
+        return cls(
+            id=inquiry.id,
+            title=inquiry.title,
+            author=inquiry.author,
+            is_secret=bool(inquiry.is_secret),
+            created_at=inquiry.created_at,
+            has_answer=inquiry.answer is not None,
+        )
 
 # For detail view with password check
 class InquiryInDB(Inquiry):
