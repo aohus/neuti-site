@@ -113,3 +113,42 @@ async def test_수신_주소가_잘못돼도_예외를_올리지_않고_로그�
     # Assert
     send_message.assert_not_awaited()
     assert "알림 메일 발송 실패" in caplog.text
+
+
+def _sent_subject(send_message: AsyncMock) -> str:
+    send_message.assert_awaited_once()
+    return send_message.await_args.args[0].subject
+
+
+@pytest.mark.asyncio
+async def test_견적_메일_제목은_홈페이지_견적_접수_말머리와_기관명이다(send_message):
+    # Act
+    await send_estimate_notification("admin@example.com", ESTIMATE_DATA)
+
+    # Assert
+    assert _sent_subject(send_message) == "[홈페이지 견적 접수] 성남시청"
+
+
+@pytest.mark.asyncio
+async def test_견적_메일_제목의_기관명에서_줄바꿈을_제거한다(send_message):
+    # Arrange — 줄바꿈이 헤더까지 가면 Bcc 등 헤더를 주입할 수 있다
+    data = {**ESTIMATE_DATA, "org_name": "성남시청\r\nBcc: victim@example.com"}
+
+    # Act
+    await send_estimate_notification("admin@example.com", data)
+
+    # Assert
+    subject = _sent_subject(send_message)
+    assert "\r" not in subject
+    assert "\n" not in subject
+    assert subject == "[홈페이지 견적 접수] 성남시청 Bcc: victim@example.com"
+
+
+@pytest.mark.asyncio
+async def test_견적_메일_본문에_관리자_견적_목록_링크가_있다(send_message):
+    # Act
+    await send_estimate_notification("admin@example.com", ESTIMATE_DATA)
+
+    # Assert
+    body = _sent_body(send_message)
+    assert 'href="https://xn--910b90bw7nhubu9w9vr.com/admin/estimates"' in body

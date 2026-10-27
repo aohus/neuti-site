@@ -12,6 +12,8 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "Neuti Tree Hospital"
     VERSION: str = "0.1.0"
     API_V1_STR: str = "/api/v1"
+    # 알림 메일의 관리자 페이지 링크에 쓴다 (느티나무병원.com 의 퓨니코드)
+    SITE_URL: str = "https://xn--910b90bw7nhubu9w9vr.com"
 
     # Database
     POSTGRES_SERVER: str = "localhost"

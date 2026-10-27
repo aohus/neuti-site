@@ -40,6 +40,11 @@ def _field(data: dict, key: str) -> str:
     return escape(str(value)) if value else "-"
 
 
+def _single_line(value: object) -> str:
+    # 제목 헤더에 들어가는 사용자 입력에서 CR/LF 를 없애 헤더 인젝션을 막는다.
+    return " ".join(str(value or "").split())
+
+
 async def _send(subject: str, email_to: str, body: str) -> None:
     # 백그라운드 작업에서 호출되므로 실패해도 접수 응답에는 영향이 없다.
     # 대신 반드시 로그를 남겨 SMTP 장애를 알아챌 수 있게 한다.
@@ -82,9 +87,14 @@ async def send_estimate_notification(email_to: str, data: dict) -> None:
         if data.get("details")
         else ""
     )
+    admin_url = escape(f"{settings.SITE_URL}/admin/estimates")
     body = f"""
     <h3>새로운 수의계약 견적 요청이 접수되었습니다.</h3>
     <table style="border-collapse:collapse; margin-top:16px;">{rows}</table>
     {details}
+    <p style="margin-top:24px;">
+        <a href="{admin_url}">관리자 페이지에서 견적 요청 확인하기</a>
+    </p>
     """
-    await _send(f"{settings.PROJECT_NAME} - 새로운 견적 요청 접수", email_to, body)
+    subject = f"[홈페이지 견적 접수] {_single_line(data.get('org_name'))}"
+    await _send(subject, email_to, body)
