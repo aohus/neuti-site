@@ -7,18 +7,23 @@
 
 | # | 작업 | 상태 | 구현 위치 |
 |---|------|------|-----------|
-| 1 | 페이지별 메타데이터 + OG 태그 | ✅ | `app/layout.tsx` (template + OG), 각 섹션 `layout.tsx` |
-| 2 | sitemap.xml + robots.txt | ✅ | `app/sitemap.ts`, `app/robots.ts` |
+| 1 | 페이지별 메타데이터 + OG 태그 + canonical | ✅ | `lib/seo.ts` `buildMetadata()` — 모든 섹션 layout/page |
+| 2 | sitemap.xml + robots.txt | ✅ | `app/sitemap.ts`(요청 시점 생성, 시공사례·공지 상세 포함), `app/robots.ts` |
 | 3 | `/contract` 수의계약 랜딩페이지 | ✅ | `app/contract/ContractContent.tsx` |
 | 4 | 수의계약 간편 견적 폼 | ✅ | `/request` 2탭 + `EstimateRequest` API + `/admin/estimates` |
 | 5 | 네이버 서치어드바이저 소유확인 | ✅ | `app/naver3bc1730bfad429fa4724a2971805d5d7.html/route.ts` |
 | 6 | 네이버 플레이스 등록 | ⬜ | 외부 작업 (절차는 아래 참조) |
 | 7 | 자격증빙 PDF 다운로드 | ⬜ | `frontend/public/downloads/credentials/` 비어 있음 |
 | 8 | 시공사례 발주처 유형 필터 | ✅ | `performance.client_type` 컬럼 + 목록 필터 |
-| 9 | JSON-LD 구조화 데이터 | ✅ | `app/layout.tsx` — LocalBusiness + OfferCatalog |
+| 9 | JSON-LD 구조화 데이터 | ✅ | `lib/structuredData.ts` — LocalBusiness(sameAs·영업시간·서비스지역) + WebSite, 시공사례 상세 Article + BreadcrumbList |
 | 10 | 모바일 하단 고정 CTA 바 | ✅ | `components/common/MobileBottomCTA.tsx` |
 | 11 | 네이버 블로그 시공사례 포스팅 | 🔁 | 지속 작업 |
-| 12 | 시공사례 상세 `generateMetadata` | ⬜ | `/performance/[id]`에 페이지별 메타데이터 없음 |
+| 12 | 시공사례 상세 `generateMetadata` | ✅ | `app/performance/[id]/page.tsx` |
+| 13 | 크롤러용 서버 렌더링 | ✅ | `/`, `/performance`, `/performance/[id]`, `/notice`, `/notice/[id]`, `/qna` 목록 |
+| 14 | RSS 피드 | ✅ | `app/rss.xml/route.ts` — 서치어드바이저에 제출할 것 |
+| 15 | 대표 도메인 통일 (www·.NET → .COM 301) | ✅ | `docker-compose.prod.yml` Traefik `neuti-canonical-host` |
+| 16 | 서치어드바이저·Search Console sitemap/RSS 제출 | ⬜ | 외부 작업 (아래 '기술 SEO 정비' 참조) |
+| 17 | 키워드별 서비스 랜딩 페이지 | ⬜ | 가로수 관리·병충해 방제·위험목 제거·수목 전정, 수의계약 한도·절차 안내 |
 
 ## 유입 실적 (2026-08-22 기준)
 
@@ -28,6 +33,38 @@
 만에 스팸이 시작됐고, 그 사이 사람이 넣은 요청은 하나도 없었다. 봇 차단은 조치했으나
 (아래 참조) **유입 자체가 없다는 문제는 그대로 남아 있다.** 위 표의 미완 항목 —
 네이버 플레이스 등록, 자격증빙 PDF, 블로그 포스팅 — 이 유입의 선행 조건이다.
+
+## 기술 SEO 정비 (2026-10-27)
+
+블로그·플레이스로 사람을 데려와도 **크롤러가 사이트 콘텐츠를 못 읽고 있었다.** 정비 전 운영 사이트를
+네이버 봇(Yeti) UA로 받아 확인한 상태:
+
+- `sitemap.xml` — 정적 페이지 10개뿐, 시공사례 URL 0개. CI의 `next build` 시점에 백엔드에 닿지 않아
+  빈 목록으로 프리렌더된 것이 그대로 서빙됐다(예외는 `return []`로 삼켜짐)
+- `/performance`, `/performance/[id]` — `useEffect`로 데이터를 받아 HTML에는 스피너만 있었다.
+  네이버 봇은 JS 렌더링이 약해 시공사례 본문이 사실상 색인되지 않았다. 상세 제목도 전부 "시공사례"
+- canonical 없음, `www.` 호스트가 같은 내용을 200으로 응답(중복 색인)
+
+조치와 원칙:
+
+- **백엔드 데이터를 쓰는 페이지는 서버 컴포넌트 + `export const dynamic = 'force-dynamic'`.**
+  빌드 시점에는 백엔드가 없으므로 정적 프리렌더를 막는다. 백엔드 부하는 `lib/serverApi.ts`
+  `serverFetch`의 fetch 캐시(`revalidate`)가 흡수한다. 새 공개 페이지도 이 규칙을 따를 것
+- 메타데이터는 `buildMetadata()`로 만든다. 섹션 layout이 `title` 문자열을 정하면 루트 `title.template`이
+  그 아래 상세 페이지에 적용되지 않으므로, 사이트명을 붙인 절대 제목을 쓴다
+- `/qna/[id]`는 비밀글·비밀번호 확인 때문에 클라이언트 렌더링으로 남겼다. 목록은 제목·작성자·상태만 서버에서 내려준다
+- 시공사례 목록은 9건 단위 클라이언트 페이지네이션이라 HTML에는 첫 페이지만 있다. 상세 URL은 sitemap·RSS로 알린다
+- sitemap·RSS는 백엔드 `GET /performance/feed`(본문 제외, `summary` 포함)를 쓴다. 수정일은 `performance.updated_at`
+
+배포 후 할 일:
+
+1. 운영 확인 — `curl -s https://xn--910b90bw7nhubu9w9vr.com/sitemap.xml | grep -c '/performance/'` 가 시공사례 수와 같은지,
+   `curl -sI https://www.xn--910b90bw7nhubu9w9vr.com/` 가 301인지
+2. **네이버 서치어드바이저** — 사이트 등록 확인 → 요청 > 사이트맵 제출(`/sitemap.xml`), RSS 제출(`/rss.xml`),
+   웹페이지 수집 요청(`/contract`, `/performance`, 최근 시공사례 몇 건). 검증 > 웹페이지 최적화로 상세 페이지 점검
+3. **Google Search Console** — 도메인 등록 → sitemap 제출 → URL 검사로 `/performance/<id>` 렌더링 HTML 확인
+4. `.NET` 도메인은 현재 TLS 인증서가 맞지 않아 HTTPS 접속이 실패한다. DNS가 이 서버를 가리키는지 확인할 것
+   (Let's Encrypt 발급은 DNS가 맞아야 된다). 쓰지 않을 도메인이면 Traefik 규칙에서 빼도 된다
 
 ## 봇 스팸 차단 (2026-08-22)
 
