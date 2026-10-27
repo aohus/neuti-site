@@ -11,6 +11,8 @@ const staticPages: {
   { path: "", changeFrequency: "weekly", priority: 1.0 },
   { path: "/about", changeFrequency: "monthly", priority: 0.7 },
   { path: "/business", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/pine-wilt", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/school", changeFrequency: "monthly", priority: 0.8 },
   { path: "/performance", changeFrequency: "weekly", priority: 0.9 },
   { path: "/qna", changeFrequency: "weekly", priority: 0.7 },
   { path: "/notice", changeFrequency: "weekly", priority: 0.5 },
