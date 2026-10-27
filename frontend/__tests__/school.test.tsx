@@ -83,7 +83,7 @@ describe('/school 학교 수목관리 페이지', () => {
 
     expect(
       screen.getByText(
-        /아파트·학교 등 생활권 수목의 진단·처방·방제는 나무병원으로 등록한 곳만 할 수 있습니다\./
+        /아파트·학교 등 생활권 수목의 진단·처방은 나무병원으로 등록한 곳만 할 수 있습니다\./
       )
     ).toBeInTheDocument()
     expect(container.textContent).not.toMatch(
