@@ -95,12 +95,12 @@ export const schoolFirst = {
     {
       icon: 'shield' as SchoolFirstIcon,
       title: '나무의사가 직접 갑니다',
-      desc: '사진만 보고 약을 정하지 않습니다. 방제 전에 나무의사가 교정을 둘러보고 대상 나무를 정합니다.'
+      desc: '방제 전에 나무의사가 교정을 둘러보고 진단을 위한 예찰을 진행합니다.'
     },
     {
       icon: 'leaf' as SchoolFirstIcon,
       title: '처방한 팀이 방제합니다',
-      desc: '처방과 시공을 한 나무병원이 맡아 약제·시기·횟수가 현장에서 어긋나지 않습니다. 적기를 맞추면 덜 뿌리고도 잡힙니다.'
+      desc: '예찰에 따른 진단과 처방에 따라 약제·시기·횟수 등을 정하고, 효과적으로 방제를 진행합니다. '
     },
     {
       icon: 'document' as SchoolFirstIcon,
@@ -243,7 +243,8 @@ const SCHOOL_PLANS: SchoolPlan[] = [
     target: '교문·통학로 화단이 중요한 학교',
     items: [
       { text: '봄·가을 계절꽃 식재' },
-      { text: '화단 제초·관수 관리' },
+      { text: '화단 예초·제초' },
+      { text: '전정·가지치기' },
       { text: '작업 사진대지' }
     ],
     price: null
