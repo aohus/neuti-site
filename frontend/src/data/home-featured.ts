@@ -30,10 +30,10 @@ export interface QuickLink {
 export const featuredServices: FeaturedService[] = [
   {
     href: '/pine-wilt',
-    title: '소나무재선충 현장진단',
+    title: '수간주사 및 재선충 진단',
     chip: '방제기 9월-3월',
-    desc: '소나무가 갑자기 시들었다면 먼저 확인',
-    mobileDesc: '방제기 9월-3월 · 시들었다면 먼저 확인',
+    desc: '예방 수간주사부터 PCR 재선충 진단까지',
+    mobileDesc: '방제기 9월-3월 · 예방 수간주사·PCR 진단',
     image: '/images/pine-wilt/daemosan-drill-inject.jpg',
     tone: 'amber',
   },

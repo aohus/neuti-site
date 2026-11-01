@@ -42,7 +42,7 @@ describe('홈 서비스 패널', () => {
     render(await Page())
 
     const panel = within(getPanel())
-    expect(panel.getByRole('link', { name: /소나무재선충 현장진단/ })).toHaveAttribute(
+    expect(panel.getByRole('link', { name: /수간주사 및 재선충 진단/ })).toHaveAttribute(
       'href',
       '/pine-wilt'
     )

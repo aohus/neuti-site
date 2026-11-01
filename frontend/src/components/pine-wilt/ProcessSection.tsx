@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import Image from 'next/image'
 import Container from '@/components/common/Container'
 import { pineWiltProcess, type ProcessStep } from '@/data/pine-wilt-content'
 import SectionHeading from './SectionHeading'
@@ -63,6 +64,27 @@ export default function ProcessSection({
             )
           })}
         </ol>
+
+        <ul className="grid gap-4 sm:grid-cols-3">
+          {pineWiltProcess.photos.map((photo, idx) => (
+            <Reveal as="li" key={photo.src} delay={idx * 0.08}>
+              <figure className="flex flex-col gap-3">
+                <div className="relative aspect-[4/3] overflow-hidden rounded-[28px]">
+                  <Image
+                    src={photo.src}
+                    alt={photo.alt}
+                    fill
+                    sizes="(min-width: 640px) 33vw, 100vw"
+                    className="object-cover"
+                  />
+                </div>
+                <figcaption className="text-[13px] font-bold text-gray-500">
+                  {photo.caption}
+                </figcaption>
+              </figure>
+            </Reveal>
+          ))}
+        </ul>
       </Container>
     </section>
   )

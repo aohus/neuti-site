@@ -147,12 +147,11 @@ export const pineWiltSymptoms = {
   label: 'SYMPTOMS',
   title: '이런 모습이면 의심해 보세요',
   image: {
-    src: '/images/pine-wilt/hadaewon-pine-browning.jpg',
-    alt: '성남시 하대원동 행정복지센터 앞 소나무. 수관 하단과 측면 침엽이 갈변했다'
+    src: '/images/pine-wilt/gachon-infected-pine.jpg',
+    alt: '재선충병에 걸린 소나무를 아래에서 올려다본 모습. 주변 활엽수는 푸른데 소나무 수관만 붉게 말랐다'
   },
-  // 재선충 사례가 아니라는 점을 캡션에서 분명히 한다.
   caption:
-    '성남 하대원동 소나무 갈변 현장. 진단 결과 재선충이 아니라 고온 스트레스와 2차 병해충이 원인이었습니다.',
+    '재선충병에 걸린 소나무. 몇 주 사이에 수관 전체의 잎이 붉게 말랐습니다.',
   items: [
     '잎이 몇 주 사이에 나무 전체가 붉게 변합니다',
     '새 잎이 아래로 축 처집니다',
@@ -173,6 +172,24 @@ export interface ProcessStep {
 export const pineWiltProcess = {
   label: 'PROCESS',
   title: '현장진단은 이렇게 진행됩니다',
+  // 절차 카드 아래에 시료 채취 → PCR 진단 순서로 놓는 현장 사진
+  photos: [
+    {
+      src: '/images/pine-wilt/gachon-sample-drill.jpg',
+      alt: '나무의사가 전동 드릴로 소나무 줄기에 구멍을 내고, 옆 사람이 비닐봉투로 목편 시료를 받고 있다',
+      caption: '줄기에서 목편 시료 채취'
+    },
+    {
+      src: '/images/pine-wilt/gachon-pcr-pipette.jpg',
+      alt: '장갑 낀 손으로 시료 추출액을 피펫으로 PCR 튜브에 나눠 담고 있다',
+      caption: '시료를 PCR 튜브에 분주'
+    },
+    {
+      src: '/images/pine-wilt/gachon-pcr-cycler.jpg',
+      alt: 'PCR 장비 화면에 소나무 재선충 진단 프로그램(pinetree.txt)의 온도 단계가 떠 있다',
+      caption: 'PCR 장비로 재선충 유전자 확인'
+    }
+  ] as (ImageContent & { caption: string })[],
   steps: [
     {
       title: '의뢰 접수',
@@ -184,8 +201,7 @@ export const pineWiltProcess = {
     },
     {
       title: '현장 1차 진단',
-      // 진단 방식(현장 검경, 진단키트 등)이 정해지면 그 방식을 넣은 문장으로 바꾼다.
-      body: null,
+      body: '채취한 목편을 PCR 분자진단 장비에 넣어 재선충 유전자가 있는지 1차 판별합니다.',
       fallback: '나무의사가 현장에서 재선충 여부를 1차 판별합니다.'
     },
     {
