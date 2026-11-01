@@ -13,16 +13,16 @@ export default function SymptomsSection() {
       <Container className="flex flex-col items-center gap-10 lg:flex-row lg:gap-14">
         <Reveal className="w-full min-w-0 lg:flex-1">
           <figure className="flex flex-col gap-3">
-            <div className="relative aspect-[16/10] overflow-hidden rounded-[28px]">
+            {/* 세로 사진이라 붉게 마른 수관이 잘리지 않도록 위쪽을 기준으로 자른다. */}
+            <div className="relative aspect-[4/5] overflow-hidden rounded-[28px] lg:aspect-[3/4]">
               <Image
                 src={content.image.src}
                 alt={content.image.alt}
                 fill
                 sizes="(min-width: 1024px) 45vw, 100vw"
-                className="object-cover"
+                className="object-cover object-[50%_15%]"
               />
             </div>
-            {/* 사진은 재선충 사례가 아니다. 갈변만으로 단정하지 말라는 메시지와 맞춘다. */}
             <figcaption className="text-[13px] leading-relaxed font-bold text-gray-500">
               {content.caption}
             </figcaption>

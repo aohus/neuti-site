@@ -130,27 +130,36 @@ describe('/pine-wilt 소나무재선충 현장진단', () => {
 })
 
 describe('확정 전 항목(null) 처리', () => {
-  it('진단 방식이 null 이면 절차 3단계에 대체 문구를 쓴다', () => {
-    expect(pineWiltProcess.steps[2].body).toBeNull()
+  it('진단 방식이 정해졌으면 절차 3단계에 대체 문구 대신 그 문장을 쓴다', () => {
+    const body = pineWiltProcess.steps[2].body
+    expect(body).toMatch(/PCR/)
     render(<PineWiltPage />)
+    expect(screen.getByText(body!)).toBeInTheDocument()
+    expect(
+      screen.queryByText('나무의사가 현장에서 재선충 여부를 1차 판별합니다.')
+    ).not.toBeInTheDocument()
+  })
+
+  it('진단 방식이 null 이면 절차 3단계에 대체 문구를 쓴다', () => {
+    const steps = pineWiltProcess.steps.map((step, idx) =>
+      idx === 2 ? { ...step, body: null } : step
+    )
+    render(<ProcessSection steps={steps} />)
     expect(
       screen.getByText('나무의사가 현장에서 재선충 여부를 1차 판별합니다.')
     ).toBeInTheDocument()
   })
 
-  it('진단 방식이 정해지면 대체 문구 대신 그 문장을 쓴다', () => {
-    const steps = pineWiltProcess.steps.map((step, idx) =>
-      idx === 2
-        ? { ...step, body: '현장 검경으로 재선충 여부를 1차 판별합니다.' }
-        : step
+  it('진단 절차 아래에 시료 채취와 PCR 진단 사진을 보여준다', () => {
+    const { container } = render(<ProcessSection />)
+    const srcs = Array.from(container.querySelectorAll('figure img')).map(
+      (img) => img.getAttribute('src')
     )
-    render(<ProcessSection steps={steps} />)
-    expect(
-      screen.getByText('현장 검경으로 재선충 여부를 1차 판별합니다.')
-    ).toBeInTheDocument()
-    expect(
-      screen.queryByText('나무의사가 현장에서 재선충 여부를 1차 판별합니다.')
-    ).not.toBeInTheDocument()
+    expect(srcs).toEqual([
+      '/images/pine-wilt/gachon-sample-drill.jpg',
+      '/images/pine-wilt/gachon-pcr-pipette.jpg',
+      '/images/pine-wilt/gachon-pcr-cycler.jpg'
+    ])
   })
 
   it('예방나무주사 03 의 효과 지속기간은 null 이면 숨기고, 값이 있으면 보인다', () => {
