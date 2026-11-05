@@ -1,4 +1,5 @@
 import { SITE_NAME, SITE_URL, absoluteUrl } from '@/lib/seo'
+import { breadcrumbJsonLd } from '@/lib/structuredData'
 import type { Performance } from '@/types/performance'
 
 const LOGO_PATH = '/brand/logo.svg'
@@ -25,19 +26,9 @@ export function buildArticleJsonLd(p: Performance, description: string) {
 }
 
 export function buildBreadcrumbJsonLd(p: Performance) {
-  const crumbs = [
-    { name: '홈', url: absoluteUrl('/') },
-    { name: '시공사례', url: absoluteUrl('/performance') },
-    { name: p.title, url: absoluteUrl(`/performance/${p.id}`) },
-  ]
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: crumbs.map((c, i) => ({
-      '@type': 'ListItem',
-      position: i + 1,
-      name: c.name,
-      item: c.url,
-    })),
-  }
+  return breadcrumbJsonLd([
+    { name: '홈', path: '/' },
+    { name: '시공사례', path: '/performance' },
+    { name: p.title, path: `/performance/${p.id}` },
+  ])
 }

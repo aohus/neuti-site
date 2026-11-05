@@ -12,11 +12,13 @@ import {
   Info,
   Map,
   Tag,
+  ArrowRight,
 } from 'lucide-react'
 import { useAuth } from '@/context/AuthContext'
 import { performanceApi } from '@/lib/performanceApi'
 import type { Performance } from '@/types/performance'
 import { formatKoreanDate } from './formatDate'
+import { findRelatedService } from './relatedService'
 import UploadPicture from '@/components/common/UploadPicture'
 
 interface Props {
@@ -212,6 +214,27 @@ function Sidebar({ performance }: { performance: Performance }) {
   )
 }
 
+function RelatedServiceCard({ performance }: { performance: Performance }) {
+  const service = findRelatedService(performance)
+  if (!service) return null
+
+  return (
+    <Link
+      href={service.href}
+      data-related-service
+      className="group bg-deep mt-16 flex flex-col gap-3 rounded-[2rem] p-8 text-white transition-colors hover:bg-black md:p-10"
+    >
+      <p className="text-xs font-black tracking-widest text-green-300">관련 서비스</p>
+      <h2 className="text-2xl leading-snug font-black text-white md:text-3xl">{service.title}</h2>
+      <p className="text-[15px] leading-[1.7] font-medium text-white/75">{service.body}</p>
+      <span className="mt-2 inline-flex items-center gap-1.5 text-[15px] font-black text-green-200">
+        자세히 보기
+        <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+      </span>
+    </Link>
+  )
+}
+
 export default function PerformanceDetailView({ performance, children }: Props) {
   return (
     <div className="min-h-screen bg-white pb-24">
@@ -226,6 +249,7 @@ export default function PerformanceDetailView({ performance, children }: Props) 
           <div className="min-w-0 lg:col-span-3">
             <AdminControls id={performance.id} />
             <div className="performance-content">{children}</div>
+            <RelatedServiceCard performance={performance} />
           </div>
 
           <Sidebar performance={performance} />

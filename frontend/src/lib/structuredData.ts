@@ -1,13 +1,21 @@
-// 루트 layout 의 사이트 공통 JSON-LD.
+// 사이트 공통 JSON-LD(루트 layout)와 페이지들이 함께 쓰는 빌더.
 // 업체명·주소·전화(NAP)는 네이버 플레이스·카카오맵 등록값과 글자 하나까지 같아야 한다.
-import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from '@/lib/seo'
+import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL, absoluteUrl } from '@/lib/seo'
 
 export const SITE_DESCRIPTION =
   '산림청 등록 1종 나무병원 · 수목진단·치료 · 조경수/관목 식재 · 계절꽃 화단 조성 · 녹지관리 전문. 수의계약 견적 문의. 031-752-6000'
 
 const NAVER_BLOG_URL = 'https://blog.naver.com/coopneuti'
 
-const SERVICES = ['조경식재', '녹지관리', '소나무 전정', '병충해 방제', '위험목 제거', '수목 진단·치료']
+const SERVICES = [
+  '조경식재',
+  '녹지관리',
+  '소나무 전정',
+  '병충해 방제',
+  '소나무재선충 진단·예방나무주사',
+  '위험목 제거',
+  '수목 진단·치료',
+]
 
 export function localBusinessJsonLd() {
   return {
@@ -32,6 +40,8 @@ export function localBusinessJsonLd() {
     areaServed: [
       { '@type': 'City', name: '성남시' },
       { '@type': 'AdministrativeArea', name: '경기도' },
+      { '@type': 'AdministrativeArea', name: '서울특별시' },
+      { '@type': 'AdministrativeArea', name: '인천광역시' },
     ],
     openingHoursSpecification: {
       '@type': 'OpeningHoursSpecification',
@@ -59,6 +69,26 @@ export function websiteJsonLd() {
     url: SITE_URL,
     inLanguage: 'ko-KR',
     publisher: { '@id': `${SITE_URL}/#organization` },
+  }
+}
+
+export interface Crumb {
+  name: string
+  /** 사이트 루트 기준 경로 또는 절대 URL */
+  path: string
+}
+
+/** 홈부터 현재 페이지까지의 이동 경로 */
+export function breadcrumbJsonLd(crumbs: Crumb[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: crumbs.map((c, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: c.name,
+      item: absoluteUrl(c.path),
+    })),
   }
 }
 

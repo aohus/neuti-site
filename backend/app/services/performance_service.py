@@ -82,6 +82,7 @@ class PerformanceService:
                 "thumbnail_url": r.thumbnail_url,
                 "job_main_category": r.job_main_category,
                 "summary": summarize_content(r.content, fallback=r.subtitle),
+                "source_file": r.source_file,
                 "created_at": r.created_at,
                 "updated_at": r.updated_at,
             }

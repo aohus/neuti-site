@@ -54,6 +54,12 @@ describe('buildMetadata', () => {
     expect(meta.openGraph).toMatchObject({ type: 'article', images: [{ url: '/uploads/x.jpg' }] })
   })
 
+  it('이미지를 크기·alt 와 함께 넘기면 그대로 쓴다', () => {
+    const image = { url: '/images/x.jpg', width: 1200, height: 630, alt: '설명' }
+    const meta = buildMetadata({ title: 't', description: 'd', path: '/', image })
+    expect(meta.openGraph?.images).toEqual([image])
+  })
+
   it('ogTitle/ogDescription 으로 OG 문구만 따로 줄 수 있다', () => {
     const meta = buildMetadata({
       title: 't',

@@ -13,7 +13,7 @@ from app.repositories.performance_repo import performance_repo
 MARKER = f"피드테스트-{uuid.uuid4().hex[:8]}"
 FEED_KEYS = {
     "id", "title", "subtitle", "thumbnail_url", "job_main_category",
-    "summary", "created_at", "updated_at",
+    "summary", "source_file", "created_at", "updated_at",
 }
 
 
@@ -73,6 +73,20 @@ async def test_feed는_목록과_같은_시공일_최신순이다(rows):
     res = await _get("/api/v1/performance/feed?limit=1000")
     titles = [r["title"].split()[-1] for r in res.json() if r["title"].startswith(MARKER)]
     assert titles == ["최근", "중간", "옛날"]
+
+
+@pytest.mark.asyncio
+async def test_feed는_md_동기화_행의_source_file을_싣는다(db_session):
+    source = f"{MARKER}_원본"
+    row = await performance_repo.create_from_markdown(
+        db_session, data=_row("동기화", None, source_file=source)
+    )
+    try:
+        res = await _get("/api/v1/performance/feed?limit=1000")
+        item = next(r for r in res.json() if r["id"] == row.id)
+        assert item["source_file"] == source
+    finally:
+        await performance_repo.remove(db_session, id=row.id)
 
 
 @pytest.mark.asyncio
