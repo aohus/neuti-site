@@ -53,6 +53,8 @@ class PerformanceFeedItem(BaseModel):
     thumbnail_url: str | None = None
     job_main_category: str | None = None
     summary: str | None = None
+    # 동기화된 md 파일명(확장자 제외, NFC). 프론트가 고정 링크를 사례 id 로 풀 때 쓴다. 관리자 등록분은 NULL.
+    source_file: str | None = None
     created_at: datetime
     updated_at: datetime
 

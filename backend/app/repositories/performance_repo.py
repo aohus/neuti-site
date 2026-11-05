@@ -61,7 +61,7 @@ class CRUDPerformance(CRUDBase[Performance, PerformanceCreate, PerformanceUpdate
         result = await db.execute(
             select(
                 m.id, m.title, m.subtitle, m.thumbnail_url, m.job_main_category,
-                m.content, m.created_at, m.updated_at,
+                m.content, m.source_file, m.created_at, m.updated_at,
             )
             .order_by(*self._recent_first())
             .limit(limit)

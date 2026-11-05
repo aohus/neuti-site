@@ -85,7 +85,12 @@ export default function TrackRecordSection({
                   <h3 className="text-deep text-lg leading-[1.4] font-black">
                     {item.title}
                   </h3>
-                  <span className="text-sm font-black text-green-700">
+                  {item.body && (
+                    <p className="text-[15px] leading-[1.7] font-medium text-gray-600">
+                      {item.body}
+                    </p>
+                  )}
+                  <span className="mt-auto pt-2 text-sm font-black text-green-700">
                     {linkLabel}
                   </span>
                 </Link>

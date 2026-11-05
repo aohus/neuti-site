@@ -118,6 +118,24 @@ describe('PerformanceDetailPage', () => {
     expect(time).toHaveTextContent('2025년 9월 16일')
   })
 
+  describe('관련 서비스 카드', () => {
+    it('재선충·나무주사 사례는 재선충 서비스 페이지로 연결한다', async () => {
+      mockServerFetch.mockResolvedValue({
+        ...performance,
+        title: '대모산·구룡산 소나무재선충병 예방나무주사',
+        job_sub_category: '예방나무주사',
+      })
+      const { container } = render(await PerformanceDetailPage(params('13')))
+      const card = container.querySelector('[data-related-service]')
+      expect(card).toHaveAttribute('href', '/pine-wilt')
+    })
+
+    it('관련 없는 사례에는 카드가 없다', async () => {
+      const { container } = render(await PerformanceDetailPage(params('13')))
+      expect(container.querySelector('[data-related-service]')).toBeNull()
+    })
+  })
+
   describe('JSON-LD', () => {
     async function ld() {
       const { container } = render(await PerformanceDetailPage(params('13')))

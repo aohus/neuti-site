@@ -10,16 +10,17 @@ import Reveal from './Reveal'
 export default function SymptomsSection() {
   return (
     <section data-section="pw-symptoms" className="section-py bg-white">
-      <Container className="flex flex-col items-center gap-10 lg:flex-row lg:gap-14">
-        <Reveal className="w-full min-w-0 lg:flex-1">
-          <figure className="flex flex-col gap-3">
+      <Container className="flex flex-col items-center gap-10 lg:flex-row lg:items-stretch lg:gap-14">
+        {/* 데스크톱에서 사진은 오른쪽 설명 높이에 맞춘다. */}
+        <Reveal className="mx-auto w-full max-w-[400px] min-w-0 lg:mx-0 lg:w-[340px] lg:max-w-none lg:flex-none">
+          <figure className="flex h-full flex-col gap-3">
             {/* 세로 사진이라 붉게 마른 수관이 잘리지 않도록 위쪽을 기준으로 자른다. */}
-            <div className="relative aspect-[4/5] overflow-hidden rounded-[28px] lg:aspect-[3/4]">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-[28px] lg:aspect-auto lg:min-h-[320px] lg:flex-1">
               <Image
                 src={content.image.src}
                 alt={content.image.alt}
                 fill
-                sizes="(min-width: 1024px) 45vw, 100vw"
+                sizes="(min-width: 1024px) 340px, 400px"
                 className="object-cover object-[50%_15%]"
               />
             </div>
@@ -29,7 +30,7 @@ export default function SymptomsSection() {
           </figure>
         </Reveal>
 
-        <div className="flex w-full min-w-0 flex-col gap-6 lg:flex-[1.1]">
+        <div className="flex w-full min-w-0 flex-col gap-6 lg:flex-1">
           <SectionHeading label={content.label} title={content.title} />
 
           <ol className="border-t border-gray-100">

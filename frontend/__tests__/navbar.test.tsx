@@ -24,6 +24,7 @@ describe('Navbar', () => {
       { name: '홈', href: '/' },
       { name: '회사소개', href: '/about' },
       { name: '주요사업', href: '/business' },
+      { name: '소나무재선충', href: '/pine-wilt' },
       { name: '시공 사례', href: '/performance' },
     ]
 

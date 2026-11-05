@@ -7,12 +7,24 @@ import ProcessSection from '@/components/pine-wilt/ProcessSection'
 import PreventionSection from '@/components/pine-wilt/PreventionSection'
 import TrackRecordSection from '@/components/pine-wilt/TrackRecordSection'
 import FaqSection from '@/components/pine-wilt/FaqSection'
+import WhyNowSection from '@/components/pine-wilt/WhyNowSection'
 import {
   pineWiltFaq,
   pineWiltPrevention,
   pineWiltProcess,
-  pineWiltTrackRecord
+  pineWiltTrackRecord,
+  pineWiltWhyNow
 } from '@/data/pine-wilt-content'
+
+const mockGetPerformanceFeed = jest.fn()
+jest.mock('@/lib/feed', () => ({
+  getPerformanceFeed: () => mockGetPerformanceFeed()
+}))
+
+beforeEach(() => {
+  mockGetPerformanceFeed.mockReset()
+  mockGetPerformanceFeed.mockResolvedValue([])
+})
 
 jest.mock('next/image', () => ({
   __esModule: true,
@@ -36,8 +48,8 @@ function sectionOf(container: HTMLElement, name: string): HTMLElement {
  *   → 내 경우인가 → 해본 적 있나 → 궁금한 점 → 의뢰
  */
 describe('/pine-wilt 소나무재선충 현장진단', () => {
-  it('시안 순서대로 섹션을 렌더링한다', () => {
-    const { container } = render(<PineWiltPage />)
+  it('시안 순서대로 섹션을 렌더링한다', async () => {
+    const { container } = render(await PineWiltPage())
 
     const sections = Array.from(
       container.querySelectorAll('[data-section]')
@@ -57,8 +69,8 @@ describe('/pine-wilt 소나무재선충 현장진단', () => {
     ])
   })
 
-  it('h1 은 히어로 하나뿐이다', () => {
-    render(<PineWiltPage />)
+  it('h1 은 히어로 하나뿐이다', async () => {
+    render(await PineWiltPage())
     const h1s = screen.getAllByRole('heading', { level: 1 })
     expect(h1s).toHaveLength(1)
     expect(h1s[0]).toHaveTextContent(
@@ -66,8 +78,8 @@ describe('/pine-wilt 소나무재선충 현장진단', () => {
     )
   })
 
-  it('히어로와 마지막 CTA 모두 진단 의뢰 탭과 전화로 연결된다', () => {
-    const { container } = render(<PineWiltPage />)
+  it('히어로와 마지막 CTA 모두 진단 의뢰 탭과 전화로 연결된다', async () => {
+    const { container } = render(await PineWiltPage())
 
     for (const name of ['pw-hero', 'pw-cta']) {
       const section = within(sectionOf(container, name))
@@ -81,21 +93,46 @@ describe('/pine-wilt 소나무재선충 현장진단', () => {
     }
   })
 
-  it('실적 카드는 해당 시공사례 목록으로 연결된다', () => {
-    const { container } = render(<PineWiltPage />)
+  it('실적 카드는 피드에서 찾은 시공사례 상세로 연결된다', async () => {
+    const feedRow = (id: number, source_file: string) => ({
+      id, source_file, title: '', subtitle: null, thumbnail_url: null,
+      job_main_category: null, summary: null, created_at: '', updated_at: ''
+    })
+    mockGetPerformanceFeed.mockResolvedValue([
+      feedRow(11, '2026_대모산_구룡산_재선충_예방나무주사'),
+      feedRow(12, '2025_수정_중원구_산림_돌발해충_방제')
+    ])
+    const { container } = render(await PineWiltPage())
+    const hrefs = within(sectionOf(container, 'pw-track-record'))
+      .getAllByRole('link')
+      .map((a) => a.getAttribute('href'))
+
+    expect(hrefs).toEqual(['/performance/11', '/performance/12'])
+  })
+
+  it('피드를 못 받으면 실적 카드는 시공사례 목록으로 연결된다', async () => {
+    const { container } = render(await PineWiltPage())
     const hrefs = within(sectionOf(container, 'pw-track-record'))
       .getAllByRole('link')
       .map((a) => a.getAttribute('href'))
 
     expect(hrefs).toEqual([
       '/performance?job_main=병해충방제',
-      '/performance?job_main=병해충방제',
-      '/performance?job_main=위험목제거'
+      '/performance?job_main=병해충방제'
     ])
   })
 
-  it('감염 판정·확인증 발급은 관할 기관 칸에만 나온다', () => {
-    const { container } = render(<PineWiltPage />)
+  it('Service·BreadcrumbList JSON-LD 를 내고 FAQPage 는 내지 않는다', async () => {
+    const { container } = render(await PineWiltPage())
+    const types = Array.from(
+      container.querySelectorAll('script[type="application/ld+json"]')
+    ).map((el) => JSON.parse(el.textContent || '{}')['@type'])
+
+    expect(types).toEqual(['Service', 'BreadcrumbList'])
+  })
+
+  it('감염 판정·확인증 발급은 관할 기관 칸에만 나온다', async () => {
+    const { container } = render(await PineWiltPage())
     const role = sectionOf(container, 'pw-role')
     const ours = within(role).getByText('느티나무병원이 하는 일').parentElement!
     const agency = within(role).getByText('관할 기관이 하는 일').parentElement!
@@ -105,8 +142,8 @@ describe('/pine-wilt 소나무재선충 현장진단', () => {
     expect(agency).toHaveTextContent('미감염 확인증 발급')
   })
 
-  it('화면 어디에도 대괄호 자리표시 문구나 소요기간 약속이 없다', () => {
-    const { container } = render(<PineWiltPage />)
+  it('화면 어디에도 대괄호 자리표시 문구나 소요기간 약속이 없다', async () => {
+    const { container } = render(await PineWiltPage())
     const text = container.textContent ?? ''
     expect(text).not.toMatch(PLACEHOLDER)
     expect(text).not.toMatch(/즉일|영업일|당일 결과/)
@@ -129,11 +166,39 @@ describe('/pine-wilt 소나무재선충 현장진단', () => {
   })
 })
 
+describe('WHY NOW 반출금지구역 시각화', () => {
+  it('핵심 수치 3개(서울 → 경기 → 성남)를 숫자와 설명 쌍으로 보여준다', () => {
+    const { container } = render(<WhyNowSection />)
+    const values = Array.from(container.querySelectorAll('dl')[0].querySelectorAll('dd')).map(
+      (dd) => dd.textContent
+    )
+    expect(values).toEqual(['서울 18배', '경기 +66%', '성남 전역'])
+  })
+
+  it('지도는 내용을 설명하는 alt 를 달고 원본을 크게 열 수 있다', () => {
+    render(<WhyNowSection />)
+    const map = screen.getByAltText(pineWiltWhyNow.map.alt)
+    expect(map).toHaveAttribute('src', '/images/pine-wilt/seongnam-quarantine-map.jpg')
+    expect(screen.getByText('지도 크게 보기 ↗')).toHaveAttribute('href', pineWiltWhyNow.map.src)
+  })
+
+  it('막대그래프 없이 지도와 핵심 수치만 둔다', () => {
+    const { container } = render(<WhyNowSection />)
+    expect(container.querySelectorAll('figure')).toHaveLength(1)
+    expect(container.querySelector('ul')).toBeNull()
+  })
+
+  it('반출금지구역 출처와 기준일을 밝힌다', () => {
+    render(<WhyNowSection />)
+    expect(screen.getByText(/반출금지구역관리정보」\(2026\.07\.01\)/)).toBeInTheDocument()
+  })
+})
+
 describe('확정 전 항목(null) 처리', () => {
-  it('진단 방식이 정해졌으면 절차 3단계에 대체 문구 대신 그 문장을 쓴다', () => {
+  it('진단 방식이 정해졌으면 절차 3단계에 대체 문구 대신 그 문장을 쓴다', async () => {
     const body = pineWiltProcess.steps[2].body
     expect(body).toMatch(/PCR/)
-    render(<PineWiltPage />)
+    render(await PineWiltPage())
     expect(screen.getByText(body!)).toBeInTheDocument()
     expect(
       screen.queryByText('나무의사가 현장에서 재선충 여부를 1차 판별합니다.')

@@ -9,6 +9,8 @@ export interface PerformanceFeedItem {
   thumbnail_url: string | null
   job_main_category: string | null
   summary: string | null
+  /** md 동기화 행의 파일명(확장자 제외). 관리자 등록분은 null */
+  source_file: string | null
   created_at: string
   updated_at: string
 }
