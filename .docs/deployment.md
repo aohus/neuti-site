@@ -72,7 +72,7 @@ SECRET_KEY               # JWT 서명 키
 UPLOAD_DIR
 ADMIN_USERNAME / ADMIN_PASSWORD
 MAIL_USERNAME / MAIL_PASSWORD / MAIL_FROM / MAIL_SERVER / MAIL_PORT
-DOMAIN_COM / DOMAIN_NET  # punycode 도메인
+DOMAIN_COM  # punycode 도메인 (.NET 은 만료돼 사용 안 함)
 ```
 
 배포 스크립트는 `POSTGRES_PASSWORD`, `SECRET_KEY`, `ADMIN_PASSWORD` 세 개의 존재를 검증한 뒤
@@ -93,8 +93,13 @@ alembic upgrade head
 
 ## Traefik 라우팅
 
-도메인: `XN--910B90BW7NHUBU9W9VR.COM` / `.NET` + 각 `www.` 변형 (느티나무병원 punycode).
+도메인: `XN--910B90BW7NHUBU9W9VR.COM` 하나 (느티나무병원 punycode). `www.` 는 `.COM` 으로 301.
 TLS는 Let's Encrypt(`certresolver=letsencrypt`), 엔트리포인트는 `websecure`.
+
+> **`.NET` 은 2026-09-23 만료, 연장하지 않는다.** 라우터 규칙에 DNS 가 없는 호스트를
+> 넣으면 안 된다. Traefik 은 한 라우터의 `Host()` 들을 한 인증서의 SAN 으로 묶어 발급하므로,
+> 하나라도 HTTP 검증에 실패하면 인증서 전체가 갱신되지 않는다. 2026-11-07 에 실제로
+> `.COM` 인증서가 이 이유로 만료됐다(`.COM`+`.NET` SAN 인증서의 갱신 실패).
 
 | 라우터 | 우선순위 | 규칙 |
 |--------|---------|------|

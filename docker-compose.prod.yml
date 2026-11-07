@@ -90,9 +90,11 @@ services:
       - "traefik.http.routers.neuti-frontend.tls.certresolver=letsencrypt"
       - "traefik.http.routers.neuti-frontend.priority=1"
 
-      # 대표 도메인 통일 — www·.NET 은 같은 경로의 .COM 으로 301.
+      # 대표 도메인 통일 — www 는 같은 경로의 .COM 으로 301.
       # 같은 페이지가 여러 호스트로 색인되면 검색 점수가 갈라진다.
-      - "traefik.http.routers.neuti-canonical-host.rule=Host(`XN--910B90BW7NHUBU9W9VR.NET`) || Host(`www.XN--910B90BW7NHUBU9W9VR.COM`) || Host(`www.XN--910B90BW7NHUBU9W9VR.NET`)"
+      # .NET 은 2026-09 에 만료돼 쓰지 않는다. DNS 가 없는 호스트를 여기 넣으면
+      # Let's Encrypt 검증이 실패해 같은 인증서에 묶인 .COM 까지 갱신이 막힌다.
+      - "traefik.http.routers.neuti-canonical-host.rule=Host(`www.XN--910B90BW7NHUBU9W9VR.COM`)"
       - "traefik.http.routers.neuti-canonical-host.entrypoints=websecure"
       - "traefik.http.routers.neuti-canonical-host.tls.certresolver=letsencrypt"
       - "traefik.http.routers.neuti-canonical-host.priority=100"
