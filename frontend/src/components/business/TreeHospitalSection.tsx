@@ -86,7 +86,7 @@ export default function TreeHospitalSection() {
               ))}
             </div>
 
-            {/* 방제기(9월-3월)에 검색으로 들어온 방문자를 재선충 현장진단 페이지로 보낸다 */}
+            {/* 방제기(11월-3월)에 검색으로 들어온 방문자를 재선충 현장진단 페이지로 보낸다 */}
             <motion.div
               data-reveal
               initial={{ opacity: 0, y: 20 }}
@@ -102,7 +102,7 @@ export default function TreeHospitalSection() {
                 </span>
                 <span className="flex min-w-0 grow flex-col gap-1">
                   <span className="text-xs font-black tracking-[0.08em] text-amber-400">
-                    방제기 9월-3월 집중 운영
+                    방제기 11월-3월 집중 운영
                   </span>
                   <span className="text-[17px] font-black text-white md:text-[19px]">
                     소나무재선충병 현장진단

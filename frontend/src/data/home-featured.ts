@@ -31,9 +31,9 @@ export const featuredServices: FeaturedService[] = [
   {
     href: '/pine-wilt',
     title: '수간주사 및 재선충 진단',
-    chip: '방제기 9월-3월',
+    chip: '방제기 11월-3월',
     desc: '예방 수간주사부터 PCR 재선충 진단까지',
-    mobileDesc: '방제기 9월-3월 · 예방 수간주사·PCR 진단',
+    mobileDesc: '방제기 11월-3월 · 예방 수간주사·PCR 진단',
     image: '/images/pine-wilt/daemosan-drill-inject.jpg',
     tone: 'amber',
   },
