@@ -21,9 +21,9 @@ export function pineWiltServiceJsonLd() {
   return {
     '@context': 'https://schema.org',
     '@type': 'Service',
-    name: '소나무재선충병 현장진단·예방나무주사',
+    name: '소나무재선충병 예방나무주사·현장진단',
     alternateName: ALTERNATE_NAMES,
-    serviceType: '소나무재선충병 진단·방제',
+    serviceType: '소나무재선충병 예방나무주사·진단',
     description: pineWiltSeo.description,
     url: absoluteUrl(PINE_WILT_PATH),
     image: absoluteUrl(pineWiltSeo.image.url),
@@ -45,6 +45,6 @@ export function pineWiltBreadcrumbJsonLd() {
   return breadcrumbJsonLd([
     { name: '홈', path: '/' },
     { name: '주요사업', path: '/business' },
-    { name: '소나무재선충 진단·방제', path: PINE_WILT_PATH }
+    { name: '소나무재선충 예방나무주사·진단', path: PINE_WILT_PATH }
   ])
 }

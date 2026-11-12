@@ -104,11 +104,11 @@ export default function TreeHospitalSection() {
                   <span className="text-xs font-black tracking-[0.08em] text-amber-400">
                     방제기 11월-3월 집중 운영
                   </span>
-                  <span className="text-[17px] font-black text-white md:text-[19px]">
-                    소나무재선충병 현장진단
+                  <span className="text-[17px] font-black break-keep text-white md:text-[19px]">
+                    소나무재선충병 예방나무주사·현장진단
                   </span>
-                  <span className="text-[13px] font-bold text-green-100 md:text-sm">
-                    나무의사 현장 1차 진단 · 관할 기관 신고 연계 · 예방나무주사
+                  <span className="text-[13px] font-bold break-keep text-green-100 md:text-sm">
+                    예방나무주사 · 나무의사 현장 1차 진단 · 관할 기관 신고 연계
                   </span>
                 </span>
                 <ArrowRight

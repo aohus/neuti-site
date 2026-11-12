@@ -118,6 +118,48 @@ describe('PerformanceDetailPage', () => {
     expect(time).toHaveTextContent('2025년 9월 16일')
   })
 
+  // jsdom 은 레이아웃을 계산하지 않으므로 잘림을 만드는 구조 자체를 막는다.
+  // 고정 높이(h-[60vh]) + overflow-hidden 에 내용을 absolute 로 띄우면, 모바일에서
+  // 제목·부제·정보가 60vh 보다 길어질 때 윗부분(뒤로가기·제목 첫 줄)이 잘렸다.
+  describe('히어로 레이아웃(모바일 잘림 방지)', () => {
+    async function hero() {
+      render(await PerformanceDetailPage(params('13')))
+      const h1 = screen.getByRole('heading', { level: 1 })
+      const box = h1.closest('[class*="overflow-hidden"]') as HTMLElement
+      return { h1, box }
+    }
+
+    it('히어로는 고정 높이가 아니라 최소 높이로 내용에 맞춰 늘어난다', async () => {
+      const { box } = await hero()
+      expect(box).toBeInTheDocument()
+      expect(box.className).not.toMatch(/(^|\s)h-\[/)
+      expect(box.className).toMatch(/(^|\s)min-h-/)
+    })
+
+    it('제목을 감싼 요소가 absolute 로 흐름에서 빠지지 않는다', async () => {
+      const { h1, box } = await hero()
+      for (let el = h1.parentElement; el && el !== box; el = el.parentElement) {
+        expect(el).not.toHaveClass('absolute')
+      }
+    })
+
+    it('흐름에 놓인 내용은 고정 Navbar 높이만큼 위 여백을 둔다', async () => {
+      const { h1 } = await hero()
+      const pad = h1.closest('[class*="pt-"]')
+      expect(pad).toHaveClass('pt-28')
+      expect(pad).toHaveClass('md:pt-36')
+    })
+
+    it('발주처·시공 시기 값은 사진 위에서 흰색으로 보인다(전역 p 회색 덮어쓰기)', async () => {
+      await hero()
+      const client = screen.getAllByText(performance.client || '느티나무병원 협동조합')[0]
+      expect(client.tagName).toBe('P')
+      expect(client.className).toMatch(/text-white/)
+      const time = screen.getByText('시공 시기').nextElementSibling
+      expect(time?.className).toMatch(/text-white/)
+    })
+  })
+
   describe('관련 서비스 카드', () => {
     it('재선충·나무주사 사례는 재선충 서비스 페이지로 연결한다', async () => {
       mockServerFetch.mockResolvedValue({

@@ -93,6 +93,21 @@ describe('/pine-wilt 소나무재선충 현장진단', () => {
     }
   })
 
+  // 진단과 예방주사·방제를 함께 적을 때는 예방나무주사를 앞에 둔다.
+  it('히어로 배지와 의뢰 버튼은 예방나무주사를 진단보다 앞에 둔다', async () => {
+    const { container } = render(await PineWiltPage())
+    const hero = within(sectionOf(container, 'pw-hero'))
+    expect(hero.getByText('소나무재선충병 예방나무주사·현장진단')).toBeInTheDocument()
+
+    for (const name of ['pw-hero', 'pw-cta']) {
+      const section = within(sectionOf(container, name))
+      expect(
+        section.getByRole('link', { name: /예방나무주사\/현장진단 의뢰하기/ })
+      ).toHaveAttribute('href', '/request?tab=diagnosis')
+    }
+    expect(container.textContent).not.toMatch(/(^|[^/])현장진단 의뢰하기/)
+  })
+
   it('실적 카드는 피드에서 찾은 시공사례 상세로 연결된다', async () => {
     const feedRow = (id: number, source_file: string) => ({
       id, source_file, title: '', subtitle: null, thumbnail_url: null,
