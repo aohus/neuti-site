@@ -51,7 +51,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 {[
                   { name: '회사소개', href: '/about' },
                   { name: '주요사업', href: '/business' },
-                  { name: '소나무재선충 진단·방제', href: '/pine-wilt' },
+                  { name: '소나무재선충 예방나무주사·진단', href: '/pine-wilt' },
                   { name: '시공 사례', href: '/performance' }
                 ].map((item) => (
                   <li key={item.name}>

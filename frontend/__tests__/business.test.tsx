@@ -17,7 +17,7 @@ describe('TreeHospitalSection 재선충 스포트라이트', () => {
     render(<BusinessPage />)
 
     expect(
-      screen.getByRole('link', { name: /소나무재선충병 현장진단/ })
+      screen.getByRole('link', { name: /소나무재선충병 예방나무주사·현장진단/ })
     ).toHaveAttribute('href', '/pine-wilt')
   })
 

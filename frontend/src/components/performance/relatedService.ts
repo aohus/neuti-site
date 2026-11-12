@@ -8,8 +8,8 @@ export interface RelatedService {
 
 const PINE_WILT_SERVICE: RelatedService = {
   href: '/pine-wilt',
-  title: '소나무재선충 진단·방제, 예방나무주사',
-  body: '소나무가 갑자기 시들었다면 재선충부터 확인합니다. 나무의사 현장 1차 진단과 예방나무주사 안내를 보세요.'
+  title: '소나무재선충 예방나무주사, 진단·방제',
+  body: '소나무가 갑자기 시들었다면 재선충부터 확인합니다. 예방나무주사와 나무의사 현장 1차 진단 안내를 보세요.'
 }
 
 // 나무주사는 느티나무 등 다른 수종에도 놓으므로 소나무류일 때만 재선충 페이지로 잇는다.
