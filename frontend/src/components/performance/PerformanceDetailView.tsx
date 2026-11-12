@@ -75,24 +75,28 @@ function AdminControls({ id }: { id: number }) {
 
 function Hero({ performance }: { performance: Performance }) {
   return (
-    <div className="relative h-[60vh] w-full overflow-hidden bg-gray-900">
+    // 고정 높이(h-[60vh])에 내용을 absolute 로 띄우면 모바일에서 제목·부제·정보가
+    // 60vh 를 넘을 때 윗부분이 잘린다. 사진만 배경으로 깔고 내용은 흐름에 둬서
+    // 최소 60vh, 넘치면 상자가 내용만큼 늘어나게 한다. 상단 여백(pt-28/36)은
+    // 히어로를 덮는 고정 Navbar(모바일 65px·데스크탑 81px) 높이를 포함한 값이다.
+    <div className="relative flex min-h-[60vh] w-full items-end overflow-hidden bg-gray-900">
       {performance.thumbnail_url ? (
         <UploadPicture
           src={performance.thumbnail_url}
           alt={performance.title}
           sizes="100vw"
           fetchPriority="high"
-          className="h-full w-full object-cover opacity-70"
+          className="absolute inset-0 h-full w-full object-cover opacity-70"
         />
       ) : (
-        <div className="h-full w-full bg-green-900/30" />
+        <div className="absolute inset-0 bg-green-900/30" />
       )}
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-      <div className="absolute inset-0 flex items-end pb-20">
+      <div className="relative w-full pt-28 pb-14 md:pt-36 md:pb-20">
         <div className="mx-auto w-full max-w-7xl px-6 sm:px-8 lg:px-10">
           <Link
             href="/performance"
-            className="group mb-10 inline-flex items-center text-white/80 transition-colors hover:text-white"
+            className="group mb-8 inline-flex items-center text-white/80 md:mb-10 transition-colors hover:text-white"
           >
             <ChevronLeft
               size={24}
@@ -102,17 +106,17 @@ function Hero({ performance }: { performance: Performance }) {
               시공 사례 목록으로
             </span>
           </Link>
-          <h1 className="mb-5 text-4xl leading-tight font-black tracking-tighter text-white drop-shadow-2xl md:text-6xl">
+          <h1 className="mb-5 text-3xl leading-tight font-black tracking-tighter text-white drop-shadow-2xl md:text-6xl">
             {performance.title}
           </h1>
           {performance.subtitle && (
-            <p className="mb-10 max-w-3xl text-lg leading-snug font-bold text-white/80 drop-shadow-lg md:text-2xl">
+            <p className="mb-8 max-w-3xl text-lg leading-snug font-bold text-white/80 drop-shadow-lg md:text-2xl">
               {performance.subtitle}
             </p>
           )}
           <div
-            className={`flex flex-wrap items-center gap-10 text-white/90 ${
-              performance.subtitle ? '' : 'mt-10'
+            className={`flex flex-wrap items-center gap-x-10 gap-y-5 text-white/90 ${
+              performance.subtitle ? '' : 'mt-8 md:mt-10'
             }`}
           >
             <div className="flex items-center gap-4">
@@ -123,7 +127,7 @@ function Hero({ performance }: { performance: Performance }) {
                 <p className="mb-1 text-xs font-black tracking-widest text-white/60">
                   발주처
                 </p>
-                <p className="text-lg font-black">
+                <p className="text-lg font-black text-white">
                   {performance.client || DEFAULT_CLIENT}
                 </p>
               </div>
@@ -136,7 +140,7 @@ function Hero({ performance }: { performance: Performance }) {
                 <p className="mb-1 text-xs font-black tracking-widest text-white/60">
                   시공 시기
                 </p>
-                <p className="text-lg font-black">
+                <p className="text-lg font-black text-white">
                   <ConstructionTime performance={performance} />
                 </p>
               </div>
